@@ -1,0 +1,31 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/exec-openapi-original.yml
+docs: https://docs.exec.com/api-reference/authentication
+summary:
+  types:
+  - http
+  http_schemes:
+  - bearer
+  api_key_in: []
+  oauth2_flows: []
+  scopes: none
+  access: full-admin
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  description: |-
+    API key created in Settings > API. Passed as `Authorization: Bearer [example key]`.
+
+    Format: `exec_live_` followed by 40 alphanumeric characters.
+    Keys grant full admin access to the workspace (no scopes/permissions).
+    Keys are shown only once at creation; deactivation is reversible, deletion is permanent.
+  key_prefix: exec_live_
+  test_prefix: null
+  sources:
+  - openapi/exec-openapi-original.yml
+  docs: https://docs.exec.com/api-reference/authentication
+notes: >-
+  No test/sandbox key variant is documented (only exec_live_). No OAuth or scope
+  surface, so scopes/ is intentionally omitted for this provider.
