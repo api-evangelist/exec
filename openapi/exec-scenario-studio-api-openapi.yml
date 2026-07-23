@@ -1,0 +1,557 @@
+openapi: 3.0.3
+info:
+  title: Exec Collections Scenario Studio API
+  version: '1.0'
+  description: 'REST API for programmatic access to your Exec workspace.
+
+
+    Use the Exec API to read workspace data, list members, retrieve group information,
+
+    and create interactive scenario creation sessions.
+
+
+    ## Authentication
+
+    All requests require a valid API key passed in the Authorization header:
+
+    ```
+
+    Authorization: Bearer exec_live_...
+
+    ```
+
+
+    Create API keys in your workspace settings under **Settings > API**.
+
+    '
+servers:
+- url: https://api.exec.com/rest/v1
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Scenario Studio
+paths:
+  /scenario-studio:
+    post:
+      operationId: createScenarioStudioSession
+      summary: Create Scenario Studio session
+      description: 'Creates an interactive scenario creation session for a user.
+
+        Returns a URL immediately that the user can visit to complete
+
+        scenario creation in the Scenario Studio UI.
+
+
+        The session is pre-populated with the provided prompt, so when the user
+
+        opens the URL, the AI agent immediately begins processing their request.
+
+        '
+      tags:
+      - Scenario Studio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - user_email
+              - prompt
+              properties:
+                user_email:
+                  type: string
+                  format: email
+                  description: Email of the user to create the session for (must be a member of your workspace)
+                prompt:
+                  type: string
+                  description: Meeting context or scenario request that will be sent to the AI agent
+                request_id:
+                  type: string
+                  description: Optional client-provided ID for deduplication. If provided and a session with this ID already exists, returns the existing session.
+            example:
+              user_email: jane@acme.com
+              prompt: Create a discovery call scenario for enterprise software sales with a skeptical IT director
+              request_id: meeting-123-scenario
+      responses:
+        '200':
+          description: Session created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScenarioStudioSession'
+              example:
+                id: x9y8z7w6v5u4
+                url: https://acme-corp.app.exec.com/chat/x9y8z7w6v5u4
+                is_new: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /scenario-studio/jobs:
+    post:
+      operationId: createScenarioJob
+      summary: Create Scenario job
+      description: 'Creates an asynchronous scenario creation job.
+
+        Returns immediately with a job ID that can be polled for status.
+
+
+        The AI agent processes the job in the background, typically completing
+
+        within 5 minutes. Use the GET endpoint to poll for completion,
+
+        or provide a `callback_url` to receive a webhook when the job finishes.
+
+
+        **Remix mode**: Provide `scenario_slug` to create a variation of an existing
+
+        scenario. The AI will use the source scenario as a starting point and apply
+
+        your prompt as modifications.
+
+        '
+      tags:
+      - Scenario Studio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - user_email
+              - prompt
+              properties:
+                user_email:
+                  type: string
+                  format: email
+                  description: Email of the user to create the scenario for (must be a workspace member)
+                prompt:
+                  type: string
+                  maxLength: 10000
+                  description: Instructions for the AI agent describing what scenario to create
+                context:
+                  type: string
+                  maxLength: 50000
+                  description: 'Additional context in Markdown format (e.g., CRM data, meeting notes, product info).
+
+                    This is provided to the AI agent as background information.
+
+                    '
+                scenario_slug:
+                  type: string
+                  description: 'Slug of an existing scenario to remix/iterate on.
+
+                    The AI will use this as a starting point and apply your prompt as modifications.
+
+                    '
+                request_id:
+                  type: string
+                  description: 'Client-provided idempotency key. If a job with this ID already exists,
+
+                    returns the existing job instead of creating a new one.
+
+                    '
+                callback_url:
+                  type: string
+                  format: uri
+                  description: URL to receive a webhook POST when the job completes
+                callback_headers:
+                  type: object
+                  additionalProperties:
+                    type: string
+                  description: Custom headers to include in the callback request (e.g., authorization)
+            example:
+              user_email: jane@acme.com
+              prompt: Create a discovery call scenario with a skeptical IT director who is concerned about integration complexity
+              context: '## Prospect Information
+
+                - Company: TechCorp Inc.
+
+                - Industry: Financial Services
+
+                - Size: 500 employees
+
+                - Current pain point: Manual data entry across systems
+
+                '
+              request_id: salesforce-opp-12345
+              callback_url: https://hooks.acme.com/exec-scenarios
+              callback_headers:
+                Authorization: Bearer webhook-secret-token
+      responses:
+        '200':
+          description: Existing job returned (idempotent duplicate — a job with this request_id already exists)
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/ScenarioJob'
+                - type: object
+                  properties:
+                    is_new:
+                      type: boolean
+                      description: Always false when an existing job is returned via request_id
+              example:
+                id: j1o2b3i4d5x6
+                status: completed
+                scenario:
+                  id: s1c2e3n4a5r6
+                  slug: discovery-call-skeptical-it-director
+                  name: Discovery Call with IT Director
+                error: null
+                created_at: '2024-03-01T10:00:00Z'
+                started_at: '2024-03-01T10:00:05Z'
+                completed_at: '2024-03-01T10:02:30Z'
+                duration_seconds: 145
+                is_new: false
+        '201':
+          description: Job created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/ScenarioJob'
+                - type: object
+                  properties:
+                    is_new:
+                      type: boolean
+                      description: True if a new job was created, false if an existing job was returned via request_id
+              example:
+                id: j1o2b3i4d5x6
+                status: queued
+                scenario: null
+                error: null
+                created_at: '2024-03-01T10:00:00Z'
+                started_at: null
+                completed_at: null
+                duration_seconds: null
+                is_new: true
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorDetail'
+              examples:
+                missing_field:
+                  summary: Missing required field
+                  value:
+                    error:
+                      type: invalid_request
+                      message: prompt is required
+                field_too_long:
+                  summary: Field exceeds max length
+                  value:
+                    error:
+                      type: invalid_request
+                      code: prompt_too_long
+                      message: prompt must be 10000 characters or fewer
+                user_not_found:
+                  summary: User not in workspace
+                  value:
+                    error:
+                      type: invalid_request
+                      code: user_not_found
+                      message: 'No user found with email: unknown@example.com'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Scenario not found (when using scenario_slug for remix)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorDetail'
+              example:
+                error:
+                  type: not_found
+                  message: 'Scenario not found: invalid-slug'
+  /scenario-studio/jobs/{job_id}:
+    get:
+      operationId: getScenarioJob
+      summary: Get Scenario job status
+      description: 'Returns the current status and result of a scenario creation job.
+
+
+        Poll this endpoint to check job progress. Typical job duration is about 5 minutes.
+
+
+        **Job statuses:**
+
+        - `queued`: Job is waiting to be processed
+
+        - `processing`: AI agent is actively creating the scenario
+
+        - `completed`: Scenario created successfully (check `scenario` field)
+
+        - `failed`: Job failed (check `error` field for details)
+
+        - `cancelled`: Job was cancelled via DELETE
+
+        '
+      tags:
+      - Scenario Studio
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        description: The job ID returned from job creation
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Job status and result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScenarioJob'
+              examples:
+                queued:
+                  summary: Job queued
+                  value:
+                    id: j1o2b3i4d5x6
+                    status: queued
+                    scenario: null
+                    error: null
+                    created_at: '2024-03-01T10:00:00Z'
+                    started_at: null
+                    completed_at: null
+                    duration_seconds: null
+                processing:
+                  summary: Job processing
+                  value:
+                    id: j1o2b3i4d5x6
+                    status: processing
+                    scenario: null
+                    error: null
+                    created_at: '2024-03-01T10:00:00Z'
+                    started_at: '2024-03-01T10:00:05Z'
+                    completed_at: null
+                    duration_seconds: null
+                completed:
+                  summary: Job completed
+                  value:
+                    id: j1o2b3i4d5x6
+                    status: completed
+                    scenario:
+                      id: s1c2e3n4a5r6
+                      name: Discovery Call with IT Director
+                      url: https://acme-corp.app.exec.com/scenarios/discovery-call-it-director
+                    error: null
+                    created_at: '2024-03-01T10:00:00Z'
+                    started_at: '2024-03-01T10:00:05Z'
+                    completed_at: '2024-03-01T10:00:45Z'
+                    duration_seconds: 40
+                failed:
+                  summary: Job failed
+                  value:
+                    id: j1o2b3i4d5x6
+                    status: failed
+                    scenario: null
+                    error:
+                      code: GENERATION_ERROR
+                      message: Unable to generate scenario from the provided prompt
+                    created_at: '2024-03-01T10:00:00Z'
+                    started_at: '2024-03-01T10:00:05Z'
+                    completed_at: '2024-03-01T10:00:30Z'
+                    duration_seconds: 25
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: cancelScenarioJob
+      summary: Cancel Scenario job
+      description: 'Cancels a scenario creation job that is queued or processing.
+
+
+        - **Queued jobs**: Marked as cancelled immediately
+
+        - **Processing jobs**: The background task is terminated and the job is marked cancelled
+
+        - **Completed/failed/cancelled jobs**: Returns 400 error (cannot cancel terminal states)
+
+        '
+      tags:
+      - Scenario Studio
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        description: The job ID to cancel
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Job cancelled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScenarioJob'
+              example:
+                id: j1o2b3i4d5x6
+                status: cancelled
+                scenario: null
+                error: null
+                created_at: '2024-03-01T10:00:00Z'
+                started_at: '2024-03-01T10:00:05Z'
+                completed_at: '2024-03-01T10:00:10Z'
+                duration_seconds: 5
+        '400':
+          description: Job cannot be cancelled (already in terminal state)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorDetail'
+              example:
+                error:
+                  type: invalid_request
+                  code: job_not_cancellable
+                  message: Cannot cancel job in 'completed' state
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Job not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorDetail'
+              example:
+                error:
+                  type: not_found
+                  code: job_not_found
+                  message: 'Job not found: j1o2b3i4d5x6'
+components:
+  schemas:
+    ScenarioJob:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Job identifier
+        status:
+          type: string
+          enum:
+          - queued
+          - processing
+          - completed
+          - failed
+          - cancelled
+          description: Current job status
+        scenario:
+          type: object
+          nullable: true
+          description: Created scenario details (only present when status is "completed")
+          properties:
+            id:
+              type: string
+              description: Scenario ID
+            name:
+              type: string
+              description: Scenario name
+            url:
+              type: string
+              format: uri
+              description: Direct link to the scenario
+        error:
+          type: object
+          nullable: true
+          description: Error details (only present when status is "failed")
+          properties:
+            code:
+              type: string
+              description: Error code (e.g. GENERATION_ERROR, CONTENT_POLICY_VIOLATION)
+            message:
+              type: string
+              description: Human-readable error message
+        created_at:
+          type: string
+          format: date-time
+          description: When the job was created
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the job started processing
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the job finished (success, failure, or cancelled)
+        duration_seconds:
+          type: number
+          nullable: true
+          description: Processing duration in seconds (only present when job has completed)
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
+    ScenarioStudioSession:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Session identifier
+        url:
+          type: string
+          format: uri
+          description: URL for the user to complete scenario creation
+        is_new:
+          type: boolean
+          description: True if a new session was created, false if an existing session was returned via request_id
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authentication_error
+              code: invalid_api_key
+              message: Invalid or inactive API key
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: invalid_request
+              code: invalid_pagination
+              message: Invalid pagination parameters
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: not_found
+              message: 'Scenario not found: abc123'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API key created in Settings > API.
+
+
+        Format: `exec_live_` followed by 40 alphanumeric characters.
+
+        '

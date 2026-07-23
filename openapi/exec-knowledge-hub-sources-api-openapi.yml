@@ -1,0 +1,512 @@
+openapi: 3.0.3
+info:
+  title: Exec Collections Knowledge Hub - Sources API
+  version: '1.0'
+  description: 'REST API for programmatic access to your Exec workspace.
+
+
+    Use the Exec API to read workspace data, list members, retrieve group information,
+
+    and create interactive scenario creation sessions.
+
+
+    ## Authentication
+
+    All requests require a valid API key passed in the Authorization header:
+
+    ```
+
+    Authorization: Bearer exec_live_...
+
+    ```
+
+
+    Create API keys in your workspace settings under **Settings > API**.
+
+    '
+servers:
+- url: https://api.exec.com/rest/v1
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Knowledge Hub - Sources
+  x-group: Knowledge Hub
+paths:
+  /knowledge-hub/sources:
+    get:
+      operationId: listKnowledgeHubSources
+      summary: List sources
+      description: 'Returns a paginated list of Knowledge Hub sources. List rows are metadata
+
+        only — pass `?include=content` on the detail endpoint to fetch the
+
+        extracted text.
+
+
+        Filter by type, status, folder, or free-text query.
+
+        '
+      tags:
+      - Knowledge Hub - Sources
+      parameters:
+      - name: type
+        in: query
+        description: Filter by source type
+        schema:
+          type: string
+          enum:
+          - upload
+          - url
+          - notion
+          - google_drive
+          - guru
+          - page
+          - integration
+      - name: status
+        in: query
+        description: Filter by extraction status
+        schema:
+          type: string
+          enum:
+          - pending
+          - processing
+          - ready
+          - failed
+      - name: folder_id
+        in: query
+        description: Filter by folder UUID
+        schema:
+          type: string
+      - name: query
+        in: query
+        description: Case-insensitive search over source titles
+        schema:
+          type: string
+      - name: page_id
+        in: query
+        description: Filter to sources attached to this page (page UUID)
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Pagination page number (1-indexed) — which page of results to return, not a Knowledge Hub page.
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: page_size
+        in: query
+        description: Number of results per page (max 100)
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 100
+      responses:
+        '200':
+          description: Paginated list of sources (metadata only)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/KnowledgeHubSource'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - id: s1a2b3c4d5e6
+                  title: Q2 pricing deck.pdf
+                  source_type: upload
+                  status: ready
+                  content_format: plain_text
+                  token_count: 5234
+                  has_images: false
+                  external_url: null
+                  summary: Quarterly pricing and packaging overview.
+                  cover: ''
+                  folders:
+                  - id: f9a8b7c6d5e4
+                    name: File Attachments
+                    emoji: 📎
+                  created_by:
+                    id: u1a2b3c4d5e6
+                    email: jane@acme.com
+                    first_name: Jane
+                    last_name: Smith
+                  created_at: '2026-05-01T09:00:00Z'
+                  updated_at: '2026-05-01T09:05:00Z'
+                  processed_at: '2026-05-01T09:05:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 42
+                  total_pages: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createKnowledgeHubSource
+      summary: Create source
+      description: 'Creates a Knowledge Hub source from a URL. Text extraction runs
+
+        asynchronously, so the source is returned with `status: pending` or
+
+        `processing`; poll the detail endpoint until `status` is `ready`.
+
+
+        URL sources are de-duplicated within the workspace: if the URL already
+
+        exists, the existing source is returned with status `200` instead of
+
+        `201`.
+
+
+        > File upload via the REST API is not yet supported — use URL ingest.
+
+        '
+      tags:
+      - Knowledge Hub - Sources
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - type
+              - title
+              properties:
+                type:
+                  type: string
+                  enum:
+                  - url
+                  description: Source type. Only `url` is supported via the REST API today.
+                title:
+                  type: string
+                  description: Display title for the source
+                url:
+                  type: string
+                  format: uri
+                  description: The URL to ingest (required when `type` is `url`)
+                cover:
+                  type: string
+                  description: Optional cover image reference
+                folder_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: UUIDs of folders to place the source in
+            example:
+              type: url
+              title: Competitor pricing page
+              url: https://example.com/pricing
+              folder_ids:
+              - f1a2b3c4d5e6
+      responses:
+        '200':
+          description: An existing source with the same URL was returned (de-duplicated)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeHubSource'
+        '201':
+          description: Source created; extraction queued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeHubSource'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /knowledge-hub/sources/{source_id}:
+    get:
+      operationId: getKnowledgeHubSource
+      summary: Get source
+      description: 'Returns a single source by its UUID. Use `?include=content` to fetch the
+
+        extracted text (read from object storage — heavier, so opt-in).
+
+        '
+      tags:
+      - Knowledge Hub - Sources
+      parameters:
+      - name: source_id
+        in: path
+        required: true
+        description: The source's unique identifier (UUID)
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: 'Comma-separated list of optional sections to include.
+
+          Available values: `content` (the extracted text).
+
+          '
+        schema:
+          type: string
+          example: content
+      responses:
+        '200':
+          description: Source detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeHubSource'
+              example:
+                id: s1a2b3c4d5e6
+                title: Q2 pricing deck.pdf
+                source_type: upload
+                status: ready
+                content_format: plain_text
+                token_count: 5234
+                has_images: false
+                external_url: null
+                summary: Quarterly pricing and packaging overview.
+                cover: ''
+                folders:
+                - id: f9a8b7c6d5e4
+                  name: File Attachments
+                  emoji: 📎
+                created_by:
+                  id: u1a2b3c4d5e6
+                  email: jane@acme.com
+                  first_name: Jane
+                  last_name: Smith
+                created_at: '2026-05-01T09:00:00Z'
+                updated_at: '2026-05-01T09:05:00Z'
+                processed_at: '2026-05-01T09:05:00Z'
+                content: …extracted text… (only when ?include=content)
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteKnowledgeHubSource
+      summary: Delete source
+      description: Archives (soft-deletes) a source.
+      tags:
+      - Knowledge Hub - Sources
+      parameters:
+      - name: source_id
+        in: path
+        required: true
+        description: The source's unique identifier (UUID)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Source deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResult'
+              example:
+                id: s1a2b3c4d5e6
+                deleted: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique user identifier
+        email:
+          type: string
+          format: email
+          description: User's email address
+        first_name:
+          type: string
+          description: User's first name
+        last_name:
+          type: string
+          description: User's last name
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
+    KnowledgeHubFolderRef:
+      type: object
+      description: A compact folder reference embedded in pages and sources.
+      properties:
+        id:
+          type: string
+          description: Unique folder identifier (UUID)
+        name:
+          type: string
+          description: Folder name
+        emoji:
+          type: string
+          nullable: true
+          description: Emoji icon shown next to the folder
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
+    DeleteResult:
+      type: object
+      description: Returned by archive/delete endpoints.
+      properties:
+        id:
+          type: string
+          description: Identifier of the archived/deleted resource
+        deleted:
+          type: boolean
+          description: Always true on success
+    KnowledgeHubSource:
+      type: object
+      description: A Knowledge Hub source — an uploaded file or ingested URL whose text is extracted and indexed.
+      properties:
+        id:
+          type: string
+          description: Unique source identifier (UUID)
+        title:
+          type: string
+          description: Source title
+        source_type:
+          type: string
+          enum:
+          - upload
+          - url
+          - notion
+          - google_drive
+          - guru
+          - page
+          - integration
+          description: Where the source came from
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - ready
+          - failed
+          description: Text-extraction status
+        content_format:
+          type: string
+          nullable: true
+          enum:
+          - markdown
+          - plain_text
+          - image
+          - video
+          description: Format of the extracted content
+        token_count:
+          type: integer
+          nullable: true
+          description: Number of tokens in the extracted text
+        has_images:
+          type: boolean
+          description: Whether the source contains images
+        external_url:
+          type: string
+          nullable: true
+          description: Original URL for url/notion/guru/google_drive sources (null otherwise)
+        summary:
+          type: string
+          nullable: true
+          description: AI-generated summary of the source
+        cover:
+          type: string
+          description: Cover image reference (empty string if none)
+        folders:
+          type: array
+          description: Folders the source belongs to
+          items:
+            $ref: '#/components/schemas/KnowledgeHubFolderRef'
+        created_by:
+          $ref: '#/components/schemas/User'
+          nullable: true
+          description: User who added the source
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        processed_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When extraction finished
+        content:
+          type: string
+          nullable: true
+          description: Extracted text (only included when requested via `?include=content`)
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authentication_error
+              code: invalid_api_key
+              message: Invalid or inactive API key
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: invalid_request
+              code: invalid_pagination
+              message: Invalid pagination parameters
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: not_found
+              message: 'Scenario not found: abc123'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API key created in Settings > API.
+
+
+        Format: `exec_live_` followed by 40 alphanumeric characters.
+
+        '

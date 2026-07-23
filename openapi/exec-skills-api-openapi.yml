@@ -1,0 +1,395 @@
+openapi: 3.0.3
+info:
+  title: Exec Collections Skills API
+  version: '1.0'
+  description: 'REST API for programmatic access to your Exec workspace.
+
+
+    Use the Exec API to read workspace data, list members, retrieve group information,
+
+    and create interactive scenario creation sessions.
+
+
+    ## Authentication
+
+    All requests require a valid API key passed in the Authorization header:
+
+    ```
+
+    Authorization: Bearer exec_live_...
+
+    ```
+
+
+    Create API keys in your workspace settings under **Settings > API**.
+
+    '
+servers:
+- url: https://api.exec.com/rest/v1
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Skills
+paths:
+  /skills:
+    get:
+      operationId: listSkills
+      summary: List skills
+      description: 'Returns a paginated list of skills in the workspace, ordered alphabetically by name.
+
+
+        Skills represent competencies that are evaluated during roleplay sessions and calls
+
+        (e.g. "Discovery Questions", "Objection Handling", "Procurement Selling"). Each skill
+
+        can be linked to evaluation criteria across multiple scenarios.
+
+
+        Use `?include=proficiency` to add aggregate proficiency stats per skill (participant
+
+        count, scored participant count, percentage proficient+, and average score). This is
+
+        computed across all workspace members who have practiced each skill.
+
+        '
+      tags:
+      - Skills
+      parameters:
+      - name: include
+        in: query
+        description: 'Comma-separated list of optional data to include.
+
+          Available values: `proficiency` (aggregate proficiency stats per skill).
+
+          '
+        schema:
+          type: string
+          example: proficiency
+      - name: page
+        in: query
+        description: Page number (1-indexed)
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: page_size
+        in: query
+        description: Number of results per page (max 100)
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 100
+      responses:
+        '200':
+          description: Paginated list of skills
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Skill'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - id: sk1a2b3c4d5e
+                  name: Procurement Selling
+                  slug: procurement-selling
+                  description: Ability to identify and sell procurement solutions effectively.
+                  created_at: '2026-01-10T09:00:00Z'
+                  proficiency_summary:
+                    participant_count: 25
+                    scored_participant_count: 20
+                    pct_proficient_plus: 60
+                    avg_score: 72.5
+                - id: sk6f7g8h9i0j
+                  name: Objection Handling
+                  slug: objection-handling
+                  description: Skill in addressing and overcoming prospect objections.
+                  created_at: '2026-01-15T14:30:00Z'
+                  proficiency_summary:
+                    participant_count: 18
+                    scored_participant_count: 15
+                    pct_proficient_plus: 40
+                    avg_score: 65.3
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 2
+                  total_pages: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /skills/{skill_id}/proficiency:
+    get:
+      operationId: getSkillProficiency
+      summary: Get skill proficiency by user
+      description: 'Returns per-user proficiency data for a specific skill.
+
+
+        Proficiency uses time-decay weighted scoring across all observations (roleplay sessions
+
+        and calls combined). Recent observations count more than older ones (30-day half-life).
+
+        A minimum of 3 observations is required before a proficiency score is calculated.
+
+
+        Proficiency tiers: `excellent` (≥90), `proficient` (≥75), `developing` (≥50),
+
+        `needs_work` (<50), `insufficient_data` (<3 observations).
+
+
+        Only users with at least one observation are included in the response. If no user
+
+        filters are provided, returns proficiency for all workspace members who have practiced
+
+        this skill.
+
+        '
+      tags:
+      - Skills
+      parameters:
+      - name: skill_id
+        in: path
+        required: true
+        description: The skill's unique identifier (UUID)
+        schema:
+          type: string
+      - name: user_ids
+        in: query
+        description: Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).
+        schema:
+          type: string
+      - name: user_emails
+        in: query
+        description: Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).
+        schema:
+          type: string
+          example: jane@acme.com,bob@acme.com
+      - name: group_ids
+        in: query
+        description: Comma-separated workspace group IDs to filter by
+        schema:
+          type: string
+      - name: end_date
+        in: query
+        description: Calculate proficiency as of this date (ISO 8601). Defaults to now.
+        schema:
+          type: string
+          format: date-time
+      - name: exclude_system_users
+        in: query
+        description: Exclude sessions from system users (emails ending in @exec.com). Default false.
+        schema:
+          type: boolean
+          default: false
+      - name: page
+        in: query
+        description: Page number (1-indexed)
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: page_size
+        in: query
+        description: Number of results per page (max 100)
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 100
+      responses:
+        '200':
+          description: Per-user proficiency data for the skill
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SkillProficiencyEntry'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - user:
+                    id: u1a2b3c4d5e6
+                    email: jane@acme.com
+                    first_name: Jane
+                    last_name: Smith
+                  score: 82
+                  tier: proficient
+                  observation_count: 14
+                  last_practiced_at: '2026-03-12T10:00:00Z'
+                - user:
+                    id: u7v8w9x0y1z2
+                    email: bob@acme.com
+                    first_name: Bob
+                    last_name: Jones
+                  score: null
+                  tier: insufficient_data
+                  observation_count: 2
+                  last_practiced_at: '2026-03-10T15:30:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 2
+                  total_pages: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique user identifier
+        email:
+          type: string
+          format: email
+          description: User's email address
+        first_name:
+          type: string
+          description: User's first name
+        last_name:
+          type: string
+          description: User's last name
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
+    Skill:
+      type: object
+      description: A competency that is evaluated during roleplay sessions and calls.
+      properties:
+        id:
+          type: string
+          description: Unique skill identifier
+        name:
+          type: string
+          description: Skill name
+        slug:
+          type: string
+          description: URL-friendly skill identifier
+        description:
+          type: string
+          description: Description of the skill
+        created_at:
+          type: string
+          format: date-time
+          description: When the skill was created
+        proficiency_summary:
+          $ref: '#/components/schemas/SkillProficiencySummary'
+          nullable: true
+          description: Aggregate proficiency stats (only included when requested via `?include=proficiency`)
+    SkillProficiencyEntry:
+      type: object
+      description: Proficiency data for a single user on a skill.
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        score:
+          type: number
+          nullable: true
+          description: Proficiency score (0-100). Null if fewer than 3 observations.
+        tier:
+          type: string
+          enum:
+          - excellent
+          - proficient
+          - developing
+          - needs_work
+          - insufficient_data
+          description: Proficiency tier based on score thresholds
+        observation_count:
+          type: integer
+          description: Total observations (roleplay sessions + calls) within the lookback window
+        last_practiced_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the most recent observation occurred
+    SkillProficiencySummary:
+      type: object
+      description: Aggregate proficiency stats for a skill across all workspace members.
+      properties:
+        participant_count:
+          type: integer
+          description: Number of users with at least one observation on this skill
+        scored_participant_count:
+          type: integer
+          description: Number of users with enough observations (3+) for a proficiency score
+        pct_proficient_plus:
+          type: integer
+          description: Percentage of scored users at Proficient or Excellent tier
+        avg_score:
+          type: number
+          nullable: true
+          description: Average proficiency score across scored users (0-100)
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authentication_error
+              code: invalid_api_key
+              message: Invalid or inactive API key
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: not_found
+              message: 'Scenario not found: abc123'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API key created in Settings > API.
+
+
+        Format: `exec_live_` followed by 40 alphanumeric characters.
+
+        '

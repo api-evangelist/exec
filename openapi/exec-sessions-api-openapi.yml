@@ -1,0 +1,575 @@
+openapi: 3.0.3
+info:
+  title: Exec Collections Sessions API
+  version: '1.0'
+  description: 'REST API for programmatic access to your Exec workspace.
+
+
+    Use the Exec API to read workspace data, list members, retrieve group information,
+
+    and create interactive scenario creation sessions.
+
+
+    ## Authentication
+
+    All requests require a valid API key passed in the Authorization header:
+
+    ```
+
+    Authorization: Bearer exec_live_...
+
+    ```
+
+
+    Create API keys in your workspace settings under **Settings > API**.
+
+    '
+servers:
+- url: https://api.exec.com/rest/v1
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Sessions
+paths:
+  /sessions:
+    get:
+      operationId: listSessions
+      summary: List roleplay sessions
+      description: 'Returns a paginated list of roleplay sessions in the workspace with inline user and scenario data.
+
+
+        Sessions represent individual practice attempts on AI roleplay scenarios. Each session
+
+        includes the participant''s score, rank, duration, and metadata. Use filters to narrow
+
+        results by user, scenario, skill, program, group, or date range.
+
+
+        Note: Sessions may include users who are no longer active workspace members (e.g., users
+
+        who have been removed). These users will not appear in GET /workspace/members but their
+
+        historical session data is preserved.
+
+
+        Results are ordered by creation date (newest first) by default.
+
+        '
+      tags:
+      - Sessions
+      parameters:
+      - name: user_ids
+        in: query
+        description: Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).
+        schema:
+          type: string
+          example: u1a2b3c4d5e6,u7v8w9x0y1z2
+      - name: user_emails
+        in: query
+        description: Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).
+        schema:
+          type: string
+          example: jane@acme.com,bob@acme.com
+      - name: scenario_ids
+        in: query
+        description: Comma-separated scenario IDs to filter by
+        schema:
+          type: string
+      - name: collection_ids
+        in: query
+        description: Comma-separated collection IDs to filter by
+        schema:
+          type: string
+      - name: skill_ids
+        in: query
+        description: Comma-separated skill IDs to filter by
+        schema:
+          type: string
+      - name: program_ids
+        in: query
+        description: Comma-separated program IDs to filter by
+        schema:
+          type: string
+      - name: group_ids
+        in: query
+        description: Comma-separated workspace group IDs to filter by
+        schema:
+          type: string
+      - name: rank
+        in: query
+        description: Filter by one or more performance ranks
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - gold
+            - silver
+            - bronze
+            - unranked
+          example:
+          - gold
+          - silver
+      - name: start_date
+        in: query
+        description: ISO 8601 datetime — only include sessions created on or after this date
+        schema:
+          type: string
+          format: date-time
+      - name: end_date
+        in: query
+        description: ISO 8601 datetime — only include sessions created on or before this date
+        schema:
+          type: string
+          format: date-time
+      - name: exclude_system_users
+        in: query
+        description: Exclude sessions from system users (emails ending in @exec.com). Default false.
+        schema:
+          type: boolean
+          default: false
+      - name: sorting
+        in: query
+        description: Sort field. Prefix with `-` for descending order.
+        schema:
+          type: string
+          default: -created_at
+          enum:
+          - created_at
+          - -created_at
+          - score
+          - -score
+          - duration
+          - -duration
+      - name: page
+        in: query
+        description: Page number (1-indexed)
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: page_size
+        in: query
+        description: Number of results per page (max 100)
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 100
+      responses:
+        '200':
+          description: Paginated list of roleplay sessions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SessionListItem'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - id: abc123def456
+                  user:
+                    id: u1a2b3c4d5e6
+                    email: jane@acme.com
+                    first_name: Jane
+                    last_name: Smith
+                  scenario:
+                    id: s1a2b3c4d5e6
+                    name: Procurement Discovery
+                    slug: procurement-discovery
+                  score: 82.5
+                  rank: gold
+                  duration_seconds: 347
+                  is_valid_attempt: true
+                  created_at: '2026-03-15T14:30:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 128
+                  total_pages: 3
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /sessions/{session_id}:
+    get:
+      operationId: getSession
+      summary: Get session detail
+      description: 'Returns full detail for a single roleplay session, including score, rank, duration,
+
+        and feedback.
+
+
+        Use the `include` parameter to fetch optional heavy fields like the full conversation
+
+        transcript or evaluation criteria with grades. These are omitted by default to keep
+
+        responses lean.
+
+        '
+      tags:
+      - Sessions
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        description: The session's unique identifier (UUID)
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: 'Comma-separated list of optional sections to include in the response.
+
+          Available values: `transcript` (conversation lines), `evaluations` (rubric criteria with grades).
+
+          '
+        schema:
+          type: string
+          example: transcript,evaluations
+      responses:
+        '200':
+          description: Session detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionDetail'
+              example:
+                id: abc123def456
+                user:
+                  id: u1a2b3c4d5e6
+                  email: jane@acme.com
+                  first_name: Jane
+                  last_name: Smith
+                scenario:
+                  id: s1a2b3c4d5e6
+                  name: Procurement Discovery
+                  slug: procurement-discovery
+                score: 82.5
+                rank: gold
+                duration_seconds: 347
+                is_valid_attempt: true
+                outcome_feedback: Strong discovery questioning with good rapport building.
+                positive_feedback: Excellent use of open-ended questions to uncover needs.
+                constructive_feedback: Consider probing deeper into budget constraints.
+                created_at: '2026-03-15T14:30:00Z'
+                transcript:
+                - speaker: ai
+                  text: Hi, I'm the procurement lead at Globex. Thanks for meeting with me today.
+                  seconds_from_start: 0
+                - speaker: user
+                  text: Thanks for your time. I'd love to learn more about your current process.
+                  seconds_from_start: 4.2
+                evaluations:
+                - criterion_name: Communication Skills
+                  items:
+                  - name: Discovery Questions
+                    grade: good
+                    feedback: Asked targeted questions about pain points and current workflow.
+                    feedback_examples:
+                    - quote: Tell me about your current procurement process.
+                      feedback: Great open-ended discovery question.
+                      suggestion_quote: null
+                      grade: good
+                      salience: high
+                - criterion_name: Objection Handling
+                  items:
+                  - name: Budget Concerns
+                    grade: mid
+                    feedback: Addressed the budget concern but could have reframed value more clearly.
+                    feedback_examples: []
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique user identifier
+        email:
+          type: string
+          format: email
+          description: User's email address
+        first_name:
+          type: string
+          description: User's first name
+        last_name:
+          type: string
+          description: User's last name
+    FeedbackExample:
+      type: object
+      description: A specific piece of evidence from the transcript supporting an evaluation.
+      properties:
+        quote:
+          type: string
+          description: Transcript excerpt
+        feedback:
+          type: string
+          nullable: true
+          description: Explanation of what was good or could be improved
+        suggestion_quote:
+          type: string
+          nullable: true
+          description: Suggested alternative phrasing
+        grade:
+          type: string
+          nullable: true
+          enum:
+          - good
+          - mid
+          - bad
+          - not_relevant
+          description: Grade for this specific moment
+        salience:
+          type: string
+          nullable: true
+          enum:
+          - high
+          - mid
+          - low
+          description: Importance level of this feedback
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
+    SessionDetail:
+      type: object
+      description: Full roleplay session detail with optional transcript and evaluations.
+      properties:
+        id:
+          type: string
+          description: Unique session identifier
+        user:
+          $ref: '#/components/schemas/User'
+        scenario:
+          $ref: '#/components/schemas/ScenarioRef'
+        score:
+          type: number
+          nullable: true
+          description: Session score (0-100 scale)
+        rank:
+          type: string
+          nullable: true
+          enum:
+          - gold
+          - silver
+          - bronze
+          - unranked
+          description: Performance rank based on score
+        duration_seconds:
+          type: number
+          nullable: true
+          description: Session duration in seconds
+        is_valid_attempt:
+          type: boolean
+          description: Whether this session counts as a valid graded attempt. A session is valid when it was completed (not abandoned), received AI grading, and has a score. Use valid attempts for analytics; non-valid sessions may be incomplete or ungraded.
+        outcome_feedback:
+          type: string
+          nullable: true
+          description: Overall outcome summary from the AI evaluator
+        positive_feedback:
+          type: string
+          nullable: true
+          description: What the participant did well
+        constructive_feedback:
+          type: string
+          nullable: true
+          description: Areas for improvement
+        transcript:
+          type: array
+          nullable: true
+          description: Conversation transcript lines, excluding system messages (only included when requested via `?include=transcript`)
+          items:
+            $ref: '#/components/schemas/TranscriptLine'
+        evaluations:
+          type: array
+          nullable: true
+          description: Evaluation criteria with grades (only included when requested via `?include=evaluations`)
+          items:
+            $ref: '#/components/schemas/EvaluationCriterion'
+        created_at:
+          type: string
+          format: date-time
+          description: When the session was created
+    EvaluationCriterion:
+      type: object
+      description: A rubric criterion with its evaluated items and feedback examples.
+      properties:
+        criterion_name:
+          type: string
+          description: Name of the parent evaluation criterion
+        items:
+          type: array
+          description: Evaluated items under this criterion
+          items:
+            $ref: '#/components/schemas/EvaluationItem'
+    SessionListItem:
+      type: object
+      description: A roleplay session summary for list responses.
+      properties:
+        id:
+          type: string
+          description: Unique session identifier
+        user:
+          $ref: '#/components/schemas/User'
+          description: The user who participated in this session
+        scenario:
+          $ref: '#/components/schemas/ScenarioRef'
+          description: The scenario that was practiced
+        score:
+          type: number
+          nullable: true
+          description: Session score (0-100 scale)
+        rank:
+          type: string
+          nullable: true
+          enum:
+          - gold
+          - silver
+          - bronze
+          - unranked
+          description: Performance rank based on score
+        duration_seconds:
+          type: number
+          nullable: true
+          description: Session duration in seconds
+        is_valid_attempt:
+          type: boolean
+          description: Whether this session counts as a valid graded attempt. A session is valid when it was completed (not abandoned), received AI grading, and has a score. Use valid attempts for analytics; non-valid sessions may be incomplete or ungraded.
+        created_at:
+          type: string
+          format: date-time
+          description: When the session was created
+    EvaluationItem:
+      type: object
+      description: An individual evaluation item with grade, feedback, and evidence.
+      properties:
+        name:
+          type: string
+          description: Name of the evaluation item
+        grade:
+          type: string
+          nullable: true
+          enum:
+          - good
+          - mid
+          - bad
+          - not_relevant
+          description: Grade received on this item
+        feedback:
+          type: string
+          nullable: true
+          description: Detailed feedback for this item
+        feedback_examples:
+          type: array
+          description: Specific transcript evidence supporting the evaluation (filtered to High/Mid salience)
+          items:
+            $ref: '#/components/schemas/FeedbackExample'
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
+    TranscriptLine:
+      type: object
+      description: A single line in the session transcript.
+      properties:
+        speaker:
+          type: string
+          nullable: true
+          description: Speaker identifier (e.g. "ai" for the AI character, "user" for the participant)
+        text:
+          type: string
+          description: The spoken text
+        seconds_from_start:
+          type: number
+          nullable: true
+          description: Seconds elapsed from the start of the session
+    ScenarioRef:
+      type: object
+      description: A compact scenario reference for embedding in other responses.
+      properties:
+        id:
+          type: string
+          description: Unique scenario identifier
+        name:
+          type: string
+          description: Scenario name
+        slug:
+          type: string
+          description: URL-friendly scenario identifier
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authentication_error
+              code: invalid_api_key
+              message: Invalid or inactive API key
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: invalid_request
+              code: invalid_pagination
+              message: Invalid pagination parameters
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: not_found
+              message: 'Scenario not found: abc123'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API key created in Settings > API.
+
+
+        Format: `exec_live_` followed by 40 alphanumeric characters.
+
+        '

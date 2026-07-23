@@ -1,0 +1,175 @@
+openapi: 3.0.3
+info:
+  title: Exec Collections API
+  version: '1.0'
+  description: 'REST API for programmatic access to your Exec workspace.
+
+
+    Use the Exec API to read workspace data, list members, retrieve group information,
+
+    and create interactive scenario creation sessions.
+
+
+    ## Authentication
+
+    All requests require a valid API key passed in the Authorization header:
+
+    ```
+
+    Authorization: Bearer exec_live_...
+
+    ```
+
+
+    Create API keys in your workspace settings under **Settings > API**.
+
+    '
+servers:
+- url: https://api.exec.com/rest/v1
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Collections
+paths:
+  /collections:
+    get:
+      operationId: listCollections
+      summary: List collections
+      description: 'Returns a paginated list of collections in the workspace, ordered
+
+        alphabetically by name.
+
+
+        Collections group related scenarios together (e.g. "Procurement Scenarios",
+
+        "Onboarding"). Use collection IDs to filter sessions, skills, and scenario
+
+        analytics by collection.
+
+        '
+      tags:
+      - Collections
+      parameters:
+      - name: page
+        in: query
+        description: Page number (1-indexed)
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: page_size
+        in: query
+        description: Number of results per page (max 100)
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 100
+      responses:
+        '200':
+          description: Paginated list of collections
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Collection'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - id: r1a2b3c4d5e6
+                  name: Procurement Scenarios
+                  slug: procurement-scenarios
+                  description: Practice scenarios for procurement conversations.
+                  scenario_count: 4
+                  created_at: '2026-01-10T09:00:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 1
+                  total_pages: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authentication_error
+              code: invalid_api_key
+              message: Invalid or inactive API key
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
+    Collection:
+      type: object
+      description: A collection that groups related scenarios together.
+      properties:
+        id:
+          type: string
+          description: Unique collection identifier
+        name:
+          type: string
+          description: Collection name
+        slug:
+          type: string
+          description: URL-friendly collection identifier
+        description:
+          type: string
+          nullable: true
+          description: Collection description
+        scenario_count:
+          type: integer
+          description: Number of scenarios in this collection
+        created_at:
+          type: string
+          format: date-time
+          description: When the collection was created
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API key created in Settings > API.
+
+
+        Format: `exec_live_` followed by 40 alphanumeric characters.
+
+        '

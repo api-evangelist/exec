@@ -1,0 +1,265 @@
+openapi: 3.0.3
+info:
+  title: Exec Collections Knowledge Hub - Folders API
+  version: '1.0'
+  description: 'REST API for programmatic access to your Exec workspace.
+
+
+    Use the Exec API to read workspace data, list members, retrieve group information,
+
+    and create interactive scenario creation sessions.
+
+
+    ## Authentication
+
+    All requests require a valid API key passed in the Authorization header:
+
+    ```
+
+    Authorization: Bearer exec_live_...
+
+    ```
+
+
+    Create API keys in your workspace settings under **Settings > API**.
+
+    '
+servers:
+- url: https://api.exec.com/rest/v1
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Knowledge Hub - Folders
+  x-group: Knowledge Hub
+paths:
+  /knowledge-hub/folders:
+    get:
+      operationId: listKnowledgeHubFolders
+      summary: List folders
+      description: 'Returns a paginated list of Knowledge Hub folders (also called Spaces or
+
+        Hubs) in the workspace.
+
+
+        Folders group pages and sources, and can be nested to form a hierarchy.
+
+        Pass `parent` to list the direct children of a folder, or omit it to list
+
+        every folder in the workspace.
+
+
+        API keys are workspace-scoped and admin-created, so the response includes
+
+        every non-archived folder regardless of its visibility scope.
+
+        '
+      tags:
+      - Knowledge Hub - Folders
+      parameters:
+      - name: parent_id
+        in: query
+        description: Return only the direct children of this folder (folder UUID). Omit to list all folders.
+        schema:
+          type: string
+      - name: query
+        in: query
+        description: Case-insensitive search over folder names
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Pagination page number (1-indexed) — which page of results to return, not a Knowledge Hub page.
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: page_size
+        in: query
+        description: Number of results per page (max 100)
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 100
+      responses:
+        '200':
+          description: Paginated list of folders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/KnowledgeHubFolder'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - id: f1a2b3c4d5e6
+                  name: Sales
+                  emoji: 💼
+                  parent: null
+                  visibility: workspace
+                  item_count: 12
+                  subfolder_count: 3
+                  created_at: '2026-05-01T09:00:00Z'
+                  updated_at: '2026-05-10T10:00:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 8
+                  total_pages: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /knowledge-hub/folders/{folder_id}:
+    get:
+      operationId: getKnowledgeHubFolder
+      summary: Get folder
+      description: Returns a single Knowledge Hub folder by its UUID.
+      tags:
+      - Knowledge Hub - Folders
+      parameters:
+      - name: folder_id
+        in: path
+        required: true
+        description: The folder's unique identifier (UUID)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Folder detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeHubFolder'
+              example:
+                id: f1a2b3c4d5e6
+                name: Sales
+                emoji: 💼
+                parent: null
+                visibility: workspace
+                item_count: 12
+                subfolder_count: 3
+                created_at: '2026-05-01T09:00:00Z'
+                updated_at: '2026-05-10T10:00:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
+    KnowledgeHubFolder:
+      type: object
+      description: A Knowledge Hub folder (also called a Space or Hub) that groups pages and sources.
+      properties:
+        id:
+          type: string
+          description: Unique folder identifier (UUID)
+        name:
+          type: string
+          description: Folder name
+        emoji:
+          type: string
+          nullable: true
+          description: Emoji icon shown next to the folder
+        parent:
+          type: string
+          nullable: true
+          description: UUID of the parent folder, or null for a top-level folder
+        visibility:
+          type: string
+          enum:
+          - private
+          - workspace
+          - global
+          description: Visibility scope of the folder
+        item_count:
+          type: integer
+          description: Number of non-archived pages directly in this folder
+        subfolder_count:
+          type: integer
+          description: Number of direct child folders
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authentication_error
+              code: invalid_api_key
+              message: Invalid or inactive API key
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: invalid_request
+              code: invalid_pagination
+              message: Invalid pagination parameters
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: not_found
+              message: 'Scenario not found: abc123'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API key created in Settings > API.
+
+
+        Format: `exec_live_` followed by 40 alphanumeric characters.
+
+        '

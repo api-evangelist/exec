@@ -1,0 +1,303 @@
+openapi: 3.0.3
+info:
+  title: Exec Collections Workspace API
+  version: '1.0'
+  description: 'REST API for programmatic access to your Exec workspace.
+
+
+    Use the Exec API to read workspace data, list members, retrieve group information,
+
+    and create interactive scenario creation sessions.
+
+
+    ## Authentication
+
+    All requests require a valid API key passed in the Authorization header:
+
+    ```
+
+    Authorization: Bearer exec_live_...
+
+    ```
+
+
+    Create API keys in your workspace settings under **Settings > API**.
+
+    '
+servers:
+- url: https://api.exec.com/rest/v1
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Workspace
+paths:
+  /workspace:
+    get:
+      operationId: getWorkspace
+      summary: Get workspace info
+      description: Returns basic information about the authenticated workspace.
+      tags:
+      - Workspace
+      responses:
+        '200':
+          description: Workspace information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workspace'
+              example:
+                id: a1b2c3d4e5f6
+                name: Acme Corp
+                url_slug: acme-corp
+                created_at: '2024-01-15T10:30:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /workspace/members:
+    get:
+      operationId: listWorkspaceMembers
+      summary: List workspace members
+      description: Returns a paginated list of workspace members with basic user info.
+      tags:
+      - Workspace
+      parameters:
+      - name: page
+        in: query
+        description: Page number (1-indexed)
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: page_size
+        in: query
+        description: Number of results per page (max 100)
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 100
+      - name: group_ids
+        in: query
+        description: Comma-separated workspace group IDs to filter by
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of workspace members
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WorkspaceMember'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - id: m1n2o3p4q5r6
+                  user:
+                    id: u7v8w9x0y1z2
+                    email: jane@acme.com
+                    first_name: Jane
+                    last_name: Smith
+                  role: admin
+                  created_at: '2024-01-15T10:30:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 25
+                  total_pages: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /workspace/groups:
+    get:
+      operationId: listWorkspaceGroups
+      summary: List workspace groups
+      description: Returns a paginated list of groups in the workspace.
+      tags:
+      - Workspace
+      parameters:
+      - name: page
+        in: query
+        description: Page number (1-indexed)
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: page_size
+        in: query
+        description: Number of results per page (max 100)
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 100
+      responses:
+        '200':
+          description: List of workspace groups
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WorkspaceGroup'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - id: g1h2i3j4k5l6
+                  name: Sales Team
+                  created_at: '2024-02-01T09:00:00Z'
+                - id: g7h8i9j0k1l2
+                  name: Customer Success
+                  created_at: '2024-02-15T14:30:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 2
+                  total_pages: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
+    WorkspaceGroup:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique group identifier
+        name:
+          type: string
+          description: Group name
+        created_at:
+          type: string
+          format: date-time
+          description: When the group was created
+    Workspace:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique workspace identifier
+        name:
+          type: string
+          description: Workspace display name
+        url_slug:
+          type: string
+          description: URL-friendly workspace identifier
+        created_at:
+          type: string
+          format: date-time
+          description: When the workspace was created
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
+    WorkspaceMember:
+      type: object
+      description: A workspace member. The id is the user's unique identifier, consistent with user objects across all endpoints.
+      properties:
+        id:
+          type: string
+          description: Unique user identifier (same as user.id in sessions, assignments, etc.)
+        email:
+          type: string
+          format: email
+          description: Member's email address
+        first_name:
+          type: string
+          description: Member's first name
+        last_name:
+          type: string
+          description: Member's last name
+        role:
+          type: string
+          description: Member's role in the workspace
+          enum:
+          - admin
+          - staff
+          - member
+        created_at:
+          type: string
+          format: date-time
+          description: When the member was added
+  responses:
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: invalid_request
+              code: invalid_pagination
+              message: Invalid pagination parameters
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authentication_error
+              code: invalid_api_key
+              message: Invalid or inactive API key
+    Forbidden:
+      description: Workspace is inactive
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authorization_error
+              code: workspace_inactive
+              message: Workspace is inactive
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API key created in Settings > API.
+
+
+        Format: `exec_live_` followed by 40 alphanumeric characters.
+
+        '

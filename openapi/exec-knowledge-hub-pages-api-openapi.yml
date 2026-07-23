@@ -1,0 +1,905 @@
+openapi: 3.0.3
+info:
+  title: Exec Collections Knowledge Hub - Pages API
+  version: '1.0'
+  description: 'REST API for programmatic access to your Exec workspace.
+
+
+    Use the Exec API to read workspace data, list members, retrieve group information,
+
+    and create interactive scenario creation sessions.
+
+
+    ## Authentication
+
+    All requests require a valid API key passed in the Authorization header:
+
+    ```
+
+    Authorization: Bearer exec_live_...
+
+    ```
+
+
+    Create API keys in your workspace settings under **Settings > API**.
+
+    '
+servers:
+- url: https://api.exec.com/rest/v1
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Knowledge Hub - Pages
+  x-group: Knowledge Hub
+paths:
+  /knowledge-hub/pages:
+    get:
+      operationId: listKnowledgeHubPages
+      summary: List pages
+      description: 'Returns a paginated list of Knowledge Hub pages. List rows are metadata
+
+        only — the page body is omitted. Fetch a single page to get its content.
+
+
+        Filter by folder, status, owner, skill, free-text query, or update-date
+
+        range. Results are sorted by `updated_at` (newest first) by default.
+
+
+        API keys are workspace-scoped and admin-created, so the response includes
+
+        every non-archived page in the workspace — including private and draft
+
+        pages — regardless of visibility.
+
+        '
+      tags:
+      - Knowledge Hub - Pages
+      parameters:
+      - name: folder_id
+        in: query
+        description: Filter by folder UUID
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Filter by page status
+        schema:
+          type: string
+          enum:
+          - draft
+          - published
+          - archived
+      - name: owner_id
+        in: query
+        description: Filter by the page owner's user UUID
+        schema:
+          type: string
+      - name: skill_id
+        in: query
+        description: Filter by an associated skill UUID
+        schema:
+          type: string
+      - name: query
+        in: query
+        description: Case-insensitive search over page titles
+        schema:
+          type: string
+      - name: updated_after
+        in: query
+        description: Only include pages updated on or after this date (ISO 8601)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_before
+        in: query
+        description: Only include pages updated on or before this date (ISO 8601)
+        schema:
+          type: string
+          format: date-time
+      - name: sort
+        in: query
+        description: 'Sort field. `updated_at` and `created_at` are newest-first; `title`
+
+          is A–Z.
+
+          '
+        schema:
+          type: string
+          default: updated_at
+          enum:
+          - updated_at
+          - created_at
+          - title
+      - name: page
+        in: query
+        description: Pagination page number (1-indexed) — which page of results to return, not a Knowledge Hub page.
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: page_size
+        in: query
+        description: Number of results per page (max 100)
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 100
+      responses:
+        '200':
+          description: Paginated list of pages (metadata only)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/KnowledgeHubPage'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - id: p1a2b3c4d5e6
+                  title: Pricing objection guide
+                  status: published
+                  visibility: workspace
+                  owner:
+                    id: u1a2b3c4d5e6
+                    email: jane@acme.com
+                    first_name: Jane
+                    last_name: Smith
+                  folders:
+                  - id: f1a2b3c4d5e6
+                    name: Sales
+                    emoji: 💼
+                  skills:
+                  - id: sk1a2b3c4d5e
+                    name: Objection handling
+                  source_count: 3
+                  version: 4
+                  cover: ''
+                  published_at: '2026-06-01T12:00:00Z'
+                  created_at: '2026-05-01T09:00:00Z'
+                  updated_at: '2026-06-10T15:30:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 123
+                  total_pages: 3
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createKnowledgeHubPage
+      summary: Create page
+      description: 'Creates a Knowledge Hub page. New pages go through the draft → publish
+
+        version flow: set `status` to `published` to publish immediately, or
+
+        `draft` (the default) to save without publishing.
+
+
+        Returns the created page with its body (`201`).
+
+        '
+      tags:
+      - Knowledge Hub - Pages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - title
+              properties:
+                title:
+                  type: string
+                  description: Page title
+                content:
+                  type: string
+                  description: Markdown body of the page
+                status:
+                  type: string
+                  enum:
+                  - draft
+                  - published
+                  default: draft
+                  description: Whether to save as a draft or publish immediately
+                visibility:
+                  type: string
+                  enum:
+                  - private
+                  - workspace
+                  default: workspace
+                  description: Visibility scope for the new page
+                folder_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: UUIDs of folders to place the page in
+                source_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: UUIDs of sources to attach to the page
+                skill_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: UUIDs of skills to associate with the page
+            example:
+              title: Pricing objection guide
+              content: '## Handling pricing objections
+
+
+                Lead with value before discussing discounts…'
+              status: published
+              visibility: workspace
+              folder_ids:
+              - f1a2b3c4d5e6
+              source_ids:
+              - s1a2b3c4d5e6
+              skill_ids:
+              - sk1a2b3c4d5e
+      responses:
+        '201':
+          description: Page created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeHubPageDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /knowledge-hub/pages/{page_id}:
+    get:
+      operationId: getKnowledgeHubPage
+      summary: Get page
+      description: 'Returns a single page with its published markdown body, attached sources,
+
+        skills, and version info.
+
+
+        Use `?include=draft` to also return the current draft body
+
+        (`draft.title` and `draft.content`).
+
+        '
+      tags:
+      - Knowledge Hub - Pages
+      parameters:
+      - name: page_id
+        in: path
+        required: true
+        description: The page's unique identifier (UUID)
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: 'Comma-separated list of optional sections to include.
+
+          Available values: `draft` (the current draft title and body).
+
+          '
+        schema:
+          type: string
+          example: draft
+      responses:
+        '200':
+          description: Page detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeHubPageDetail'
+              example:
+                id: p1a2b3c4d5e6
+                title: Pricing objection guide
+                status: published
+                visibility: workspace
+                owner:
+                  id: u1a2b3c4d5e6
+                  email: jane@acme.com
+                  first_name: Jane
+                  last_name: Smith
+                folders:
+                - id: f1a2b3c4d5e6
+                  name: Sales
+                  emoji: 💼
+                skills:
+                - id: sk1a2b3c4d5e
+                  name: Objection handling
+                source_count: 1
+                version: 4
+                cover: ''
+                published_at: '2026-06-01T12:00:00Z'
+                created_at: '2026-05-01T09:00:00Z'
+                updated_at: '2026-06-10T15:30:00Z'
+                content: '## Handling pricing objections
+
+
+                  Lead with value before discussing discounts…'
+                sources:
+                - id: s1a2b3c4d5e6
+                  title: Q2 pricing deck.pdf
+                  source_type: upload
+                  status: ready
+                  content_format: plain_text
+                  token_count: 5234
+                  has_images: false
+                  external_url: null
+                  summary: Quarterly pricing and packaging overview.
+                  cover: ''
+                  folders:
+                  - id: f9a8b7c6d5e4
+                    name: File Attachments
+                    emoji: 📎
+                  created_by:
+                    id: u1a2b3c4d5e6
+                    email: jane@acme.com
+                    first_name: Jane
+                    last_name: Smith
+                  created_at: '2026-05-01T09:00:00Z'
+                  updated_at: '2026-05-01T09:05:00Z'
+                  processed_at: '2026-05-01T09:05:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateKnowledgeHubPage
+      summary: Update page
+      description: 'Updates a page. Only the fields you provide are changed; omitted fields
+
+        are left untouched. Editing `content` creates a new draft; set `status`
+
+        to `published` to publish the new version.
+
+
+        `PUT` is also accepted and behaves the same way.
+
+        '
+      tags:
+      - Knowledge Hub - Pages
+      parameters:
+      - name: page_id
+        in: path
+        required: true
+        description: The page's unique identifier (UUID)
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: New page title
+                content:
+                  type: string
+                  description: New markdown body (creates a new draft)
+                status:
+                  type: string
+                  enum:
+                  - draft
+                  - published
+                  description: Set to `published` to publish the new version. To archive a page, use `DELETE`.
+                folder_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Replace the page's folders with these UUIDs
+                source_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Replace the page's attached sources with these UUIDs
+                skill_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Replace the page's linked skills with these UUIDs
+            example:
+              title: Pricing objection guide (updated)
+              content: '## Handling pricing objections
+
+
+                Updated guidance…'
+              status: published
+      responses:
+        '200':
+          description: Updated page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeHubPageDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceKnowledgeHubPage
+      x-hidden: true
+      summary: Update page (PUT)
+      description: Alias of `PATCH /knowledge-hub/pages/{page_id}`; see that operation.
+      tags:
+      - Knowledge Hub - Pages
+      parameters:
+      - name: page_id
+        in: path
+        required: true
+        description: The page's unique identifier (UUID)
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                status:
+                  type: string
+                  enum:
+                  - draft
+                  - published
+                folder_ids:
+                  type: array
+                  items:
+                    type: string
+                source_ids:
+                  type: array
+                  items:
+                    type: string
+                skill_ids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Updated page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeHubPageDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: archiveKnowledgeHubPage
+      summary: Archive page
+      description: Archives (soft-deletes) a page. The page is hidden from lists but its history is preserved.
+      tags:
+      - Knowledge Hub - Pages
+      parameters:
+      - name: page_id
+        in: path
+        required: true
+        description: The page's unique identifier (UUID)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Page archived
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResult'
+              example:
+                id: p1a2b3c4d5e6
+                deleted: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /knowledge-hub/pages/{page_id}/versions:
+    get:
+      operationId: listKnowledgeHubPageVersions
+      summary: List page versions
+      description: Returns the version history for a page, newest first.
+      tags:
+      - Knowledge Hub - Pages
+      parameters:
+      - name: page_id
+        in: path
+        required: true
+        description: The page's unique identifier (UUID)
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Pagination page number (1-indexed) — which page of results to return, not a Knowledge Hub page.
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: page_size
+        in: query
+        description: Number of results per page (max 100)
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 100
+      responses:
+        '200':
+          description: Paginated version history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/KnowledgeHubPageVersion'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - version: 4
+                  title: Pricing objection guide
+                  change_type: manual_edit
+                  created_by:
+                    id: u1a2b3c4d5e6
+                    email: jane@acme.com
+                    first_name: Jane
+                    last_name: Smith
+                  created_at: '2026-06-01T12:00:00Z'
+                  updated_at: '2026-06-01T12:00:00Z'
+                - version: 3
+                  title: Pricing objection guide
+                  change_type: ai_generation
+                  created_by: null
+                  created_at: '2026-05-20T10:00:00Z'
+                  updated_at: '2026-05-20T10:00:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 4
+                  total_pages: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique user identifier
+        email:
+          type: string
+          format: email
+          description: User's email address
+        first_name:
+          type: string
+          description: User's first name
+        last_name:
+          type: string
+          description: User's last name
+    KnowledgeHubPage:
+      type: object
+      description: A Knowledge Hub page. List responses return this metadata-only shape (no body).
+      properties:
+        id:
+          type: string
+          description: Unique page identifier (UUID)
+        title:
+          type: string
+          description: Page title
+        status:
+          type: string
+          enum:
+          - draft
+          - published
+          - archived
+          description: Current page status
+        visibility:
+          type: string
+          enum:
+          - private
+          - workspace
+          - global
+          description: Visibility scope of the page
+        owner:
+          $ref: '#/components/schemas/User'
+          nullable: true
+          description: User who owns the page
+        folders:
+          type: array
+          description: Folders the page belongs to
+          items:
+            $ref: '#/components/schemas/KnowledgeHubFolderRef'
+        skills:
+          type: array
+          description: Skills associated with the page
+          items:
+            $ref: '#/components/schemas/KnowledgeHubSkillRef'
+        source_count:
+          type: integer
+          description: Number of sources attached to the page
+        version:
+          type: integer
+          nullable: true
+          description: Version number of the published version, or null if never published
+        cover:
+          type: string
+          description: Cover image reference (empty string if none)
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the page was last published
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
+    KnowledgeHubSkillRef:
+      type: object
+      description: A compact skill reference embedded in pages.
+      properties:
+        id:
+          type: string
+          description: Unique skill identifier (UUID)
+        name:
+          type: string
+          description: Skill name
+    KnowledgeHubPageDraft:
+      type: object
+      description: The unpublished draft of a page.
+      properties:
+        title:
+          type: string
+          description: Draft title
+        content:
+          type: string
+          nullable: true
+          description: Markdown body of the draft
+    KnowledgeHubPageDetail:
+      description: A single page with its published body, attached sources, and (optionally) its draft.
+      allOf:
+      - $ref: '#/components/schemas/KnowledgeHubPage'
+      - type: object
+        properties:
+          content:
+            type: string
+            nullable: true
+            description: Markdown body of the published version (null if unpublished)
+          sources:
+            type: array
+            description: Sources attached to the page
+            items:
+              $ref: '#/components/schemas/KnowledgeHubSource'
+          draft:
+            $ref: '#/components/schemas/KnowledgeHubPageDraft'
+            nullable: true
+            description: Current draft (only included when requested via `?include=draft`)
+    KnowledgeHubPageVersion:
+      type: object
+      description: A single entry in a page's version history.
+      properties:
+        version:
+          type: integer
+          description: Version number
+        title:
+          type: string
+          description: Page title at this version
+        change_type:
+          type: string
+          enum:
+          - created
+          - ai_generation
+          - manual_edit
+          - restore
+          - clone
+          description: What kind of change produced this version
+        created_by:
+          $ref: '#/components/schemas/User'
+          nullable: true
+          description: User who created this version (null for system/AI changes)
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    KnowledgeHubFolderRef:
+      type: object
+      description: A compact folder reference embedded in pages and sources.
+      properties:
+        id:
+          type: string
+          description: Unique folder identifier (UUID)
+        name:
+          type: string
+          description: Folder name
+        emoji:
+          type: string
+          nullable: true
+          description: Emoji icon shown next to the folder
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
+    DeleteResult:
+      type: object
+      description: Returned by archive/delete endpoints.
+      properties:
+        id:
+          type: string
+          description: Identifier of the archived/deleted resource
+        deleted:
+          type: boolean
+          description: Always true on success
+    KnowledgeHubSource:
+      type: object
+      description: A Knowledge Hub source — an uploaded file or ingested URL whose text is extracted and indexed.
+      properties:
+        id:
+          type: string
+          description: Unique source identifier (UUID)
+        title:
+          type: string
+          description: Source title
+        source_type:
+          type: string
+          enum:
+          - upload
+          - url
+          - notion
+          - google_drive
+          - guru
+          - page
+          - integration
+          description: Where the source came from
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - ready
+          - failed
+          description: Text-extraction status
+        content_format:
+          type: string
+          nullable: true
+          enum:
+          - markdown
+          - plain_text
+          - image
+          - video
+          description: Format of the extracted content
+        token_count:
+          type: integer
+          nullable: true
+          description: Number of tokens in the extracted text
+        has_images:
+          type: boolean
+          description: Whether the source contains images
+        external_url:
+          type: string
+          nullable: true
+          description: Original URL for url/notion/guru/google_drive sources (null otherwise)
+        summary:
+          type: string
+          nullable: true
+          description: AI-generated summary of the source
+        cover:
+          type: string
+          description: Cover image reference (empty string if none)
+        folders:
+          type: array
+          description: Folders the source belongs to
+          items:
+            $ref: '#/components/schemas/KnowledgeHubFolderRef'
+        created_by:
+          $ref: '#/components/schemas/User'
+          nullable: true
+          description: User who added the source
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        processed_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When extraction finished
+        content:
+          type: string
+          nullable: true
+          description: Extracted text (only included when requested via `?include=content`)
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authentication_error
+              code: invalid_api_key
+              message: Invalid or inactive API key
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: invalid_request
+              code: invalid_pagination
+              message: Invalid pagination parameters
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: not_found
+              message: 'Scenario not found: abc123'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API key created in Settings > API.
+
+
+        Format: `exec_live_` followed by 40 alphanumeric characters.
+
+        '

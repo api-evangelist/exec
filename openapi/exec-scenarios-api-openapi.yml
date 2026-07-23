@@ -1,0 +1,1109 @@
+openapi: 3.0.3
+info:
+  title: Exec Collections Scenarios API
+  version: '1.0'
+  description: 'REST API for programmatic access to your Exec workspace.
+
+
+    Use the Exec API to read workspace data, list members, retrieve group information,
+
+    and create interactive scenario creation sessions.
+
+
+    ## Authentication
+
+    All requests require a valid API key passed in the Authorization header:
+
+    ```
+
+    Authorization: Bearer exec_live_...
+
+    ```
+
+
+    Create API keys in your workspace settings under **Settings > API**.
+
+    '
+servers:
+- url: https://api.exec.com/rest/v1
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Scenarios
+paths:
+  /scenarios/assignments:
+    get:
+      operationId: listAssignments
+      summary: List scenario assignments
+      description: 'Returns a paginated list of scenario assignments in the workspace.
+
+
+        Assignments represent tasks given to users to practice specific scenarios. Each
+
+        assignment tracks status (not_started, in_progress, completed, past_due, did_not_pass),
+
+        best score, attempt count, and completion requirements.
+
+
+        Filter by user, scenario, program, or status to find specific assignments.
+
+        '
+      tags:
+      - Scenarios
+      parameters:
+      - name: user_ids
+        in: query
+        description: Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).
+        schema:
+          type: string
+      - name: user_emails
+        in: query
+        description: Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).
+        schema:
+          type: string
+      - name: scenario_ids
+        in: query
+        description: Comma-separated scenario IDs to filter by
+        schema:
+          type: string
+      - name: program_ids
+        in: query
+        description: Comma-separated program IDs to filter by
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Filter by one or more assignment statuses
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - not_started
+            - in_progress
+            - completed
+            - past_due
+            - did_not_pass
+          example:
+          - completed
+          - past_due
+      - name: page
+        in: query
+        description: Page number (1-indexed)
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: page_size
+        in: query
+        description: Number of results per page (max 100)
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 100
+      responses:
+        '200':
+          description: Paginated list of assignments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Assignment'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - id: a1b2c3d4e5f6
+                  user:
+                    id: u1a2b3c4d5e6
+                    email: jane@acme.com
+                    first_name: Jane
+                    last_name: Smith
+                  scenario:
+                    id: s1a2b3c4d5e6
+                    name: Procurement Discovery
+                    slug: procurement-discovery
+                  status: completed
+                  due_date: '2026-04-15T00:00:00Z'
+                  best_score: 88
+                  best_rank: gold
+                  attempt_count: 3
+                  attempt_min: 1
+                  attempt_max: null
+                  rank_min: silver
+                  program: null
+                  created_at: '2026-03-01T10:00:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 1
+                  total_pages: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /scenarios/{scenario_id}/analytics/summary:
+    get:
+      operationId: getScenarioAnalyticsSummary
+      summary: Get scenario analytics summary
+      description: 'Returns aggregate metrics for a scenario: participant count, total sessions,
+
+        average best score and rank, average lift, total practice minutes, and average
+
+        session duration. Accepts both UUID and slug for the scenario identifier.
+
+        '
+      tags:
+      - Scenarios
+      parameters:
+      - name: scenario_id
+        in: path
+        required: true
+        description: Scenario identifier (UUID or slug)
+        schema:
+          type: string
+      - name: user_ids
+        in: query
+        description: Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).
+        schema:
+          type: string
+      - name: user_emails
+        in: query
+        description: Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).
+        schema:
+          type: string
+      - name: group_ids
+        in: query
+        description: Comma-separated workspace group IDs to filter by
+        schema:
+          type: string
+      - name: start_date
+        in: query
+        description: ISO 8601 datetime — only include sessions on or after this date
+        schema:
+          type: string
+          format: date-time
+      - name: end_date
+        in: query
+        description: ISO 8601 datetime — only include sessions on or before this date
+        schema:
+          type: string
+          format: date-time
+      - name: exclude_system_users
+        in: query
+        description: Exclude sessions from system users (emails ending in @exec.com). Default false.
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Scenario analytics summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScenarioAnalyticsSummary'
+              example:
+                participant_count: 45
+                total_sessions: 128
+                average_best_score: 74.2
+                average_best_rank: silver
+                average_lift_percentage: 18.5
+                total_practice_minutes: 742
+                average_session_duration_seconds: 348
+                score_distribution:
+                - rank: gold
+                  count: 12
+                  percentage: 26.7
+                - rank: silver
+                  count: 18
+                  percentage: 40
+                - rank: bronze
+                  count: 10
+                  percentage: 22.2
+                - rank: unranked
+                  count: 5
+                  percentage: 11.1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /scenarios/{scenario_id}/analytics/participants:
+    get:
+      operationId: getScenarioAnalyticsParticipants
+      summary: Get scenario participant analytics
+      description: 'Returns a per-user performance table for a scenario with pagination and sorting.
+
+        Shows each participant''s first score, best score, lift, rank, session count,
+
+        and total practice duration.
+
+        '
+      tags:
+      - Scenarios
+      parameters:
+      - name: scenario_id
+        in: path
+        required: true
+        description: Scenario identifier (UUID or slug)
+        schema:
+          type: string
+      - name: user_ids
+        in: query
+        description: Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).
+        schema:
+          type: string
+      - name: user_emails
+        in: query
+        description: Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).
+        schema:
+          type: string
+      - name: group_ids
+        in: query
+        description: Comma-separated workspace group IDs to filter by
+        schema:
+          type: string
+      - name: start_date
+        in: query
+        description: ISO 8601 datetime — only include sessions on or after this date
+        schema:
+          type: string
+          format: date-time
+      - name: end_date
+        in: query
+        description: ISO 8601 datetime — only include sessions on or before this date
+        schema:
+          type: string
+          format: date-time
+      - name: exclude_system_users
+        in: query
+        description: Exclude sessions from system users (emails ending in @exec.com). Default false.
+        schema:
+          type: boolean
+          default: false
+      - name: sorting
+        in: query
+        description: Sort field. Prefix with `-` for descending order.
+        schema:
+          type: string
+          default: -best_score
+          enum:
+          - best_score
+          - -best_score
+          - first_score
+          - -first_score
+          - lift_percentage
+          - -lift_percentage
+          - total_duration_seconds
+          - -total_duration_seconds
+          - session_count
+          - -session_count
+      - name: page
+        in: query
+        description: Page number (1-indexed)
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: page_size
+        in: query
+        description: Number of results per page (max 100)
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 100
+      responses:
+        '200':
+          description: Per-user participant analytics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ScenarioParticipantEntry'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - user:
+                    id: u1a2b3c4d5e6
+                    email: jane@acme.com
+                    first_name: Jane
+                    last_name: Smith
+                  session_count: 4
+                  first_score: 55
+                  first_rank: bronze
+                  best_score: 88
+                  best_rank: gold
+                  lift_percentage: 33
+                  total_duration_seconds: 1240
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 1
+                  total_pages: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /scenarios:
+    get:
+      operationId: listScenarios
+      summary: List scenarios
+      description: 'Returns a paginated list of scenarios in the workspace.
+
+
+        By default, returns all scenarios in the workspace (admin view).
+
+        Use filters to narrow down results by owner, visibility, or access.
+
+        '
+      tags:
+      - Scenarios
+      parameters:
+      - name: page
+        in: query
+        description: Page number (1-indexed)
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: page_size
+        in: query
+        description: Number of results per page (max 100)
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 100
+      - name: owner_email
+        in: query
+        description: Filter by scenario owner's email address
+        schema:
+          type: string
+          format: email
+      - name: visible_to_email
+        in: query
+        description: Filter by who can access the scenario (checks owner, user shares, group shares, workspace shares)
+        schema:
+          type: string
+          format: email
+      - name: visibility
+        in: query
+        description: Filter by visibility scope
+        schema:
+          type: string
+          enum:
+          - private
+          - workspace
+      - name: include_archived
+        in: query
+        description: Include archived scenarios in results
+        schema:
+          type: boolean
+          default: false
+      - name: skill_ids
+        in: query
+        description: Comma-separated skill IDs to filter by
+        schema:
+          type: string
+      - name: collection_ids
+        in: query
+        description: Comma-separated collection IDs to filter by
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: 'Comma-separated list of optional data to include.
+
+          Available values: `skills` (list of skills evaluated by each scenario).
+
+          '
+        schema:
+          type: string
+          example: skills
+      responses:
+        '200':
+          description: List of scenarios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Scenario'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - id: s1c2e3n4a5r6
+                  name: Discovery Call with IT Director
+                  description: Practice handling objections from skeptical IT buyers
+                  slug: discovery-call-it-director
+                  url: https://acme-corp.app.exec.com/scenarios/discovery-call-it-director
+                  difficulty: medium
+                  context: The buyer is the VP of Engineering at a Series B fintech. They have an active RFP out for an observability tool and your competitor presented yesterday.
+                  objective: 'Qualify the opportunity and book a follow-up meeting with the economic buyer.
+
+                    ##### Outcomes to Avoid:
+
+                    - Discounting before discovery
+
+                    - Skipping the budget conversation
+
+                    - Committing to a custom integration without scoping'
+                  language: English
+                  visibility: workspace
+                  owner:
+                    id: u7v8w9x0y1z2
+                    email: jane@acme.com
+                    first_name: Jane
+                    last_name: Smith
+                  created_at: '2024-01-15T10:30:00Z'
+                  updated_at: '2024-02-01T14:20:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 125
+                  total_pages: 3
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /scenarios/{scenario_id}/access:
+    get:
+      operationId: checkScenarioAccess
+      summary: Check scenario access
+      description: 'Check if a user has access to a specific scenario and what permission level they have.
+
+        '
+      tags:
+      - Scenarios
+      parameters:
+      - name: scenario_id
+        in: path
+        required: true
+        description: Scenario identifier
+        schema:
+          type: string
+      - name: user_email
+        in: query
+        required: true
+        description: Email of the user to check access for
+        schema:
+          type: string
+          format: email
+          example: jane@acme.com
+      responses:
+        '200':
+          description: User's permission levels for the scenario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScenarioAccessResponse'
+              example:
+                user_email: jane@acme.com
+                scenario_id: s1c2e3n4a5r6
+                permissions:
+                  can_view: true
+                  can_share: true
+                  can_monitor: false
+                  can_edit: false
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: grantScenarioAccess
+      summary: Grant scenario access
+      description: 'Grant a user access to a specific scenario with a specified permission level.
+
+        '
+      tags:
+      - Scenarios
+      parameters:
+      - name: scenario_id
+        in: path
+        required: true
+        description: Scenario identifier
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - user_email
+              - permission_level
+              properties:
+                user_email:
+                  type: string
+                  format: email
+                  description: Email of the user to grant access to
+                permission_level:
+                  type: string
+                  enum:
+                  - view
+                  - share
+                  - monitor
+                  - edit
+                  description: Permission level to grant
+            example:
+              user_email: jane@acme.com
+              permission_level: edit
+      responses:
+        '200':
+          description: Access granted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GrantAccessResponse'
+              example:
+                user_email: jane@acme.com
+                scenario_id: s1c2e3n4a5r6
+                permission_level: edit
+                granted: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /scenarios/{scenario_id}/assignments:
+    post:
+      operationId: assignScenario
+      summary: Assign scenario to user
+      description: 'Assign a scenario to a user as a task or homework assignment.
+
+        The user will receive notification of the assignment and can track their progress.
+
+        '
+      tags:
+      - Scenarios
+      parameters:
+      - name: scenario_id
+        in: path
+        required: true
+        description: Scenario identifier
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - user_email
+              - due_date
+              properties:
+                user_email:
+                  type: string
+                  format: email
+                  description: Email of the user to assign the scenario to
+                due_date:
+                  type: string
+                  format: date-time
+                  description: When the assignment is due (ISO 8601 format)
+                assigner_email:
+                  type: string
+                  format: email
+                  description: Email of the user creating the assignment (optional, used in notification emails)
+                attempt_min:
+                  type: integer
+                  minimum: 1
+                  description: Minimum number of attempts required
+                attempt_max:
+                  type: integer
+                  minimum: 1
+                  description: Maximum number of attempts allowed
+                rank_min:
+                  type: string
+                  enum:
+                  - gold
+                  - silver
+                  - bronze
+                  description: Minimum rank required to complete
+                custom_message:
+                  type: string
+                  description: Custom message to include with the assignment
+            example:
+              user_email: jane@acme.com
+              due_date: '2024-03-15T17:00:00Z'
+              assigner_email: manager@acme.com
+              attempt_min: 1
+              attempt_max: 5
+              rank_min: silver
+              custom_message: Please complete this discovery call practice by Friday
+      responses:
+        '200':
+          description: Assignment created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assignment'
+              example:
+                id: a1s2s3i4g5n6
+                user:
+                  id: u1a2b3c4d5e6
+                  email: jane@acme.com
+                  first_name: Jane
+                  last_name: Smith
+                scenario:
+                  id: s1c2e3n4a5r6
+                  name: Discovery Call
+                  slug: discovery-call
+                status: not_started
+                due_date: '2024-03-15T17:00:00Z'
+                best_score: null
+                best_rank: null
+                attempt_count: 0
+                attempt_min: 1
+                attempt_max: 5
+                rank_min: silver
+                program: null
+                created_at: '2024-03-01T10:00:00Z'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique user identifier
+        email:
+          type: string
+          format: email
+          description: User's email address
+        first_name:
+          type: string
+          description: User's first name
+        last_name:
+          type: string
+          description: User's last name
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
+    ScenarioParticipantEntry:
+      type: object
+      description: Per-user performance data for a scenario.
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        session_count:
+          type: integer
+          description: Number of sessions the user completed
+        first_score:
+          type: number
+          nullable: true
+          description: Score from the user's first attempt
+        first_rank:
+          type: string
+          nullable: true
+          enum:
+          - gold
+          - silver
+          - bronze
+          - unranked
+          description: Rank from the first attempt
+        best_score:
+          type: number
+          nullable: true
+          description: User's highest score
+        best_rank:
+          type: string
+          nullable: true
+          enum:
+          - gold
+          - silver
+          - bronze
+          - unranked
+          description: Rank from the best score
+        lift_percentage:
+          type: number
+          nullable: true
+          description: Improvement from first to best score
+        total_duration_seconds:
+          type: number
+          description: Total practice time in seconds
+    Assignment:
+      type: object
+      description: A scenario assignment given to a user as a practice task.
+      properties:
+        id:
+          type: string
+          description: Unique assignment identifier
+        user:
+          $ref: '#/components/schemas/User'
+        scenario:
+          $ref: '#/components/schemas/ScenarioRef'
+        status:
+          type: string
+          enum:
+          - not_started
+          - in_progress
+          - completed
+          - past_due
+          - did_not_pass
+          description: Current assignment status
+        due_date:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the assignment is due
+        best_score:
+          type: number
+          nullable: true
+          description: Highest score achieved on this assignment
+        best_rank:
+          type: string
+          nullable: true
+          enum:
+          - gold
+          - silver
+          - bronze
+          - unranked
+          description: Rank from the best scoring attempt
+        attempt_count:
+          type: integer
+          description: Number of completed attempts
+        attempt_min:
+          type: integer
+          nullable: true
+          description: Minimum attempts required
+        attempt_max:
+          type: integer
+          nullable: true
+          description: Maximum attempts allowed
+        rank_min:
+          type: string
+          nullable: true
+          enum:
+          - gold
+          - silver
+          - bronze
+          - unranked
+          description: Minimum rank required to pass
+        program:
+          type: object
+          nullable: true
+          description: Program this assignment belongs to (null if standalone)
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+        created_at:
+          type: string
+          format: date-time
+    ScenarioAccessResponse:
+      type: object
+      properties:
+        user_email:
+          type: string
+          format: email
+          description: Email of the user checked
+        scenario_id:
+          type: string
+          description: Scenario identifier
+        permissions:
+          type: object
+          properties:
+            can_view:
+              type: boolean
+              description: Whether the user can view the scenario
+            can_share:
+              type: boolean
+              description: Whether the user can share the scenario
+            can_monitor:
+              type: boolean
+              description: Whether the user can monitor sessions on this scenario
+            can_edit:
+              type: boolean
+              description: Whether the user can edit the scenario
+    SkillRef:
+      type: object
+      description: A compact skill reference for embedding in other responses.
+      properties:
+        id:
+          type: string
+          description: Unique skill identifier
+        name:
+          type: string
+          description: Skill name
+        slug:
+          type: string
+          description: URL-friendly skill identifier
+    ScenarioAnalyticsSummary:
+      type: object
+      description: Aggregate analytics metrics for a scenario.
+      properties:
+        participant_count:
+          type: integer
+          description: Number of unique participants with graded sessions
+        total_sessions:
+          type: integer
+          description: Total number of graded sessions
+        average_best_score:
+          type: number
+          description: Average of each participant's best score (0-100)
+        average_best_rank:
+          type: string
+          enum:
+          - gold
+          - silver
+          - bronze
+          - unranked
+          description: Rank corresponding to the average best score
+        average_lift_percentage:
+          type: number
+          description: Average improvement (best - first score) across participants
+        total_practice_minutes:
+          type: integer
+          description: Total practice time across all sessions in minutes
+        average_session_duration_seconds:
+          type: number
+          description: Average duration per session in seconds
+        score_distribution:
+          $ref: '#/components/schemas/ScenarioScoreDistribution'
+    GrantAccessResponse:
+      type: object
+      properties:
+        user_email:
+          type: string
+          format: email
+          description: Email of the user granted access
+        scenario_id:
+          type: string
+          description: Scenario identifier
+        permission_level:
+          type: string
+          enum:
+          - view
+          - share
+          - monitor
+          - edit
+          description: Permission level granted
+        granted:
+          type: boolean
+          description: Whether the access was successfully granted
+    Scenario:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique scenario identifier
+        name:
+          type: string
+          description: Scenario name
+        description:
+          type: string
+          nullable: true
+          description: Short description of the scenario
+        slug:
+          type: string
+          description: URL-friendly scenario identifier
+        url:
+          type: string
+          format: uri
+          description: Direct link to the scenario
+        difficulty:
+          type: string
+          description: Scenario difficulty level
+          enum:
+          - easy
+          - medium
+          - hard
+          - very_hard
+          - custom
+        context:
+          type: string
+          nullable: true
+          description: 'The scenario''s context - background and setup information that frames
+
+            the roleplay (e.g., the buyer''s company, current situation, recent
+
+            events). Plain text, may contain newlines. May be null for scenarios
+
+            that haven''t filled in this section.
+
+            '
+          example: The buyer is the VP of Engineering at a Series B fintech. They have an active RFP out for an observability tool and your competitor presented yesterday.
+        objective:
+          type: string
+          nullable: true
+          description: 'The learner''s objective for the scenario. The value is markdown and
+
+            includes an embedded "Outcomes to Avoid" subsection separated by the
+
+            delimiter `##### Outcomes to Avoid:`, followed by a bulleted list.
+
+            Consumers who want the two pieces separately can split on that
+
+            delimiter.
+
+            '
+          example: 'Qualify the opportunity and book a follow-up meeting with the economic buyer.
+
+            ##### Outcomes to Avoid:
+
+            - Discounting before discovery
+
+            - Skipping the budget conversation
+
+            - Committing to a custom integration without scoping
+
+            '
+        language:
+          type: string
+          description: Scenario language
+        visibility:
+          type: string
+          description: Sharing scope of the scenario
+          enum:
+          - private
+          - workspace
+        owner:
+          $ref: '#/components/schemas/User'
+          nullable: true
+          description: User who owns the scenario
+        created_at:
+          type: string
+          format: date-time
+          description: When the scenario was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the scenario was last updated
+        skills:
+          type: array
+          nullable: true
+          description: Skills evaluated by this scenario (only included when requested via `?include=skills`)
+          items:
+            $ref: '#/components/schemas/SkillRef'
+    ScenarioScoreDistribution:
+      type: array
+      description: Rank distribution across participants based on best scores (Gold ≥90, Silver ≥75, Bronze ≥50, Unranked <50).
+      items:
+        type: object
+        properties:
+          rank:
+            type: string
+            enum:
+            - gold
+            - silver
+            - bronze
+            - unranked
+            description: Performance rank
+          count:
+            type: integer
+            description: Number of participants at this rank
+          percentage:
+            type: number
+            description: Percentage of participants at this rank
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
+    ScenarioRef:
+      type: object
+      description: A compact scenario reference for embedding in other responses.
+      properties:
+        id:
+          type: string
+          description: Unique scenario identifier
+        name:
+          type: string
+          description: Scenario name
+        slug:
+          type: string
+          description: URL-friendly scenario identifier
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authentication_error
+              code: invalid_api_key
+              message: Invalid or inactive API key
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: invalid_request
+              code: invalid_pagination
+              message: Invalid pagination parameters
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: not_found
+              message: 'Scenario not found: abc123'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API key created in Settings > API.
+
+
+        Format: `exec_live_` followed by 40 alphanumeric characters.
+
+        '
