@@ -1,0 +1,32 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/exec-openapi-original.yml
+docs: https://docs.exec.com/api-reference/scenario-studio/create-scenario-job
+spec_type: Webhooks
+status: partial
+summary: >-
+  Exec does not yet publish general event webhooks (documented as "coming soon"),
+  but the Scenario Studio job API supports a per-request completion callback: when
+  a scenario-creation job finishes, Exec sends an HTTP POST to a caller-supplied
+  callback_url. This is the only delivered webhook surface today.
+webhooks:
+  - name: scenario-job.completed
+    delivery: HTTP POST
+    trigger: An asynchronous scenario-creation job reaches a terminal state.
+    subscribe_via:
+      operation: createScenarioJob
+      path: POST /scenario-studio/jobs
+      fields:
+        - name: callback_url
+          description: URL to receive a webhook POST when the job completes.
+        - name: callback_headers
+          description: Optional custom headers (e.g. authorization) to include on the callback.
+    payload_hint: >-
+      Mirrors the ScenarioJob resource (id, status, scenario, error, timestamps).
+      Poll GET /scenario-studio/jobs/{job_id} for authoritative status.
+general_event_webhooks:
+  status: coming-soon
+  source: https://docs.exec.com/api-reference/overview
+notes: >-
+  No AsyncAPI document is published. Emitting a Webhooks surface for the
+  documented job-completion callback; not fabricating an event catalog.

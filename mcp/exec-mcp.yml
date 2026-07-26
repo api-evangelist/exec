@@ -1,0 +1,108 @@
+# Candidate MCP server derived from the Exec OpenAPI (no official server published).
+generated: '2026-07-19'
+method: derived
+status: candidate
+source: openapi/exec-openapi-original.yml
+server:
+  name: exec
+  transport: http
+  url: null
+  notes: No official hosted/remote MCP server found. Candidate tool list derived one-per-operation from
+    the Exec OpenAPI.
+tools:
+- name: getWorkspace
+  description: Get workspace info
+  source_operation: openapi/exec-openapi-original.yml#getWorkspace
+- name: listWorkspaceMembers
+  description: List workspace members
+  source_operation: openapi/exec-openapi-original.yml#listWorkspaceMembers
+- name: listWorkspaceGroups
+  description: List workspace groups
+  source_operation: openapi/exec-openapi-original.yml#listWorkspaceGroups
+- name: listAssignments
+  description: List scenario assignments
+  source_operation: openapi/exec-openapi-original.yml#listAssignments
+- name: listCollections
+  description: List collections
+  source_operation: openapi/exec-openapi-original.yml#listCollections
+- name: listSessions
+  description: List roleplay sessions
+  source_operation: openapi/exec-openapi-original.yml#listSessions
+- name: getSession
+  description: Get session detail
+  source_operation: openapi/exec-openapi-original.yml#getSession
+- name: listSkills
+  description: List skills
+  source_operation: openapi/exec-openapi-original.yml#listSkills
+- name: getSkillProficiency
+  description: Get skill proficiency by user
+  source_operation: openapi/exec-openapi-original.yml#getSkillProficiency
+- name: getScenarioAnalyticsSummary
+  description: Get scenario analytics summary
+  source_operation: openapi/exec-openapi-original.yml#getScenarioAnalyticsSummary
+- name: getScenarioAnalyticsParticipants
+  description: Get scenario participant analytics
+  source_operation: openapi/exec-openapi-original.yml#getScenarioAnalyticsParticipants
+- name: listScenarios
+  description: List scenarios
+  source_operation: openapi/exec-openapi-original.yml#listScenarios
+- name: checkScenarioAccess
+  description: Check scenario access
+  source_operation: openapi/exec-openapi-original.yml#checkScenarioAccess
+- name: grantScenarioAccess
+  description: Grant scenario access
+  source_operation: openapi/exec-openapi-original.yml#grantScenarioAccess
+- name: assignScenario
+  description: Assign scenario to user
+  source_operation: openapi/exec-openapi-original.yml#assignScenario
+- name: createScenarioStudioSession
+  description: Create Scenario Studio session
+  source_operation: openapi/exec-openapi-original.yml#createScenarioStudioSession
+- name: createScenarioJob
+  description: Create Scenario job
+  source_operation: openapi/exec-openapi-original.yml#createScenarioJob
+- name: getScenarioJob
+  description: Get Scenario job status
+  source_operation: openapi/exec-openapi-original.yml#getScenarioJob
+- name: cancelScenarioJob
+  description: Cancel Scenario job
+  source_operation: openapi/exec-openapi-original.yml#cancelScenarioJob
+- name: listKnowledgeHubFolders
+  description: List folders
+  source_operation: openapi/exec-openapi-original.yml#listKnowledgeHubFolders
+- name: getKnowledgeHubFolder
+  description: Get folder
+  source_operation: openapi/exec-openapi-original.yml#getKnowledgeHubFolder
+- name: listKnowledgeHubPages
+  description: List pages
+  source_operation: openapi/exec-openapi-original.yml#listKnowledgeHubPages
+- name: createKnowledgeHubPage
+  description: Create page
+  source_operation: openapi/exec-openapi-original.yml#createKnowledgeHubPage
+- name: getKnowledgeHubPage
+  description: Get page
+  source_operation: openapi/exec-openapi-original.yml#getKnowledgeHubPage
+- name: updateKnowledgeHubPage
+  description: Update page
+  source_operation: openapi/exec-openapi-original.yml#updateKnowledgeHubPage
+- name: replaceKnowledgeHubPage
+  description: Update page (PUT)
+  source_operation: openapi/exec-openapi-original.yml#replaceKnowledgeHubPage
+- name: archiveKnowledgeHubPage
+  description: Archive page
+  source_operation: openapi/exec-openapi-original.yml#archiveKnowledgeHubPage
+- name: listKnowledgeHubPageVersions
+  description: List page versions
+  source_operation: openapi/exec-openapi-original.yml#listKnowledgeHubPageVersions
+- name: listKnowledgeHubSources
+  description: List sources
+  source_operation: openapi/exec-openapi-original.yml#listKnowledgeHubSources
+- name: createKnowledgeHubSource
+  description: Create source
+  source_operation: openapi/exec-openapi-original.yml#createKnowledgeHubSource
+- name: getKnowledgeHubSource
+  description: Get source
+  source_operation: openapi/exec-openapi-original.yml#getKnowledgeHubSource
+- name: deleteKnowledgeHubSource
+  description: Delete source
+  source_operation: openapi/exec-openapi-original.yml#deleteKnowledgeHubSource

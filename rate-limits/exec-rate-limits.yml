@@ -1,0 +1,33 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.exec.com/api-reference/overview
+docs: https://docs.exec.com/api-reference/overview
+summary: >-
+  The Exec API applies per-workspace rate limits with a short-burst allowance, a
+  daily sustained ceiling, and a tighter dedicated limit on asynchronous scenario
+  creation. Exceeding a limit returns HTTP 429 with a retry_after field.
+limits:
+  - name: burst
+    scope: workspace
+    limit_count: 60
+    window: minute
+    description: Up to 60 requests per minute (short-burst allowance).
+  - name: sustained
+    scope: workspace
+    limit_count: 1000
+    window: day
+    description: Up to 1,000 requests per day (sustained ceiling).
+  - name: scenario-creation
+    scope: workspace
+    limit_count: 10
+    window: minute
+    endpoints:
+      - POST /scenario-studio/jobs
+      - POST /scenario-studio
+    description: Asynchronous scenario creation is limited to 10 requests per minute.
+signaling:
+  status_code: 429
+  retry_after_field: retry_after
+  notes: >-
+    Rate-limited responses return HTTP 429 with a retry_after value indicating
+    when to retry.

@@ -1,22 +1,279 @@
 aid: exec
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/exec.png
 name: Exec
-description: Exec is a company surfaced as a portfolio company of a16z and added to the API Evangelist
-  network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Exec is an AI-powered roleplay and sales-training platform (exec.com) for
+  practicing high-stakes conversations. Teams run voice-based AI roleplays,
+  automatically score real calls, build structured programs and certifications,
+  coach one-on-one, and manage training content in a Knowledge Hub. The Exec REST
+  API gives programmatic access to a workspace: members and groups, scenarios and
+  collections, roleplay sessions and analytics, skills and proficiency, Scenario
+  Studio job creation, and Knowledge Hub pages and sources. Backed by a16z.
 url: https://raw.githubusercontent.com/api-evangelist/exec/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - a16z
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: active
+x-tier-reason: enriched-api
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
-apis: []
+- Artificial Intelligence
+- Sales Enablement
+- Training
+- Roleplay
+- Coaching
+- Learning
+- Knowledge Management
+- LMS
+apis:
+- aid: exec:exec-collections-api
+  name: Exec Collections API
+  description: The Collections API from Exec — 1 operation(s) for collections.
+  humanURL: https://docs.exec.com/api-reference/overview
+  baseURL: https://api.exec.com/rest/v1
+  tags:
+  - Collections
+  properties:
+  - type: OpenAPI
+    url: openapi/exec-collections-api-openapi.yml
+  - type: Documentation
+    url: https://docs.exec.com/api-reference/overview
+  - type: APIReference
+    url: https://docs.exec.com/api-reference/overview
+  - type: GettingStarted
+    url: https://docs.exec.com/api-reference/quickstart
+  - type: Authentication
+    url: authentication/exec-authentication.yml
+- aid: exec:exec-knowledge-hub-folders-api
+  name: Exec Knowledge Hub - Folders API
+  description: The Knowledge Hub - Folders API from Exec — 2 operation(s) for knowledge hub - folders.
+  humanURL: https://docs.exec.com/api-reference/overview
+  baseURL: https://api.exec.com/rest/v1
+  tags:
+  - Knowledge Hub - Folders
+  properties:
+  - type: OpenAPI
+    url: openapi/exec-knowledge-hub-folders-api-openapi.yml
+  - type: Documentation
+    url: https://docs.exec.com/api-reference/overview
+  - type: APIReference
+    url: https://docs.exec.com/api-reference/overview
+  - type: GettingStarted
+    url: https://docs.exec.com/api-reference/quickstart
+  - type: Authentication
+    url: authentication/exec-authentication.yml
+- aid: exec:exec-knowledge-hub-pages-api
+  name: Exec Knowledge Hub - Pages API
+  description: The Knowledge Hub - Pages API from Exec — 3 operation(s) for knowledge hub - pages.
+  humanURL: https://docs.exec.com/api-reference/overview
+  baseURL: https://api.exec.com/rest/v1
+  tags:
+  - Knowledge Hub - Pages
+  properties:
+  - type: OpenAPI
+    url: openapi/exec-knowledge-hub-pages-api-openapi.yml
+  - type: Documentation
+    url: https://docs.exec.com/api-reference/overview
+  - type: APIReference
+    url: https://docs.exec.com/api-reference/overview
+  - type: GettingStarted
+    url: https://docs.exec.com/api-reference/quickstart
+  - type: Authentication
+    url: authentication/exec-authentication.yml
+- aid: exec:exec-knowledge-hub-sources-api
+  name: Exec Knowledge Hub - Sources API
+  description: The Knowledge Hub - Sources API from Exec — 2 operation(s) for knowledge hub - sources.
+  humanURL: https://docs.exec.com/api-reference/overview
+  baseURL: https://api.exec.com/rest/v1
+  tags:
+  - Knowledge Hub - Sources
+  properties:
+  - type: OpenAPI
+    url: openapi/exec-knowledge-hub-sources-api-openapi.yml
+  - type: Documentation
+    url: https://docs.exec.com/api-reference/overview
+  - type: APIReference
+    url: https://docs.exec.com/api-reference/overview
+  - type: GettingStarted
+    url: https://docs.exec.com/api-reference/quickstart
+  - type: Authentication
+    url: authentication/exec-authentication.yml
+- aid: exec:exec-scenario-studio-api
+  name: Exec Scenario Studio API
+  description: The Scenario Studio API from Exec — 3 operation(s) for scenario studio.
+  humanURL: https://docs.exec.com/api-reference/overview
+  baseURL: https://api.exec.com/rest/v1
+  tags:
+  - Scenario Studio
+  properties:
+  - type: OpenAPI
+    url: openapi/exec-scenario-studio-api-openapi.yml
+  - type: Documentation
+    url: https://docs.exec.com/api-reference/overview
+  - type: APIReference
+    url: https://docs.exec.com/api-reference/overview
+  - type: GettingStarted
+    url: https://docs.exec.com/api-reference/quickstart
+  - type: Authentication
+    url: authentication/exec-authentication.yml
+- aid: exec:exec-scenarios-api
+  name: Exec Scenarios API
+  description: The Scenarios API from Exec — 6 operation(s) for scenarios.
+  humanURL: https://docs.exec.com/api-reference/overview
+  baseURL: https://api.exec.com/rest/v1
+  tags:
+  - Scenarios
+  properties:
+  - type: OpenAPI
+    url: openapi/exec-scenarios-api-openapi.yml
+  - type: Documentation
+    url: https://docs.exec.com/api-reference/overview
+  - type: APIReference
+    url: https://docs.exec.com/api-reference/overview
+  - type: GettingStarted
+    url: https://docs.exec.com/api-reference/quickstart
+  - type: Authentication
+    url: authentication/exec-authentication.yml
+- aid: exec:exec-sessions-api
+  name: Exec Sessions API
+  description: The Sessions API from Exec — 2 operation(s) for sessions.
+  humanURL: https://docs.exec.com/api-reference/overview
+  baseURL: https://api.exec.com/rest/v1
+  tags:
+  - Sessions
+  properties:
+  - type: OpenAPI
+    url: openapi/exec-sessions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.exec.com/api-reference/overview
+  - type: APIReference
+    url: https://docs.exec.com/api-reference/overview
+  - type: GettingStarted
+    url: https://docs.exec.com/api-reference/quickstart
+  - type: Authentication
+    url: authentication/exec-authentication.yml
+- aid: exec:exec-skills-api
+  name: Exec Skills API
+  description: The Skills API from Exec — 2 operation(s) for skills.
+  humanURL: https://docs.exec.com/api-reference/overview
+  baseURL: https://api.exec.com/rest/v1
+  tags:
+  - Skills
+  properties:
+  - type: OpenAPI
+    url: openapi/exec-skills-api-openapi.yml
+  - type: Documentation
+    url: https://docs.exec.com/api-reference/overview
+  - type: APIReference
+    url: https://docs.exec.com/api-reference/overview
+  - type: GettingStarted
+    url: https://docs.exec.com/api-reference/quickstart
+  - type: Authentication
+    url: authentication/exec-authentication.yml
+- aid: exec:exec-workspace-api
+  name: Exec Workspace API
+  description: The Workspace API from Exec — 3 operation(s) for workspace.
+  humanURL: https://docs.exec.com/api-reference/overview
+  baseURL: https://api.exec.com/rest/v1
+  tags:
+  - Workspace
+  properties:
+  - type: OpenAPI
+    url: openapi/exec-workspace-api-openapi.yml
+  - type: Documentation
+    url: https://docs.exec.com/api-reference/overview
+  - type: APIReference
+    url: https://docs.exec.com/api-reference/overview
+  - type: GettingStarted
+    url: https://docs.exec.com/api-reference/quickstart
+  - type: Authentication
+    url: authentication/exec-authentication.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+common:
+- type: OpenAPI
+  url: openapi/exec-openapi-original.yml
+- type: AgenticAccess
+  url: agentic-access/exec-agentic-access.yml
+- type: DomainSecurity
+  url: security/exec-domain-security.yml
+- type: Authentication
+  url: authentication/exec-authentication.yml
+- type: Conventions
+  url: conventions/exec-conventions.yml
+- type: Idempotency
+  url: conventions/exec-conventions.yml
+- type: RateLimits
+  url: rate-limits/exec-rate-limits.yml
+- type: ErrorCatalog
+  url: errors/exec-error-codes.yml
+- type: Lifecycle
+  url: lifecycle/exec-lifecycle.yml
+- type: StatusPage
+  url: https://status.exec.com
+- type: Conformance
+  url: conformance/exec-conformance.yml
+- type: Compliance
+  url: https://www.exec.com/enterprise-privacy
+- type: TrustCenter
+  url: https://app.vanta.com/exec.com/trust/j0xkhh5zesxvojinovqlpm
+- type: DataModel
+  url: data-model/exec-data-model.yml
+- type: Overlay
+  url: overlays/exec-openapi-overlay.yaml
+- type: Webhooks
+  url: asyncapi/exec-webhooks.yml
+- type: MCPServer
+  url: mcp/exec-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/exec-llms.txt
+- type: DeveloperPortal
+  url: https://docs.exec.com
+- type: Documentation
+  url: https://docs.exec.com
+- type: APIReference
+  url: https://docs.exec.com/api-reference/overview
+- type: GettingStarted
+  url: https://docs.exec.com/api-reference/quickstart
+- type: Support
+  url: https://docs.exec.com
+- type: Blog
+  url: https://www.exec.com/news
+- type: Pricing
+  url: https://www.exec.com/pricing
+- type: SignUp
+  url: https://www.exec.com/start
+- type: Login
+  url: https://www.exec.com/login
+- type: TermsOfService
+  url: https://www.exec.com/tos
+- type: PrivacyPolicy
+  url: https://www.exec.com/privacy-policy
+- type: Website
+  url: https://www.exec.com
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

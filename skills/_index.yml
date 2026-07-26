@@ -1,0 +1,16 @@
+generated: '2026-07-19'
+method: generated
+source: openapi/exec-openapi-original.yml
+skills:
+  - file: exec-create-scenario.md
+    name: Create an AI roleplay scenario with Exec Scenario Studio
+    api: openapi/exec-openapi-original.yml
+    operations: [createScenarioJob, getScenarioJob, cancelScenarioJob, createScenarioStudioSession]
+  - file: exec-assign-and-track.md
+    name: Assign a scenario and track team performance
+    api: openapi/exec-openapi-original.yml
+    operations: [listScenarios, checkScenarioAccess, grantScenarioAccess, assignScenario, listSessions, getSession, getScenarioAnalyticsSummary, getScenarioAnalyticsParticipants]
+  - file: exec-knowledge-hub.md
+    name: Manage Knowledge Hub pages and sources
+    api: openapi/exec-openapi-original.yml
+    operations: [listKnowledgeHubFolders, createKnowledgeHubPage, getKnowledgeHubPage, updateKnowledgeHubPage, createKnowledgeHubSource, getKnowledgeHubSource]

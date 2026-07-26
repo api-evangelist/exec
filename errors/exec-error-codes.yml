@@ -1,0 +1,45 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/exec-openapi-original.yml
+docs: https://docs.exec.com/api-reference/authentication
+format: custom
+envelope:
+  shape: '{ "error": { "type": string, "code": string, "message": string } }'
+  fields:
+    - name: error.type
+      description: Error category (e.g. "invalid_request", "authentication_error").
+    - name: error.code
+      description: Specific machine-readable error code (e.g. "invalid_api_key", "user_not_found").
+    - name: error.message
+      description: Human-readable error message.
+  content_type: application/json
+  notes: >-
+    Exec returns a structured JSON error envelope (not RFC 9457 problem+json).
+    Errors carry a category `type`, an optional specific `code`, and a
+    human-readable `message`.
+problems:
+  - status: 400
+    type: invalid_request
+    code: invalid_pagination
+    title: Invalid request parameters
+    source: openapi/exec-openapi-original.yml#/components/responses/BadRequest
+  - status: 401
+    type: authentication_error
+    code: invalid_api_key
+    title: Missing or invalid API key
+    remediation: 'Provide a valid Authorization: Bearer exec_live_... API key.'
+    source: openapi/exec-openapi-original.yml#/components/responses/Unauthorized
+  - status: 403
+    type: authorization_error
+    code: workspace_inactive
+    title: Workspace is inactive
+    source: openapi/exec-openapi-original.yml#/components/responses/Forbidden
+  - status: 404
+    type: not_found
+    title: Resource not found
+    source: openapi/exec-openapi-original.yml#/components/responses/NotFound
+  - status: 429
+    type: rate_limited
+    title: Too many requests
+    remediation: Back off and retry after the interval in the `retry_after` field.
+    source: https://docs.exec.com/api-reference/overview

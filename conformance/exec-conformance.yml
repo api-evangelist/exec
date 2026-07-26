@@ -1,0 +1,44 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/exec-openapi-original.yml
+docs: https://www.exec.com/enterprise-privacy
+standards:
+  - id: oauth2
+    conforms: false
+    evidence: API uses static bearer API keys (exec_live_), not OAuth2 flows.
+  - id: oidc
+    conforms: false
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      Errors use a custom { error: { type, code, message } } envelope, not
+      application/problem+json.
+  - id: pagination
+    conforms: true
+    evidence: Page-number pagination (page/page_size/total_count/total_pages).
+  - id: idempotency
+    conforms: true
+    evidence: request_id idempotency key on POST /scenario-studio/jobs.
+  - id: rate-limiting
+    conforms: true
+    evidence: HTTP 429 with retry_after signaling.
+  - id: lti-1.3
+    conforms: true
+    evidence: Exec ships an LTI 1.3 tool integration for LMS launch + grade passback.
+  - id: soc2-type2
+    conforms: true
+    evidence: >-
+      "SOC 2 Type 2 Certified" per exec.com/enterprise-privacy and the Vanta
+      trust center.
+  - id: soc3
+    conforms: true
+    evidence: SOC 3 referenced in Security Measures on exec.com/enterprise-privacy.
+compliance:
+  certifications:
+    - SOC 2 Type II
+    - SOC 3
+  trust_center: https://app.vanta.com/exec.com/trust/j0xkhh5zesxvojinovqlpm
+  encryption:
+    in_transit: TLS 1.2+
+    at_rest: true
+  source: https://www.exec.com/enterprise-privacy

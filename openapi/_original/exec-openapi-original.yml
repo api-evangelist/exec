@@ -1,0 +1,3933 @@
+openapi: 3.0.3
+info:
+  title: Exec API
+  version: '1.0'
+  description: >
+    REST API for programmatic access to your Exec workspace.
+
+
+    Use the Exec API to read workspace data, list members, retrieve group
+    information,
+
+    and create interactive scenario creation sessions.
+
+
+    ## Authentication
+
+    All requests require a valid API key passed in the Authorization header:
+
+    ```
+
+    Authorization: Bearer exec_live_...
+
+    ```
+
+
+    Create API keys in your workspace settings under **Settings > API**.
+tags:
+  - name: Knowledge Hub - Folders
+    x-group: Knowledge Hub
+  - name: Knowledge Hub - Pages
+    x-group: Knowledge Hub
+  - name: Knowledge Hub - Sources
+    x-group: Knowledge Hub
+servers:
+  - url: https://api.exec.com/rest/v1
+    description: Production
+security:
+  - bearerAuth: []
+paths:
+  /workspace:
+    get:
+      operationId: getWorkspace
+      summary: Get workspace info
+      description: Returns basic information about the authenticated workspace.
+      tags:
+        - Workspace
+      responses:
+        '200':
+          description: Workspace information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workspace'
+              example:
+                id: a1b2c3d4e5f6
+                name: Acme Corp
+                url_slug: acme-corp
+                created_at: '2024-01-15T10:30:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /workspace/members:
+    get:
+      operationId: listWorkspaceMembers
+      summary: List workspace members
+      description: Returns a paginated list of workspace members with basic user info.
+      tags:
+        - Workspace
+      parameters:
+        - name: page
+          in: query
+          description: Page number (1-indexed)
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: page_size
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+        - name: group_ids
+          in: query
+          description: Comma-separated workspace group IDs to filter by
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of workspace members
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WorkspaceMember'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                  - id: m1n2o3p4q5r6
+                    user:
+                      id: u7v8w9x0y1z2
+                      email: jane@acme.com
+                      first_name: Jane
+                      last_name: Smith
+                    role: admin
+                    created_at: '2024-01-15T10:30:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 25
+                  total_pages: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /workspace/groups:
+    get:
+      operationId: listWorkspaceGroups
+      summary: List workspace groups
+      description: Returns a paginated list of groups in the workspace.
+      tags:
+        - Workspace
+      parameters:
+        - name: page
+          in: query
+          description: Page number (1-indexed)
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: page_size
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: List of workspace groups
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WorkspaceGroup'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                  - id: g1h2i3j4k5l6
+                    name: Sales Team
+                    created_at: '2024-02-01T09:00:00Z'
+                  - id: g7h8i9j0k1l2
+                    name: Customer Success
+                    created_at: '2024-02-15T14:30:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 2
+                  total_pages: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /scenarios/assignments:
+    get:
+      operationId: listAssignments
+      summary: List scenario assignments
+      description: >
+        Returns a paginated list of scenario assignments in the workspace.
+
+
+        Assignments represent tasks given to users to practice specific
+        scenarios. Each
+
+        assignment tracks status (not_started, in_progress, completed, past_due,
+        did_not_pass),
+
+        best score, attempt count, and completion requirements.
+
+
+        Filter by user, scenario, program, or status to find specific
+        assignments.
+      tags:
+        - Scenarios
+      parameters:
+        - name: user_ids
+          in: query
+          description: >-
+            Comma-separated user IDs to filter by. When combined with
+            user_emails, results are unioned (all matching users from either
+            list are included).
+          schema:
+            type: string
+        - name: user_emails
+          in: query
+          description: >-
+            Comma-separated user email addresses to filter by. When combined
+            with user_ids, results are unioned (all matching users from either
+            list are included).
+          schema:
+            type: string
+        - name: scenario_ids
+          in: query
+          description: Comma-separated scenario IDs to filter by
+          schema:
+            type: string
+        - name: program_ids
+          in: query
+          description: Comma-separated program IDs to filter by
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Filter by one or more assignment statuses
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - not_started
+                - in_progress
+                - completed
+                - past_due
+                - did_not_pass
+            example:
+              - completed
+              - past_due
+        - name: page
+          in: query
+          description: Page number (1-indexed)
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: page_size
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Paginated list of assignments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Assignment'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                  - id: a1b2c3d4e5f6
+                    user:
+                      id: u1a2b3c4d5e6
+                      email: jane@acme.com
+                      first_name: Jane
+                      last_name: Smith
+                    scenario:
+                      id: s1a2b3c4d5e6
+                      name: Procurement Discovery
+                      slug: procurement-discovery
+                    status: completed
+                    due_date: '2026-04-15T00:00:00Z'
+                    best_score: 88
+                    best_rank: gold
+                    attempt_count: 3
+                    attempt_min: 1
+                    attempt_max: null
+                    rank_min: silver
+                    program: null
+                    created_at: '2026-03-01T10:00:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 1
+                  total_pages: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /collections:
+    get:
+      operationId: listCollections
+      summary: List collections
+      description: >
+        Returns a paginated list of collections in the workspace, ordered
+
+        alphabetically by name.
+
+
+        Collections group related scenarios together (e.g. "Procurement
+        Scenarios",
+
+        "Onboarding"). Use collection IDs to filter sessions, skills, and
+        scenario
+
+        analytics by collection.
+      tags:
+        - Collections
+      parameters:
+        - name: page
+          in: query
+          description: Page number (1-indexed)
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: page_size
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Paginated list of collections
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Collection'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                  - id: r1a2b3c4d5e6
+                    name: Procurement Scenarios
+                    slug: procurement-scenarios
+                    description: Practice scenarios for procurement conversations.
+                    scenario_count: 4
+                    created_at: '2026-01-10T09:00:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 1
+                  total_pages: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /sessions:
+    get:
+      operationId: listSessions
+      summary: List roleplay sessions
+      description: >
+        Returns a paginated list of roleplay sessions in the workspace with
+        inline user and scenario data.
+
+
+        Sessions represent individual practice attempts on AI roleplay
+        scenarios. Each session
+
+        includes the participant's score, rank, duration, and metadata. Use
+        filters to narrow
+
+        results by user, scenario, skill, program, group, or date range.
+
+
+        Note: Sessions may include users who are no longer active workspace
+        members (e.g., users
+
+        who have been removed). These users will not appear in GET
+        /workspace/members but their
+
+        historical session data is preserved.
+
+
+        Results are ordered by creation date (newest first) by default.
+      tags:
+        - Sessions
+      parameters:
+        - name: user_ids
+          in: query
+          description: >-
+            Comma-separated user IDs to filter by. When combined with
+            user_emails, results are unioned (all matching users from either
+            list are included).
+          schema:
+            type: string
+            example: u1a2b3c4d5e6,u7v8w9x0y1z2
+        - name: user_emails
+          in: query
+          description: >-
+            Comma-separated user email addresses to filter by. When combined
+            with user_ids, results are unioned (all matching users from either
+            list are included).
+          schema:
+            type: string
+            example: jane@acme.com,bob@acme.com
+        - name: scenario_ids
+          in: query
+          description: Comma-separated scenario IDs to filter by
+          schema:
+            type: string
+        - name: collection_ids
+          in: query
+          description: Comma-separated collection IDs to filter by
+          schema:
+            type: string
+        - name: skill_ids
+          in: query
+          description: Comma-separated skill IDs to filter by
+          schema:
+            type: string
+        - name: program_ids
+          in: query
+          description: Comma-separated program IDs to filter by
+          schema:
+            type: string
+        - name: group_ids
+          in: query
+          description: Comma-separated workspace group IDs to filter by
+          schema:
+            type: string
+        - name: rank
+          in: query
+          description: Filter by one or more performance ranks
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - gold
+                - silver
+                - bronze
+                - unranked
+            example:
+              - gold
+              - silver
+        - name: start_date
+          in: query
+          description: >-
+            ISO 8601 datetime — only include sessions created on or after this
+            date
+          schema:
+            type: string
+            format: date-time
+        - name: end_date
+          in: query
+          description: >-
+            ISO 8601 datetime — only include sessions created on or before this
+            date
+          schema:
+            type: string
+            format: date-time
+        - name: exclude_system_users
+          in: query
+          description: >-
+            Exclude sessions from system users (emails ending in @exec.com).
+            Default false.
+          schema:
+            type: boolean
+            default: false
+        - name: sorting
+          in: query
+          description: Sort field. Prefix with `-` for descending order.
+          schema:
+            type: string
+            default: '-created_at'
+            enum:
+              - created_at
+              - '-created_at'
+              - score
+              - '-score'
+              - duration
+              - '-duration'
+        - name: page
+          in: query
+          description: Page number (1-indexed)
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: page_size
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Paginated list of roleplay sessions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SessionListItem'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                  - id: abc123def456
+                    user:
+                      id: u1a2b3c4d5e6
+                      email: jane@acme.com
+                      first_name: Jane
+                      last_name: Smith
+                    scenario:
+                      id: s1a2b3c4d5e6
+                      name: Procurement Discovery
+                      slug: procurement-discovery
+                    score: 82.5
+                    rank: gold
+                    duration_seconds: 347
+                    is_valid_attempt: true
+                    created_at: '2026-03-15T14:30:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 128
+                  total_pages: 3
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /sessions/{session_id}:
+    get:
+      operationId: getSession
+      summary: Get session detail
+      description: >
+        Returns full detail for a single roleplay session, including score,
+        rank, duration,
+
+        and feedback.
+
+
+        Use the `include` parameter to fetch optional heavy fields like the full
+        conversation
+
+        transcript or evaluation criteria with grades. These are omitted by
+        default to keep
+
+        responses lean.
+      tags:
+        - Sessions
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          description: The session's unique identifier (UUID)
+          schema:
+            type: string
+        - name: include
+          in: query
+          description: >
+            Comma-separated list of optional sections to include in the
+            response.
+
+            Available values: `transcript` (conversation lines), `evaluations`
+            (rubric criteria with grades).
+          schema:
+            type: string
+            example: transcript,evaluations
+      responses:
+        '200':
+          description: Session detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionDetail'
+              example:
+                id: abc123def456
+                user:
+                  id: u1a2b3c4d5e6
+                  email: jane@acme.com
+                  first_name: Jane
+                  last_name: Smith
+                scenario:
+                  id: s1a2b3c4d5e6
+                  name: Procurement Discovery
+                  slug: procurement-discovery
+                score: 82.5
+                rank: gold
+                duration_seconds: 347
+                is_valid_attempt: true
+                outcome_feedback: Strong discovery questioning with good rapport building.
+                positive_feedback: Excellent use of open-ended questions to uncover needs.
+                constructive_feedback: Consider probing deeper into budget constraints.
+                created_at: '2026-03-15T14:30:00Z'
+                transcript:
+                  - speaker: ai
+                    text: >-
+                      Hi, I'm the procurement lead at Globex. Thanks for meeting
+                      with me today.
+                    seconds_from_start: 0
+                  - speaker: user
+                    text: >-
+                      Thanks for your time. I'd love to learn more about your
+                      current process.
+                    seconds_from_start: 4.2
+                evaluations:
+                  - criterion_name: Communication Skills
+                    items:
+                      - name: Discovery Questions
+                        grade: good
+                        feedback: >-
+                          Asked targeted questions about pain points and current
+                          workflow.
+                        feedback_examples:
+                          - quote: Tell me about your current procurement process.
+                            feedback: Great open-ended discovery question.
+                            suggestion_quote: null
+                            grade: good
+                            salience: high
+                  - criterion_name: Objection Handling
+                    items:
+                      - name: Budget Concerns
+                        grade: mid
+                        feedback: >-
+                          Addressed the budget concern but could have reframed
+                          value more clearly.
+                        feedback_examples: []
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /skills:
+    get:
+      operationId: listSkills
+      summary: List skills
+      description: >
+        Returns a paginated list of skills in the workspace, ordered
+        alphabetically by name.
+
+
+        Skills represent competencies that are evaluated during roleplay
+        sessions and calls
+
+        (e.g. "Discovery Questions", "Objection Handling", "Procurement
+        Selling"). Each skill
+
+        can be linked to evaluation criteria across multiple scenarios.
+
+
+        Use `?include=proficiency` to add aggregate proficiency stats per skill
+        (participant
+
+        count, scored participant count, percentage proficient+, and average
+        score). This is
+
+        computed across all workspace members who have practiced each skill.
+      tags:
+        - Skills
+      parameters:
+        - name: include
+          in: query
+          description: >
+            Comma-separated list of optional data to include.
+
+            Available values: `proficiency` (aggregate proficiency stats per
+            skill).
+          schema:
+            type: string
+            example: proficiency
+        - name: page
+          in: query
+          description: Page number (1-indexed)
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: page_size
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Paginated list of skills
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Skill'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                  - id: sk1a2b3c4d5e
+                    name: Procurement Selling
+                    slug: procurement-selling
+                    description: >-
+                      Ability to identify and sell procurement solutions
+                      effectively.
+                    created_at: '2026-01-10T09:00:00Z'
+                    proficiency_summary:
+                      participant_count: 25
+                      scored_participant_count: 20
+                      pct_proficient_plus: 60
+                      avg_score: 72.5
+                  - id: sk6f7g8h9i0j
+                    name: Objection Handling
+                    slug: objection-handling
+                    description: Skill in addressing and overcoming prospect objections.
+                    created_at: '2026-01-15T14:30:00Z'
+                    proficiency_summary:
+                      participant_count: 18
+                      scored_participant_count: 15
+                      pct_proficient_plus: 40
+                      avg_score: 65.3
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 2
+                  total_pages: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /skills/{skill_id}/proficiency:
+    get:
+      operationId: getSkillProficiency
+      summary: Get skill proficiency by user
+      description: >
+        Returns per-user proficiency data for a specific skill.
+
+
+        Proficiency uses time-decay weighted scoring across all observations
+        (roleplay sessions
+
+        and calls combined). Recent observations count more than older ones
+        (30-day half-life).
+
+        A minimum of 3 observations is required before a proficiency score is
+        calculated.
+
+
+        Proficiency tiers: `excellent` (≥90), `proficient` (≥75), `developing`
+        (≥50),
+
+        `needs_work` (<50), `insufficient_data` (<3 observations).
+
+
+        Only users with at least one observation are included in the response.
+        If no user
+
+        filters are provided, returns proficiency for all workspace members who
+        have practiced
+
+        this skill.
+      tags:
+        - Skills
+      parameters:
+        - name: skill_id
+          in: path
+          required: true
+          description: The skill's unique identifier (UUID)
+          schema:
+            type: string
+        - name: user_ids
+          in: query
+          description: >-
+            Comma-separated user IDs to filter by. When combined with
+            user_emails, results are unioned (all matching users from either
+            list are included).
+          schema:
+            type: string
+        - name: user_emails
+          in: query
+          description: >-
+            Comma-separated user email addresses to filter by. When combined
+            with user_ids, results are unioned (all matching users from either
+            list are included).
+          schema:
+            type: string
+            example: jane@acme.com,bob@acme.com
+        - name: group_ids
+          in: query
+          description: Comma-separated workspace group IDs to filter by
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          description: Calculate proficiency as of this date (ISO 8601). Defaults to now.
+          schema:
+            type: string
+            format: date-time
+        - name: exclude_system_users
+          in: query
+          description: >-
+            Exclude sessions from system users (emails ending in @exec.com).
+            Default false.
+          schema:
+            type: boolean
+            default: false
+        - name: page
+          in: query
+          description: Page number (1-indexed)
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: page_size
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Per-user proficiency data for the skill
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SkillProficiencyEntry'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                  - user:
+                      id: u1a2b3c4d5e6
+                      email: jane@acme.com
+                      first_name: Jane
+                      last_name: Smith
+                    score: 82
+                    tier: proficient
+                    observation_count: 14
+                    last_practiced_at: '2026-03-12T10:00:00Z'
+                  - user:
+                      id: u7v8w9x0y1z2
+                      email: bob@acme.com
+                      first_name: Bob
+                      last_name: Jones
+                    score: null
+                    tier: insufficient_data
+                    observation_count: 2
+                    last_practiced_at: '2026-03-10T15:30:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 2
+                  total_pages: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /scenarios/{scenario_id}/analytics/summary:
+    get:
+      operationId: getScenarioAnalyticsSummary
+      summary: Get scenario analytics summary
+      description: >
+        Returns aggregate metrics for a scenario: participant count, total
+        sessions,
+
+        average best score and rank, average lift, total practice minutes, and
+        average
+
+        session duration. Accepts both UUID and slug for the scenario
+        identifier.
+      tags:
+        - Scenarios
+      parameters:
+        - name: scenario_id
+          in: path
+          required: true
+          description: Scenario identifier (UUID or slug)
+          schema:
+            type: string
+        - name: user_ids
+          in: query
+          description: >-
+            Comma-separated user IDs to filter by. When combined with
+            user_emails, results are unioned (all matching users from either
+            list are included).
+          schema:
+            type: string
+        - name: user_emails
+          in: query
+          description: >-
+            Comma-separated user email addresses to filter by. When combined
+            with user_ids, results are unioned (all matching users from either
+            list are included).
+          schema:
+            type: string
+        - name: group_ids
+          in: query
+          description: Comma-separated workspace group IDs to filter by
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          description: ISO 8601 datetime — only include sessions on or after this date
+          schema:
+            type: string
+            format: date-time
+        - name: end_date
+          in: query
+          description: ISO 8601 datetime — only include sessions on or before this date
+          schema:
+            type: string
+            format: date-time
+        - name: exclude_system_users
+          in: query
+          description: >-
+            Exclude sessions from system users (emails ending in @exec.com).
+            Default false.
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Scenario analytics summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScenarioAnalyticsSummary'
+              example:
+                participant_count: 45
+                total_sessions: 128
+                average_best_score: 74.2
+                average_best_rank: silver
+                average_lift_percentage: 18.5
+                total_practice_minutes: 742
+                average_session_duration_seconds: 348
+                score_distribution:
+                  - rank: gold
+                    count: 12
+                    percentage: 26.7
+                  - rank: silver
+                    count: 18
+                    percentage: 40
+                  - rank: bronze
+                    count: 10
+                    percentage: 22.2
+                  - rank: unranked
+                    count: 5
+                    percentage: 11.1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /scenarios/{scenario_id}/analytics/participants:
+    get:
+      operationId: getScenarioAnalyticsParticipants
+      summary: Get scenario participant analytics
+      description: >
+        Returns a per-user performance table for a scenario with pagination and
+        sorting.
+
+        Shows each participant's first score, best score, lift, rank, session
+        count,
+
+        and total practice duration.
+      tags:
+        - Scenarios
+      parameters:
+        - name: scenario_id
+          in: path
+          required: true
+          description: Scenario identifier (UUID or slug)
+          schema:
+            type: string
+        - name: user_ids
+          in: query
+          description: >-
+            Comma-separated user IDs to filter by. When combined with
+            user_emails, results are unioned (all matching users from either
+            list are included).
+          schema:
+            type: string
+        - name: user_emails
+          in: query
+          description: >-
+            Comma-separated user email addresses to filter by. When combined
+            with user_ids, results are unioned (all matching users from either
+            list are included).
+          schema:
+            type: string
+        - name: group_ids
+          in: query
+          description: Comma-separated workspace group IDs to filter by
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          description: ISO 8601 datetime — only include sessions on or after this date
+          schema:
+            type: string
+            format: date-time
+        - name: end_date
+          in: query
+          description: ISO 8601 datetime — only include sessions on or before this date
+          schema:
+            type: string
+            format: date-time
+        - name: exclude_system_users
+          in: query
+          description: >-
+            Exclude sessions from system users (emails ending in @exec.com).
+            Default false.
+          schema:
+            type: boolean
+            default: false
+        - name: sorting
+          in: query
+          description: Sort field. Prefix with `-` for descending order.
+          schema:
+            type: string
+            default: '-best_score'
+            enum:
+              - best_score
+              - '-best_score'
+              - first_score
+              - '-first_score'
+              - lift_percentage
+              - '-lift_percentage'
+              - total_duration_seconds
+              - '-total_duration_seconds'
+              - session_count
+              - '-session_count'
+        - name: page
+          in: query
+          description: Page number (1-indexed)
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: page_size
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Per-user participant analytics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ScenarioParticipantEntry'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                  - user:
+                      id: u1a2b3c4d5e6
+                      email: jane@acme.com
+                      first_name: Jane
+                      last_name: Smith
+                    session_count: 4
+                    first_score: 55
+                    first_rank: bronze
+                    best_score: 88
+                    best_rank: gold
+                    lift_percentage: 33
+                    total_duration_seconds: 1240
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 1
+                  total_pages: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /scenarios:
+    get:
+      operationId: listScenarios
+      summary: List scenarios
+      description: |
+        Returns a paginated list of scenarios in the workspace.
+
+        By default, returns all scenarios in the workspace (admin view).
+        Use filters to narrow down results by owner, visibility, or access.
+      tags:
+        - Scenarios
+      parameters:
+        - name: page
+          in: query
+          description: Page number (1-indexed)
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: page_size
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+        - name: owner_email
+          in: query
+          description: Filter by scenario owner's email address
+          schema:
+            type: string
+            format: email
+        - name: visible_to_email
+          in: query
+          description: >-
+            Filter by who can access the scenario (checks owner, user shares,
+            group shares, workspace shares)
+          schema:
+            type: string
+            format: email
+        - name: visibility
+          in: query
+          description: Filter by visibility scope
+          schema:
+            type: string
+            enum:
+              - private
+              - workspace
+        - name: include_archived
+          in: query
+          description: Include archived scenarios in results
+          schema:
+            type: boolean
+            default: false
+        - name: skill_ids
+          in: query
+          description: Comma-separated skill IDs to filter by
+          schema:
+            type: string
+        - name: collection_ids
+          in: query
+          description: Comma-separated collection IDs to filter by
+          schema:
+            type: string
+        - name: include
+          in: query
+          description: >
+            Comma-separated list of optional data to include.
+
+            Available values: `skills` (list of skills evaluated by each
+            scenario).
+          schema:
+            type: string
+            example: skills
+      responses:
+        '200':
+          description: List of scenarios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Scenario'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                  - id: s1c2e3n4a5r6
+                    name: Discovery Call with IT Director
+                    description: Practice handling objections from skeptical IT buyers
+                    slug: discovery-call-it-director
+                    url: >-
+                      https://acme-corp.app.exec.com/scenarios/discovery-call-it-director
+                    difficulty: medium
+                    context: >-
+                      The buyer is the VP of Engineering at a Series B fintech.
+                      They have an active RFP out for an observability tool and
+                      your competitor presented yesterday.
+                    objective: >-
+                      Qualify the opportunity and book a follow-up meeting with
+                      the economic buyer.
+
+                      ##### Outcomes to Avoid:
+
+                      - Discounting before discovery
+
+                      - Skipping the budget conversation
+
+                      - Committing to a custom integration without scoping
+                    language: English
+                    visibility: workspace
+                    owner:
+                      id: u7v8w9x0y1z2
+                      email: jane@acme.com
+                      first_name: Jane
+                      last_name: Smith
+                    created_at: '2024-01-15T10:30:00Z'
+                    updated_at: '2024-02-01T14:20:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 125
+                  total_pages: 3
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /scenarios/{scenario_id}/access:
+    get:
+      operationId: checkScenarioAccess
+      summary: Check scenario access
+      description: >
+        Check if a user has access to a specific scenario and what permission
+        level they have.
+      tags:
+        - Scenarios
+      parameters:
+        - name: scenario_id
+          in: path
+          required: true
+          description: Scenario identifier
+          schema:
+            type: string
+        - name: user_email
+          in: query
+          required: true
+          description: Email of the user to check access for
+          schema:
+            type: string
+            format: email
+            example: jane@acme.com
+      responses:
+        '200':
+          description: User's permission levels for the scenario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScenarioAccessResponse'
+              example:
+                user_email: jane@acme.com
+                scenario_id: s1c2e3n4a5r6
+                permissions:
+                  can_view: true
+                  can_share: true
+                  can_monitor: false
+                  can_edit: false
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: grantScenarioAccess
+      summary: Grant scenario access
+      description: >
+        Grant a user access to a specific scenario with a specified permission
+        level.
+      tags:
+        - Scenarios
+      parameters:
+        - name: scenario_id
+          in: path
+          required: true
+          description: Scenario identifier
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_email
+                - permission_level
+              properties:
+                user_email:
+                  type: string
+                  format: email
+                  description: Email of the user to grant access to
+                permission_level:
+                  type: string
+                  enum:
+                    - view
+                    - share
+                    - monitor
+                    - edit
+                  description: Permission level to grant
+            example:
+              user_email: jane@acme.com
+              permission_level: edit
+      responses:
+        '200':
+          description: Access granted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GrantAccessResponse'
+              example:
+                user_email: jane@acme.com
+                scenario_id: s1c2e3n4a5r6
+                permission_level: edit
+                granted: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /scenarios/{scenario_id}/assignments:
+    post:
+      operationId: assignScenario
+      summary: Assign scenario to user
+      description: >
+        Assign a scenario to a user as a task or homework assignment.
+
+        The user will receive notification of the assignment and can track their
+        progress.
+      tags:
+        - Scenarios
+      parameters:
+        - name: scenario_id
+          in: path
+          required: true
+          description: Scenario identifier
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_email
+                - due_date
+              properties:
+                user_email:
+                  type: string
+                  format: email
+                  description: Email of the user to assign the scenario to
+                due_date:
+                  type: string
+                  format: date-time
+                  description: When the assignment is due (ISO 8601 format)
+                assigner_email:
+                  type: string
+                  format: email
+                  description: >-
+                    Email of the user creating the assignment (optional, used in
+                    notification emails)
+                attempt_min:
+                  type: integer
+                  minimum: 1
+                  description: Minimum number of attempts required
+                attempt_max:
+                  type: integer
+                  minimum: 1
+                  description: Maximum number of attempts allowed
+                rank_min:
+                  type: string
+                  enum:
+                    - gold
+                    - silver
+                    - bronze
+                  description: Minimum rank required to complete
+                custom_message:
+                  type: string
+                  description: Custom message to include with the assignment
+            example:
+              user_email: jane@acme.com
+              due_date: '2024-03-15T17:00:00Z'
+              assigner_email: manager@acme.com
+              attempt_min: 1
+              attempt_max: 5
+              rank_min: silver
+              custom_message: Please complete this discovery call practice by Friday
+      responses:
+        '200':
+          description: Assignment created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assignment'
+              example:
+                id: a1s2s3i4g5n6
+                user:
+                  id: u1a2b3c4d5e6
+                  email: jane@acme.com
+                  first_name: Jane
+                  last_name: Smith
+                scenario:
+                  id: s1c2e3n4a5r6
+                  name: Discovery Call
+                  slug: discovery-call
+                status: not_started
+                due_date: '2024-03-15T17:00:00Z'
+                best_score: null
+                best_rank: null
+                attempt_count: 0
+                attempt_min: 1
+                attempt_max: 5
+                rank_min: silver
+                program: null
+                created_at: '2024-03-01T10:00:00Z'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /scenario-studio:
+    post:
+      operationId: createScenarioStudioSession
+      summary: Create Scenario Studio session
+      description: |
+        Creates an interactive scenario creation session for a user.
+        Returns a URL immediately that the user can visit to complete
+        scenario creation in the Scenario Studio UI.
+
+        The session is pre-populated with the provided prompt, so when the user
+        opens the URL, the AI agent immediately begins processing their request.
+      tags:
+        - Scenario Studio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_email
+                - prompt
+              properties:
+                user_email:
+                  type: string
+                  format: email
+                  description: >-
+                    Email of the user to create the session for (must be a
+                    member of your workspace)
+                prompt:
+                  type: string
+                  description: >-
+                    Meeting context or scenario request that will be sent to the
+                    AI agent
+                request_id:
+                  type: string
+                  description: >-
+                    Optional client-provided ID for deduplication. If provided
+                    and a session with this ID already exists, returns the
+                    existing session.
+            example:
+              user_email: jane@acme.com
+              prompt: >-
+                Create a discovery call scenario for enterprise software sales
+                with a skeptical IT director
+              request_id: meeting-123-scenario
+      responses:
+        '200':
+          description: Session created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScenarioStudioSession'
+              example:
+                id: x9y8z7w6v5u4
+                url: https://acme-corp.app.exec.com/chat/x9y8z7w6v5u4
+                is_new: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /scenario-studio/jobs:
+    post:
+      operationId: createScenarioJob
+      summary: Create Scenario job
+      description: >
+        Creates an asynchronous scenario creation job.
+
+        Returns immediately with a job ID that can be polled for status.
+
+
+        The AI agent processes the job in the background, typically completing
+
+        within 5 minutes. Use the GET endpoint to poll for completion,
+
+        or provide a `callback_url` to receive a webhook when the job finishes.
+
+
+        **Remix mode**: Provide `scenario_slug` to create a variation of an
+        existing
+
+        scenario. The AI will use the source scenario as a starting point and
+        apply
+
+        your prompt as modifications.
+      tags:
+        - Scenario Studio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_email
+                - prompt
+              properties:
+                user_email:
+                  type: string
+                  format: email
+                  description: >-
+                    Email of the user to create the scenario for (must be a
+                    workspace member)
+                prompt:
+                  type: string
+                  maxLength: 10000
+                  description: >-
+                    Instructions for the AI agent describing what scenario to
+                    create
+                context:
+                  type: string
+                  maxLength: 50000
+                  description: >
+                    Additional context in Markdown format (e.g., CRM data,
+                    meeting notes, product info).
+
+                    This is provided to the AI agent as background information.
+                scenario_slug:
+                  type: string
+                  description: >
+                    Slug of an existing scenario to remix/iterate on.
+
+                    The AI will use this as a starting point and apply your
+                    prompt as modifications.
+                request_id:
+                  type: string
+                  description: >
+                    Client-provided idempotency key. If a job with this ID
+                    already exists,
+
+                    returns the existing job instead of creating a new one.
+                callback_url:
+                  type: string
+                  format: uri
+                  description: URL to receive a webhook POST when the job completes
+                callback_headers:
+                  type: object
+                  additionalProperties:
+                    type: string
+                  description: >-
+                    Custom headers to include in the callback request (e.g.,
+                    authorization)
+            example:
+              user_email: jane@acme.com
+              prompt: >-
+                Create a discovery call scenario with a skeptical IT director
+                who is concerned about integration complexity
+              context: |
+                ## Prospect Information
+                - Company: TechCorp Inc.
+                - Industry: Financial Services
+                - Size: 500 employees
+                - Current pain point: Manual data entry across systems
+              request_id: salesforce-opp-12345
+              callback_url: https://hooks.acme.com/exec-scenarios
+              callback_headers:
+                Authorization: Bearer webhook-secret-token
+      responses:
+        '200':
+          description: >-
+            Existing job returned (idempotent duplicate — a job with this
+            request_id already exists)
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ScenarioJob'
+                  - type: object
+                    properties:
+                      is_new:
+                        type: boolean
+                        description: >-
+                          Always false when an existing job is returned via
+                          request_id
+              example:
+                id: j1o2b3i4d5x6
+                status: completed
+                scenario:
+                  id: s1c2e3n4a5r6
+                  slug: discovery-call-skeptical-it-director
+                  name: Discovery Call with IT Director
+                error: null
+                created_at: '2024-03-01T10:00:00Z'
+                started_at: '2024-03-01T10:00:05Z'
+                completed_at: '2024-03-01T10:02:30Z'
+                duration_seconds: 145
+                is_new: false
+        '201':
+          description: Job created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ScenarioJob'
+                  - type: object
+                    properties:
+                      is_new:
+                        type: boolean
+                        description: >-
+                          True if a new job was created, false if an existing
+                          job was returned via request_id
+              example:
+                id: j1o2b3i4d5x6
+                status: queued
+                scenario: null
+                error: null
+                created_at: '2024-03-01T10:00:00Z'
+                started_at: null
+                completed_at: null
+                duration_seconds: null
+                is_new: true
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorDetail'
+              examples:
+                missing_field:
+                  summary: Missing required field
+                  value:
+                    error:
+                      type: invalid_request
+                      message: prompt is required
+                field_too_long:
+                  summary: Field exceeds max length
+                  value:
+                    error:
+                      type: invalid_request
+                      code: prompt_too_long
+                      message: prompt must be 10000 characters or fewer
+                user_not_found:
+                  summary: User not in workspace
+                  value:
+                    error:
+                      type: invalid_request
+                      code: user_not_found
+                      message: 'No user found with email: unknown@example.com'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Scenario not found (when using scenario_slug for remix)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorDetail'
+              example:
+                error:
+                  type: not_found
+                  message: 'Scenario not found: invalid-slug'
+  /scenario-studio/jobs/{job_id}:
+    get:
+      operationId: getScenarioJob
+      summary: Get Scenario job status
+      description: >
+        Returns the current status and result of a scenario creation job.
+
+
+        Poll this endpoint to check job progress. Typical job duration is about
+        5 minutes.
+
+
+        **Job statuses:**
+
+        - `queued`: Job is waiting to be processed
+
+        - `processing`: AI agent is actively creating the scenario
+
+        - `completed`: Scenario created successfully (check `scenario` field)
+
+        - `failed`: Job failed (check `error` field for details)
+
+        - `cancelled`: Job was cancelled via DELETE
+      tags:
+        - Scenario Studio
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          description: The job ID returned from job creation
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Job status and result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScenarioJob'
+              examples:
+                queued:
+                  summary: Job queued
+                  value:
+                    id: j1o2b3i4d5x6
+                    status: queued
+                    scenario: null
+                    error: null
+                    created_at: '2024-03-01T10:00:00Z'
+                    started_at: null
+                    completed_at: null
+                    duration_seconds: null
+                processing:
+                  summary: Job processing
+                  value:
+                    id: j1o2b3i4d5x6
+                    status: processing
+                    scenario: null
+                    error: null
+                    created_at: '2024-03-01T10:00:00Z'
+                    started_at: '2024-03-01T10:00:05Z'
+                    completed_at: null
+                    duration_seconds: null
+                completed:
+                  summary: Job completed
+                  value:
+                    id: j1o2b3i4d5x6
+                    status: completed
+                    scenario:
+                      id: s1c2e3n4a5r6
+                      name: Discovery Call with IT Director
+                      url: >-
+                        https://acme-corp.app.exec.com/scenarios/discovery-call-it-director
+                    error: null
+                    created_at: '2024-03-01T10:00:00Z'
+                    started_at: '2024-03-01T10:00:05Z'
+                    completed_at: '2024-03-01T10:00:45Z'
+                    duration_seconds: 40
+                failed:
+                  summary: Job failed
+                  value:
+                    id: j1o2b3i4d5x6
+                    status: failed
+                    scenario: null
+                    error:
+                      code: GENERATION_ERROR
+                      message: Unable to generate scenario from the provided prompt
+                    created_at: '2024-03-01T10:00:00Z'
+                    started_at: '2024-03-01T10:00:05Z'
+                    completed_at: '2024-03-01T10:00:30Z'
+                    duration_seconds: 25
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: cancelScenarioJob
+      summary: Cancel Scenario job
+      description: >
+        Cancels a scenario creation job that is queued or processing.
+
+
+        - **Queued jobs**: Marked as cancelled immediately
+
+        - **Processing jobs**: The background task is terminated and the job is
+        marked cancelled
+
+        - **Completed/failed/cancelled jobs**: Returns 400 error (cannot cancel
+        terminal states)
+      tags:
+        - Scenario Studio
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          description: The job ID to cancel
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Job cancelled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScenarioJob'
+              example:
+                id: j1o2b3i4d5x6
+                status: cancelled
+                scenario: null
+                error: null
+                created_at: '2024-03-01T10:00:00Z'
+                started_at: '2024-03-01T10:00:05Z'
+                completed_at: '2024-03-01T10:00:10Z'
+                duration_seconds: 5
+        '400':
+          description: Job cannot be cancelled (already in terminal state)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorDetail'
+              example:
+                error:
+                  type: invalid_request
+                  code: job_not_cancellable
+                  message: Cannot cancel job in 'completed' state
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Job not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorDetail'
+              example:
+                error:
+                  type: not_found
+                  code: job_not_found
+                  message: 'Job not found: j1o2b3i4d5x6'
+  /knowledge-hub/folders:
+    get:
+      operationId: listKnowledgeHubFolders
+      summary: List folders
+      description: >
+        Returns a paginated list of Knowledge Hub folders (also called Spaces or
+
+        Hubs) in the workspace.
+
+
+        Folders group pages and sources, and can be nested to form a hierarchy.
+
+        Pass `parent` to list the direct children of a folder, or omit it to
+        list
+
+        every folder in the workspace.
+
+
+        API keys are workspace-scoped and admin-created, so the response
+        includes
+
+        every non-archived folder regardless of its visibility scope.
+      tags:
+        - Knowledge Hub - Folders
+      parameters:
+        - name: parent_id
+          in: query
+          description: >-
+            Return only the direct children of this folder (folder UUID). Omit
+            to list all folders.
+          schema:
+            type: string
+        - name: query
+          in: query
+          description: Case-insensitive search over folder names
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: >-
+            Pagination page number (1-indexed) — which page of results to
+            return, not a Knowledge Hub page.
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: page_size
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Paginated list of folders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/KnowledgeHubFolder'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                  - id: f1a2b3c4d5e6
+                    name: Sales
+                    emoji: 💼
+                    parent: null
+                    visibility: workspace
+                    item_count: 12
+                    subfolder_count: 3
+                    created_at: '2026-05-01T09:00:00Z'
+                    updated_at: '2026-05-10T10:00:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 8
+                  total_pages: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /knowledge-hub/folders/{folder_id}:
+    get:
+      operationId: getKnowledgeHubFolder
+      summary: Get folder
+      description: Returns a single Knowledge Hub folder by its UUID.
+      tags:
+        - Knowledge Hub - Folders
+      parameters:
+        - name: folder_id
+          in: path
+          required: true
+          description: The folder's unique identifier (UUID)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Folder detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeHubFolder'
+              example:
+                id: f1a2b3c4d5e6
+                name: Sales
+                emoji: 💼
+                parent: null
+                visibility: workspace
+                item_count: 12
+                subfolder_count: 3
+                created_at: '2026-05-01T09:00:00Z'
+                updated_at: '2026-05-10T10:00:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /knowledge-hub/pages:
+    get:
+      operationId: listKnowledgeHubPages
+      summary: List pages
+      description: >
+        Returns a paginated list of Knowledge Hub pages. List rows are metadata
+
+        only — the page body is omitted. Fetch a single page to get its content.
+
+
+        Filter by folder, status, owner, skill, free-text query, or update-date
+
+        range. Results are sorted by `updated_at` (newest first) by default.
+
+
+        API keys are workspace-scoped and admin-created, so the response
+        includes
+
+        every non-archived page in the workspace — including private and draft
+
+        pages — regardless of visibility.
+      tags:
+        - Knowledge Hub - Pages
+      parameters:
+        - name: folder_id
+          in: query
+          description: Filter by folder UUID
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Filter by page status
+          schema:
+            type: string
+            enum:
+              - draft
+              - published
+              - archived
+        - name: owner_id
+          in: query
+          description: Filter by the page owner's user UUID
+          schema:
+            type: string
+        - name: skill_id
+          in: query
+          description: Filter by an associated skill UUID
+          schema:
+            type: string
+        - name: query
+          in: query
+          description: Case-insensitive search over page titles
+          schema:
+            type: string
+        - name: updated_after
+          in: query
+          description: Only include pages updated on or after this date (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: updated_before
+          in: query
+          description: Only include pages updated on or before this date (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: sort
+          in: query
+          description: |
+            Sort field. `updated_at` and `created_at` are newest-first; `title`
+            is A–Z.
+          schema:
+            type: string
+            default: updated_at
+            enum:
+              - updated_at
+              - created_at
+              - title
+        - name: page
+          in: query
+          description: >-
+            Pagination page number (1-indexed) — which page of results to
+            return, not a Knowledge Hub page.
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: page_size
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Paginated list of pages (metadata only)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/KnowledgeHubPage'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                  - id: p1a2b3c4d5e6
+                    title: Pricing objection guide
+                    status: published
+                    visibility: workspace
+                    owner:
+                      id: u1a2b3c4d5e6
+                      email: jane@acme.com
+                      first_name: Jane
+                      last_name: Smith
+                    folders:
+                      - id: f1a2b3c4d5e6
+                        name: Sales
+                        emoji: 💼
+                    skills:
+                      - id: sk1a2b3c4d5e
+                        name: Objection handling
+                    source_count: 3
+                    version: 4
+                    cover: ''
+                    published_at: '2026-06-01T12:00:00Z'
+                    created_at: '2026-05-01T09:00:00Z'
+                    updated_at: '2026-06-10T15:30:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 123
+                  total_pages: 3
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createKnowledgeHubPage
+      summary: Create page
+      description: |
+        Creates a Knowledge Hub page. New pages go through the draft → publish
+        version flow: set `status` to `published` to publish immediately, or
+        `draft` (the default) to save without publishing.
+
+        Returns the created page with its body (`201`).
+      tags:
+        - Knowledge Hub - Pages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+              properties:
+                title:
+                  type: string
+                  description: Page title
+                content:
+                  type: string
+                  description: Markdown body of the page
+                status:
+                  type: string
+                  enum:
+                    - draft
+                    - published
+                  default: draft
+                  description: Whether to save as a draft or publish immediately
+                visibility:
+                  type: string
+                  enum:
+                    - private
+                    - workspace
+                  default: workspace
+                  description: Visibility scope for the new page
+                folder_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: UUIDs of folders to place the page in
+                source_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: UUIDs of sources to attach to the page
+                skill_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: UUIDs of skills to associate with the page
+            example:
+              title: Pricing objection guide
+              content: |-
+                ## Handling pricing objections
+
+                Lead with value before discussing discounts…
+              status: published
+              visibility: workspace
+              folder_ids:
+                - f1a2b3c4d5e6
+              source_ids:
+                - s1a2b3c4d5e6
+              skill_ids:
+                - sk1a2b3c4d5e
+      responses:
+        '201':
+          description: Page created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeHubPageDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /knowledge-hub/pages/{page_id}:
+    get:
+      operationId: getKnowledgeHubPage
+      summary: Get page
+      description: >
+        Returns a single page with its published markdown body, attached
+        sources,
+
+        skills, and version info.
+
+
+        Use `?include=draft` to also return the current draft body
+
+        (`draft.title` and `draft.content`).
+      tags:
+        - Knowledge Hub - Pages
+      parameters:
+        - name: page_id
+          in: path
+          required: true
+          description: The page's unique identifier (UUID)
+          schema:
+            type: string
+        - name: include
+          in: query
+          description: |
+            Comma-separated list of optional sections to include.
+            Available values: `draft` (the current draft title and body).
+          schema:
+            type: string
+            example: draft
+      responses:
+        '200':
+          description: Page detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeHubPageDetail'
+              example:
+                id: p1a2b3c4d5e6
+                title: Pricing objection guide
+                status: published
+                visibility: workspace
+                owner:
+                  id: u1a2b3c4d5e6
+                  email: jane@acme.com
+                  first_name: Jane
+                  last_name: Smith
+                folders:
+                  - id: f1a2b3c4d5e6
+                    name: Sales
+                    emoji: 💼
+                skills:
+                  - id: sk1a2b3c4d5e
+                    name: Objection handling
+                source_count: 1
+                version: 4
+                cover: ''
+                published_at: '2026-06-01T12:00:00Z'
+                created_at: '2026-05-01T09:00:00Z'
+                updated_at: '2026-06-10T15:30:00Z'
+                content: |-
+                  ## Handling pricing objections
+
+                  Lead with value before discussing discounts…
+                sources:
+                  - id: s1a2b3c4d5e6
+                    title: Q2 pricing deck.pdf
+                    source_type: upload
+                    status: ready
+                    content_format: plain_text
+                    token_count: 5234
+                    has_images: false
+                    external_url: null
+                    summary: Quarterly pricing and packaging overview.
+                    cover: ''
+                    folders:
+                      - id: f9a8b7c6d5e4
+                        name: File Attachments
+                        emoji: 📎
+                    created_by:
+                      id: u1a2b3c4d5e6
+                      email: jane@acme.com
+                      first_name: Jane
+                      last_name: Smith
+                    created_at: '2026-05-01T09:00:00Z'
+                    updated_at: '2026-05-01T09:05:00Z'
+                    processed_at: '2026-05-01T09:05:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateKnowledgeHubPage
+      summary: Update page
+      description: |
+        Updates a page. Only the fields you provide are changed; omitted fields
+        are left untouched. Editing `content` creates a new draft; set `status`
+        to `published` to publish the new version.
+
+        `PUT` is also accepted and behaves the same way.
+      tags:
+        - Knowledge Hub - Pages
+      parameters:
+        - name: page_id
+          in: path
+          required: true
+          description: The page's unique identifier (UUID)
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: New page title
+                content:
+                  type: string
+                  description: New markdown body (creates a new draft)
+                status:
+                  type: string
+                  enum:
+                    - draft
+                    - published
+                  description: >-
+                    Set to `published` to publish the new version. To archive a
+                    page, use `DELETE`.
+                folder_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Replace the page's folders with these UUIDs
+                source_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Replace the page's attached sources with these UUIDs
+                skill_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Replace the page's linked skills with these UUIDs
+            example:
+              title: Pricing objection guide (updated)
+              content: |-
+                ## Handling pricing objections
+
+                Updated guidance…
+              status: published
+      responses:
+        '200':
+          description: Updated page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeHubPageDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceKnowledgeHubPage
+      x-hidden: true
+      summary: Update page (PUT)
+      description: Alias of `PATCH /knowledge-hub/pages/{page_id}`; see that operation.
+      tags:
+        - Knowledge Hub - Pages
+      parameters:
+        - name: page_id
+          in: path
+          required: true
+          description: The page's unique identifier (UUID)
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                status:
+                  type: string
+                  enum:
+                    - draft
+                    - published
+                folder_ids:
+                  type: array
+                  items:
+                    type: string
+                source_ids:
+                  type: array
+                  items:
+                    type: string
+                skill_ids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Updated page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeHubPageDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: archiveKnowledgeHubPage
+      summary: Archive page
+      description: >-
+        Archives (soft-deletes) a page. The page is hidden from lists but its
+        history is preserved.
+      tags:
+        - Knowledge Hub - Pages
+      parameters:
+        - name: page_id
+          in: path
+          required: true
+          description: The page's unique identifier (UUID)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Page archived
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResult'
+              example:
+                id: p1a2b3c4d5e6
+                deleted: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /knowledge-hub/pages/{page_id}/versions:
+    get:
+      operationId: listKnowledgeHubPageVersions
+      summary: List page versions
+      description: Returns the version history for a page, newest first.
+      tags:
+        - Knowledge Hub - Pages
+      parameters:
+        - name: page_id
+          in: path
+          required: true
+          description: The page's unique identifier (UUID)
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: >-
+            Pagination page number (1-indexed) — which page of results to
+            return, not a Knowledge Hub page.
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: page_size
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Paginated version history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/KnowledgeHubPageVersion'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                  - version: 4
+                    title: Pricing objection guide
+                    change_type: manual_edit
+                    created_by:
+                      id: u1a2b3c4d5e6
+                      email: jane@acme.com
+                      first_name: Jane
+                      last_name: Smith
+                    created_at: '2026-06-01T12:00:00Z'
+                    updated_at: '2026-06-01T12:00:00Z'
+                  - version: 3
+                    title: Pricing objection guide
+                    change_type: ai_generation
+                    created_by: null
+                    created_at: '2026-05-20T10:00:00Z'
+                    updated_at: '2026-05-20T10:00:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 4
+                  total_pages: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /knowledge-hub/sources:
+    get:
+      operationId: listKnowledgeHubSources
+      summary: List sources
+      description: >
+        Returns a paginated list of Knowledge Hub sources. List rows are
+        metadata
+
+        only — pass `?include=content` on the detail endpoint to fetch the
+
+        extracted text.
+
+
+        Filter by type, status, folder, or free-text query.
+      tags:
+        - Knowledge Hub - Sources
+      parameters:
+        - name: type
+          in: query
+          description: Filter by source type
+          schema:
+            type: string
+            enum:
+              - upload
+              - url
+              - notion
+              - google_drive
+              - guru
+              - page
+              - integration
+        - name: status
+          in: query
+          description: Filter by extraction status
+          schema:
+            type: string
+            enum:
+              - pending
+              - processing
+              - ready
+              - failed
+        - name: folder_id
+          in: query
+          description: Filter by folder UUID
+          schema:
+            type: string
+        - name: query
+          in: query
+          description: Case-insensitive search over source titles
+          schema:
+            type: string
+        - name: page_id
+          in: query
+          description: Filter to sources attached to this page (page UUID)
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: >-
+            Pagination page number (1-indexed) — which page of results to
+            return, not a Knowledge Hub page.
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: page_size
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Paginated list of sources (metadata only)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/KnowledgeHubSource'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                  - id: s1a2b3c4d5e6
+                    title: Q2 pricing deck.pdf
+                    source_type: upload
+                    status: ready
+                    content_format: plain_text
+                    token_count: 5234
+                    has_images: false
+                    external_url: null
+                    summary: Quarterly pricing and packaging overview.
+                    cover: ''
+                    folders:
+                      - id: f9a8b7c6d5e4
+                        name: File Attachments
+                        emoji: 📎
+                    created_by:
+                      id: u1a2b3c4d5e6
+                      email: jane@acme.com
+                      first_name: Jane
+                      last_name: Smith
+                    created_at: '2026-05-01T09:00:00Z'
+                    updated_at: '2026-05-01T09:05:00Z'
+                    processed_at: '2026-05-01T09:05:00Z'
+                pagination:
+                  page: 1
+                  page_size: 50
+                  total_count: 42
+                  total_pages: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createKnowledgeHubSource
+      summary: Create source
+      description: |
+        Creates a Knowledge Hub source from a URL. Text extraction runs
+        asynchronously, so the source is returned with `status: pending` or
+        `processing`; poll the detail endpoint until `status` is `ready`.
+
+        URL sources are de-duplicated within the workspace: if the URL already
+        exists, the existing source is returned with status `200` instead of
+        `201`.
+
+        > File upload via the REST API is not yet supported — use URL ingest.
+      tags:
+        - Knowledge Hub - Sources
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - title
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - url
+                  description: Source type. Only `url` is supported via the REST API today.
+                title:
+                  type: string
+                  description: Display title for the source
+                url:
+                  type: string
+                  format: uri
+                  description: The URL to ingest (required when `type` is `url`)
+                cover:
+                  type: string
+                  description: Optional cover image reference
+                folder_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: UUIDs of folders to place the source in
+            example:
+              type: url
+              title: Competitor pricing page
+              url: https://example.com/pricing
+              folder_ids:
+                - f1a2b3c4d5e6
+      responses:
+        '200':
+          description: An existing source with the same URL was returned (de-duplicated)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeHubSource'
+        '201':
+          description: Source created; extraction queued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeHubSource'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /knowledge-hub/sources/{source_id}:
+    get:
+      operationId: getKnowledgeHubSource
+      summary: Get source
+      description: |
+        Returns a single source by its UUID. Use `?include=content` to fetch the
+        extracted text (read from object storage — heavier, so opt-in).
+      tags:
+        - Knowledge Hub - Sources
+      parameters:
+        - name: source_id
+          in: path
+          required: true
+          description: The source's unique identifier (UUID)
+          schema:
+            type: string
+        - name: include
+          in: query
+          description: |
+            Comma-separated list of optional sections to include.
+            Available values: `content` (the extracted text).
+          schema:
+            type: string
+            example: content
+      responses:
+        '200':
+          description: Source detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeHubSource'
+              example:
+                id: s1a2b3c4d5e6
+                title: Q2 pricing deck.pdf
+                source_type: upload
+                status: ready
+                content_format: plain_text
+                token_count: 5234
+                has_images: false
+                external_url: null
+                summary: Quarterly pricing and packaging overview.
+                cover: ''
+                folders:
+                  - id: f9a8b7c6d5e4
+                    name: File Attachments
+                    emoji: 📎
+                created_by:
+                  id: u1a2b3c4d5e6
+                  email: jane@acme.com
+                  first_name: Jane
+                  last_name: Smith
+                created_at: '2026-05-01T09:00:00Z'
+                updated_at: '2026-05-01T09:05:00Z'
+                processed_at: '2026-05-01T09:05:00Z'
+                content: …extracted text… (only when ?include=content)
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteKnowledgeHubSource
+      summary: Delete source
+      description: Archives (soft-deletes) a source.
+      tags:
+        - Knowledge Hub - Sources
+      parameters:
+        - name: source_id
+          in: path
+          required: true
+          description: The source's unique identifier (UUID)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Source deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResult'
+              example:
+                id: s1a2b3c4d5e6
+                deleted: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: |
+        API key created in Settings > API.
+
+        Format: `exec_live_` followed by 40 alphanumeric characters.
+  schemas:
+    Workspace:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique workspace identifier
+        name:
+          type: string
+          description: Workspace display name
+        url_slug:
+          type: string
+          description: URL-friendly workspace identifier
+        created_at:
+          type: string
+          format: date-time
+          description: When the workspace was created
+    WorkspaceMember:
+      type: object
+      description: >-
+        A workspace member. The id is the user's unique identifier, consistent
+        with user objects across all endpoints.
+      properties:
+        id:
+          type: string
+          description: >-
+            Unique user identifier (same as user.id in sessions, assignments,
+            etc.)
+        email:
+          type: string
+          format: email
+          description: Member's email address
+        first_name:
+          type: string
+          description: Member's first name
+        last_name:
+          type: string
+          description: Member's last name
+        role:
+          type: string
+          description: Member's role in the workspace
+          enum:
+            - admin
+            - staff
+            - member
+        created_at:
+          type: string
+          format: date-time
+          description: When the member was added
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique user identifier
+        email:
+          type: string
+          format: email
+          description: User's email address
+        first_name:
+          type: string
+          description: User's first name
+        last_name:
+          type: string
+          description: User's last name
+    WorkspaceGroup:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique group identifier
+        name:
+          type: string
+          description: Group name
+        created_at:
+          type: string
+          format: date-time
+          description: When the group was created
+    Collection:
+      type: object
+      description: A collection that groups related scenarios together.
+      properties:
+        id:
+          type: string
+          description: Unique collection identifier
+        name:
+          type: string
+          description: Collection name
+        slug:
+          type: string
+          description: URL-friendly collection identifier
+        description:
+          type: string
+          nullable: true
+          description: Collection description
+        scenario_count:
+          type: integer
+          description: Number of scenarios in this collection
+        created_at:
+          type: string
+          format: date-time
+          description: When the collection was created
+    Assignment:
+      type: object
+      description: A scenario assignment given to a user as a practice task.
+      properties:
+        id:
+          type: string
+          description: Unique assignment identifier
+        user:
+          $ref: '#/components/schemas/User'
+        scenario:
+          $ref: '#/components/schemas/ScenarioRef'
+        status:
+          type: string
+          enum:
+            - not_started
+            - in_progress
+            - completed
+            - past_due
+            - did_not_pass
+          description: Current assignment status
+        due_date:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the assignment is due
+        best_score:
+          type: number
+          nullable: true
+          description: Highest score achieved on this assignment
+        best_rank:
+          type: string
+          nullable: true
+          enum:
+            - gold
+            - silver
+            - bronze
+            - unranked
+          description: Rank from the best scoring attempt
+        attempt_count:
+          type: integer
+          description: Number of completed attempts
+        attempt_min:
+          type: integer
+          nullable: true
+          description: Minimum attempts required
+        attempt_max:
+          type: integer
+          nullable: true
+          description: Maximum attempts allowed
+        rank_min:
+          type: string
+          nullable: true
+          enum:
+            - gold
+            - silver
+            - bronze
+            - unranked
+          description: Minimum rank required to pass
+        program:
+          type: object
+          nullable: true
+          description: Program this assignment belongs to (null if standalone)
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+        created_at:
+          type: string
+          format: date-time
+    SessionListItem:
+      type: object
+      description: A roleplay session summary for list responses.
+      properties:
+        id:
+          type: string
+          description: Unique session identifier
+        user:
+          $ref: '#/components/schemas/User'
+          description: The user who participated in this session
+        scenario:
+          $ref: '#/components/schemas/ScenarioRef'
+          description: The scenario that was practiced
+        score:
+          type: number
+          nullable: true
+          description: Session score (0-100 scale)
+        rank:
+          type: string
+          nullable: true
+          enum:
+            - gold
+            - silver
+            - bronze
+            - unranked
+          description: Performance rank based on score
+        duration_seconds:
+          type: number
+          nullable: true
+          description: Session duration in seconds
+        is_valid_attempt:
+          type: boolean
+          description: >-
+            Whether this session counts as a valid graded attempt. A session is
+            valid when it was completed (not abandoned), received AI grading,
+            and has a score. Use valid attempts for analytics; non-valid
+            sessions may be incomplete or ungraded.
+        created_at:
+          type: string
+          format: date-time
+          description: When the session was created
+    SessionDetail:
+      type: object
+      description: Full roleplay session detail with optional transcript and evaluations.
+      properties:
+        id:
+          type: string
+          description: Unique session identifier
+        user:
+          $ref: '#/components/schemas/User'
+        scenario:
+          $ref: '#/components/schemas/ScenarioRef'
+        score:
+          type: number
+          nullable: true
+          description: Session score (0-100 scale)
+        rank:
+          type: string
+          nullable: true
+          enum:
+            - gold
+            - silver
+            - bronze
+            - unranked
+          description: Performance rank based on score
+        duration_seconds:
+          type: number
+          nullable: true
+          description: Session duration in seconds
+        is_valid_attempt:
+          type: boolean
+          description: >-
+            Whether this session counts as a valid graded attempt. A session is
+            valid when it was completed (not abandoned), received AI grading,
+            and has a score. Use valid attempts for analytics; non-valid
+            sessions may be incomplete or ungraded.
+        outcome_feedback:
+          type: string
+          nullable: true
+          description: Overall outcome summary from the AI evaluator
+        positive_feedback:
+          type: string
+          nullable: true
+          description: What the participant did well
+        constructive_feedback:
+          type: string
+          nullable: true
+          description: Areas for improvement
+        transcript:
+          type: array
+          nullable: true
+          description: >-
+            Conversation transcript lines, excluding system messages (only
+            included when requested via `?include=transcript`)
+          items:
+            $ref: '#/components/schemas/TranscriptLine'
+        evaluations:
+          type: array
+          nullable: true
+          description: >-
+            Evaluation criteria with grades (only included when requested via
+            `?include=evaluations`)
+          items:
+            $ref: '#/components/schemas/EvaluationCriterion'
+        created_at:
+          type: string
+          format: date-time
+          description: When the session was created
+    TranscriptLine:
+      type: object
+      description: A single line in the session transcript.
+      properties:
+        speaker:
+          type: string
+          nullable: true
+          description: >-
+            Speaker identifier (e.g. "ai" for the AI character, "user" for the
+            participant)
+        text:
+          type: string
+          description: The spoken text
+        seconds_from_start:
+          type: number
+          nullable: true
+          description: Seconds elapsed from the start of the session
+    EvaluationCriterion:
+      type: object
+      description: A rubric criterion with its evaluated items and feedback examples.
+      properties:
+        criterion_name:
+          type: string
+          description: Name of the parent evaluation criterion
+        items:
+          type: array
+          description: Evaluated items under this criterion
+          items:
+            $ref: '#/components/schemas/EvaluationItem'
+    EvaluationItem:
+      type: object
+      description: An individual evaluation item with grade, feedback, and evidence.
+      properties:
+        name:
+          type: string
+          description: Name of the evaluation item
+        grade:
+          type: string
+          nullable: true
+          enum:
+            - good
+            - mid
+            - bad
+            - not_relevant
+          description: Grade received on this item
+        feedback:
+          type: string
+          nullable: true
+          description: Detailed feedback for this item
+        feedback_examples:
+          type: array
+          description: >-
+            Specific transcript evidence supporting the evaluation (filtered to
+            High/Mid salience)
+          items:
+            $ref: '#/components/schemas/FeedbackExample'
+    FeedbackExample:
+      type: object
+      description: >-
+        A specific piece of evidence from the transcript supporting an
+        evaluation.
+      properties:
+        quote:
+          type: string
+          description: Transcript excerpt
+        feedback:
+          type: string
+          nullable: true
+          description: Explanation of what was good or could be improved
+        suggestion_quote:
+          type: string
+          nullable: true
+          description: Suggested alternative phrasing
+        grade:
+          type: string
+          nullable: true
+          enum:
+            - good
+            - mid
+            - bad
+            - not_relevant
+          description: Grade for this specific moment
+        salience:
+          type: string
+          nullable: true
+          enum:
+            - high
+            - mid
+            - low
+          description: Importance level of this feedback
+    ScenarioRef:
+      type: object
+      description: A compact scenario reference for embedding in other responses.
+      properties:
+        id:
+          type: string
+          description: Unique scenario identifier
+        name:
+          type: string
+          description: Scenario name
+        slug:
+          type: string
+          description: URL-friendly scenario identifier
+    ScenarioAnalyticsSummary:
+      type: object
+      description: Aggregate analytics metrics for a scenario.
+      properties:
+        participant_count:
+          type: integer
+          description: Number of unique participants with graded sessions
+        total_sessions:
+          type: integer
+          description: Total number of graded sessions
+        average_best_score:
+          type: number
+          description: Average of each participant's best score (0-100)
+        average_best_rank:
+          type: string
+          enum:
+            - gold
+            - silver
+            - bronze
+            - unranked
+          description: Rank corresponding to the average best score
+        average_lift_percentage:
+          type: number
+          description: Average improvement (best - first score) across participants
+        total_practice_minutes:
+          type: integer
+          description: Total practice time across all sessions in minutes
+        average_session_duration_seconds:
+          type: number
+          description: Average duration per session in seconds
+        score_distribution:
+          $ref: '#/components/schemas/ScenarioScoreDistribution'
+    ScenarioParticipantEntry:
+      type: object
+      description: Per-user performance data for a scenario.
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        session_count:
+          type: integer
+          description: Number of sessions the user completed
+        first_score:
+          type: number
+          nullable: true
+          description: Score from the user's first attempt
+        first_rank:
+          type: string
+          nullable: true
+          enum:
+            - gold
+            - silver
+            - bronze
+            - unranked
+          description: Rank from the first attempt
+        best_score:
+          type: number
+          nullable: true
+          description: User's highest score
+        best_rank:
+          type: string
+          nullable: true
+          enum:
+            - gold
+            - silver
+            - bronze
+            - unranked
+          description: Rank from the best score
+        lift_percentage:
+          type: number
+          nullable: true
+          description: Improvement from first to best score
+        total_duration_seconds:
+          type: number
+          description: Total practice time in seconds
+    ScenarioScoreDistribution:
+      type: array
+      description: >-
+        Rank distribution across participants based on best scores (Gold ≥90,
+        Silver ≥75, Bronze ≥50, Unranked <50).
+      items:
+        type: object
+        properties:
+          rank:
+            type: string
+            enum:
+              - gold
+              - silver
+              - bronze
+              - unranked
+            description: Performance rank
+          count:
+            type: integer
+            description: Number of participants at this rank
+          percentage:
+            type: number
+            description: Percentage of participants at this rank
+    SkillProficiencyEntry:
+      type: object
+      description: Proficiency data for a single user on a skill.
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        score:
+          type: number
+          nullable: true
+          description: Proficiency score (0-100). Null if fewer than 3 observations.
+        tier:
+          type: string
+          enum:
+            - excellent
+            - proficient
+            - developing
+            - needs_work
+            - insufficient_data
+          description: Proficiency tier based on score thresholds
+        observation_count:
+          type: integer
+          description: >-
+            Total observations (roleplay sessions + calls) within the lookback
+            window
+        last_practiced_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the most recent observation occurred
+    Skill:
+      type: object
+      description: A competency that is evaluated during roleplay sessions and calls.
+      properties:
+        id:
+          type: string
+          description: Unique skill identifier
+        name:
+          type: string
+          description: Skill name
+        slug:
+          type: string
+          description: URL-friendly skill identifier
+        description:
+          type: string
+          description: Description of the skill
+        created_at:
+          type: string
+          format: date-time
+          description: When the skill was created
+        proficiency_summary:
+          $ref: '#/components/schemas/SkillProficiencySummary'
+          nullable: true
+          description: >-
+            Aggregate proficiency stats (only included when requested via
+            `?include=proficiency`)
+    SkillProficiencySummary:
+      type: object
+      description: Aggregate proficiency stats for a skill across all workspace members.
+      properties:
+        participant_count:
+          type: integer
+          description: Number of users with at least one observation on this skill
+        scored_participant_count:
+          type: integer
+          description: >-
+            Number of users with enough observations (3+) for a proficiency
+            score
+        pct_proficient_plus:
+          type: integer
+          description: Percentage of scored users at Proficient or Excellent tier
+        avg_score:
+          type: number
+          nullable: true
+          description: Average proficiency score across scored users (0-100)
+    SkillRef:
+      type: object
+      description: A compact skill reference for embedding in other responses.
+      properties:
+        id:
+          type: string
+          description: Unique skill identifier
+        name:
+          type: string
+          description: Skill name
+        slug:
+          type: string
+          description: URL-friendly skill identifier
+    Scenario:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique scenario identifier
+        name:
+          type: string
+          description: Scenario name
+        description:
+          type: string
+          nullable: true
+          description: Short description of the scenario
+        slug:
+          type: string
+          description: URL-friendly scenario identifier
+        url:
+          type: string
+          format: uri
+          description: Direct link to the scenario
+        difficulty:
+          type: string
+          description: Scenario difficulty level
+          enum:
+            - easy
+            - medium
+            - hard
+            - very_hard
+            - custom
+        context:
+          type: string
+          nullable: true
+          description: >
+            The scenario's context - background and setup information that
+            frames
+
+            the roleplay (e.g., the buyer's company, current situation, recent
+
+            events). Plain text, may contain newlines. May be null for scenarios
+
+            that haven't filled in this section.
+          example: >-
+            The buyer is the VP of Engineering at a Series B fintech. They have
+            an active RFP out for an observability tool and your competitor
+            presented yesterday.
+        objective:
+          type: string
+          nullable: true
+          description: |
+            The learner's objective for the scenario. The value is markdown and
+            includes an embedded "Outcomes to Avoid" subsection separated by the
+            delimiter `##### Outcomes to Avoid:`, followed by a bulleted list.
+            Consumers who want the two pieces separately can split on that
+            delimiter.
+          example: >
+            Qualify the opportunity and book a follow-up meeting with the
+            economic buyer.
+
+            ##### Outcomes to Avoid:
+
+            - Discounting before discovery
+
+            - Skipping the budget conversation
+
+            - Committing to a custom integration without scoping
+        language:
+          type: string
+          description: Scenario language
+        visibility:
+          type: string
+          description: Sharing scope of the scenario
+          enum:
+            - private
+            - workspace
+        owner:
+          $ref: '#/components/schemas/User'
+          nullable: true
+          description: User who owns the scenario
+        created_at:
+          type: string
+          format: date-time
+          description: When the scenario was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the scenario was last updated
+        skills:
+          type: array
+          nullable: true
+          description: >-
+            Skills evaluated by this scenario (only included when requested via
+            `?include=skills`)
+          items:
+            $ref: '#/components/schemas/SkillRef'
+    ScenarioStudioSession:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Session identifier
+        url:
+          type: string
+          format: uri
+          description: URL for the user to complete scenario creation
+        is_new:
+          type: boolean
+          description: >-
+            True if a new session was created, false if an existing session was
+            returned via request_id
+    ScenarioJob:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Job identifier
+        status:
+          type: string
+          enum:
+            - queued
+            - processing
+            - completed
+            - failed
+            - cancelled
+          description: Current job status
+        scenario:
+          type: object
+          nullable: true
+          description: Created scenario details (only present when status is "completed")
+          properties:
+            id:
+              type: string
+              description: Scenario ID
+            name:
+              type: string
+              description: Scenario name
+            url:
+              type: string
+              format: uri
+              description: Direct link to the scenario
+        error:
+          type: object
+          nullable: true
+          description: Error details (only present when status is "failed")
+          properties:
+            code:
+              type: string
+              description: Error code (e.g. GENERATION_ERROR, CONTENT_POLICY_VIOLATION)
+            message:
+              type: string
+              description: Human-readable error message
+        created_at:
+          type: string
+          format: date-time
+          description: When the job was created
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the job started processing
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the job finished (success, failure, or cancelled)
+        duration_seconds:
+          type: number
+          nullable: true
+          description: Processing duration in seconds (only present when job has completed)
+    ScenarioAccessResponse:
+      type: object
+      properties:
+        user_email:
+          type: string
+          format: email
+          description: Email of the user checked
+        scenario_id:
+          type: string
+          description: Scenario identifier
+        permissions:
+          type: object
+          properties:
+            can_view:
+              type: boolean
+              description: Whether the user can view the scenario
+            can_share:
+              type: boolean
+              description: Whether the user can share the scenario
+            can_monitor:
+              type: boolean
+              description: Whether the user can monitor sessions on this scenario
+            can_edit:
+              type: boolean
+              description: Whether the user can edit the scenario
+    GrantAccessResponse:
+      type: object
+      properties:
+        user_email:
+          type: string
+          format: email
+          description: Email of the user granted access
+        scenario_id:
+          type: string
+          description: Scenario identifier
+        permission_level:
+          type: string
+          enum:
+            - view
+            - share
+            - monitor
+            - edit
+          description: Permission level granted
+        granted:
+          type: boolean
+          description: Whether the access was successfully granted
+    KnowledgeHubFolder:
+      type: object
+      description: >-
+        A Knowledge Hub folder (also called a Space or Hub) that groups pages
+        and sources.
+      properties:
+        id:
+          type: string
+          description: Unique folder identifier (UUID)
+        name:
+          type: string
+          description: Folder name
+        emoji:
+          type: string
+          nullable: true
+          description: Emoji icon shown next to the folder
+        parent:
+          type: string
+          nullable: true
+          description: UUID of the parent folder, or null for a top-level folder
+        visibility:
+          type: string
+          enum:
+            - private
+            - workspace
+            - global
+          description: Visibility scope of the folder
+        item_count:
+          type: integer
+          description: Number of non-archived pages directly in this folder
+        subfolder_count:
+          type: integer
+          description: Number of direct child folders
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    KnowledgeHubFolderRef:
+      type: object
+      description: A compact folder reference embedded in pages and sources.
+      properties:
+        id:
+          type: string
+          description: Unique folder identifier (UUID)
+        name:
+          type: string
+          description: Folder name
+        emoji:
+          type: string
+          nullable: true
+          description: Emoji icon shown next to the folder
+    KnowledgeHubSkillRef:
+      type: object
+      description: A compact skill reference embedded in pages.
+      properties:
+        id:
+          type: string
+          description: Unique skill identifier (UUID)
+        name:
+          type: string
+          description: Skill name
+    KnowledgeHubPage:
+      type: object
+      description: >-
+        A Knowledge Hub page. List responses return this metadata-only shape (no
+        body).
+      properties:
+        id:
+          type: string
+          description: Unique page identifier (UUID)
+        title:
+          type: string
+          description: Page title
+        status:
+          type: string
+          enum:
+            - draft
+            - published
+            - archived
+          description: Current page status
+        visibility:
+          type: string
+          enum:
+            - private
+            - workspace
+            - global
+          description: Visibility scope of the page
+        owner:
+          $ref: '#/components/schemas/User'
+          nullable: true
+          description: User who owns the page
+        folders:
+          type: array
+          description: Folders the page belongs to
+          items:
+            $ref: '#/components/schemas/KnowledgeHubFolderRef'
+        skills:
+          type: array
+          description: Skills associated with the page
+          items:
+            $ref: '#/components/schemas/KnowledgeHubSkillRef'
+        source_count:
+          type: integer
+          description: Number of sources attached to the page
+        version:
+          type: integer
+          nullable: true
+          description: Version number of the published version, or null if never published
+        cover:
+          type: string
+          description: Cover image reference (empty string if none)
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the page was last published
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    KnowledgeHubPageDetail:
+      description: >-
+        A single page with its published body, attached sources, and
+        (optionally) its draft.
+      allOf:
+        - $ref: '#/components/schemas/KnowledgeHubPage'
+        - type: object
+          properties:
+            content:
+              type: string
+              nullable: true
+              description: Markdown body of the published version (null if unpublished)
+            sources:
+              type: array
+              description: Sources attached to the page
+              items:
+                $ref: '#/components/schemas/KnowledgeHubSource'
+            draft:
+              $ref: '#/components/schemas/KnowledgeHubPageDraft'
+              nullable: true
+              description: >-
+                Current draft (only included when requested via
+                `?include=draft`)
+    KnowledgeHubPageDraft:
+      type: object
+      description: The unpublished draft of a page.
+      properties:
+        title:
+          type: string
+          description: Draft title
+        content:
+          type: string
+          nullable: true
+          description: Markdown body of the draft
+    KnowledgeHubPageVersion:
+      type: object
+      description: A single entry in a page's version history.
+      properties:
+        version:
+          type: integer
+          description: Version number
+        title:
+          type: string
+          description: Page title at this version
+        change_type:
+          type: string
+          enum:
+            - created
+            - ai_generation
+            - manual_edit
+            - restore
+            - clone
+          description: What kind of change produced this version
+        created_by:
+          $ref: '#/components/schemas/User'
+          nullable: true
+          description: User who created this version (null for system/AI changes)
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    KnowledgeHubSource:
+      type: object
+      description: >-
+        A Knowledge Hub source — an uploaded file or ingested URL whose text is
+        extracted and indexed.
+      properties:
+        id:
+          type: string
+          description: Unique source identifier (UUID)
+        title:
+          type: string
+          description: Source title
+        source_type:
+          type: string
+          enum:
+            - upload
+            - url
+            - notion
+            - google_drive
+            - guru
+            - page
+            - integration
+          description: Where the source came from
+        status:
+          type: string
+          enum:
+            - pending
+            - processing
+            - ready
+            - failed
+          description: Text-extraction status
+        content_format:
+          type: string
+          nullable: true
+          enum:
+            - markdown
+            - plain_text
+            - image
+            - video
+          description: Format of the extracted content
+        token_count:
+          type: integer
+          nullable: true
+          description: Number of tokens in the extracted text
+        has_images:
+          type: boolean
+          description: Whether the source contains images
+        external_url:
+          type: string
+          nullable: true
+          description: >-
+            Original URL for url/notion/guru/google_drive sources (null
+            otherwise)
+        summary:
+          type: string
+          nullable: true
+          description: AI-generated summary of the source
+        cover:
+          type: string
+          description: Cover image reference (empty string if none)
+        folders:
+          type: array
+          description: Folders the source belongs to
+          items:
+            $ref: '#/components/schemas/KnowledgeHubFolderRef'
+        created_by:
+          $ref: '#/components/schemas/User'
+          nullable: true
+          description: User who added the source
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        processed_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When extraction finished
+        content:
+          type: string
+          nullable: true
+          description: Extracted text (only included when requested via `?include=content`)
+    DeleteResult:
+      type: object
+      description: Returned by archive/delete endpoints.
+      properties:
+        id:
+          type: string
+          description: Identifier of the archived/deleted resource
+        deleted:
+          type: boolean
+          description: Always true on success
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authentication_error
+              code: invalid_api_key
+              message: Invalid or inactive API key
+    Forbidden:
+      description: Workspace is inactive
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authorization_error
+              code: workspace_inactive
+              message: Workspace is inactive
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: invalid_request
+              code: invalid_pagination
+              message: Invalid pagination parameters
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: not_found
+              message: 'Scenario not found: abc123'

@@ -1,0 +1,97 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/exec-openapi-original.yml
+entities:
+  - name: Workspace
+    id: id
+    description: Top-level tenant; everything belongs to a workspace.
+  - name: User
+    id: id
+    description: A workspace member (email, name, role).
+  - name: WorkspaceGroup
+    id: id
+  - name: Scenario
+    id: id
+    key_fields: [slug]
+    description: A roleplay scenario; owned by a User, tagged with Skills.
+  - name: Collection
+    id: id
+    description: A named grouping of scenarios.
+  - name: Session
+    id: id
+    description: A roleplay session for a User against a Scenario (score, rank, transcript).
+  - name: Assignment
+    id: id
+    description: A scenario assigned to a User as homework/task.
+  - name: Skill
+    id: id
+    key_fields: [slug]
+  - name: ScenarioJob
+    id: id
+    description: An async scenario-creation job in Scenario Studio.
+  - name: KnowledgeHubFolder
+    id: id
+    description: Also called Spaces/Hubs; can nest via parent.
+  - name: KnowledgeHubPage
+    id: id
+    description: Versioned rich-text page owned by a User.
+  - name: KnowledgeHubSource
+    id: id
+    description: Uploaded/linked source content created by a User.
+relationships:
+  - from: Scenario
+    to: User
+    type: belongs_to
+    via: owner
+  - from: Scenario
+    to: Skill
+    type: has_many
+    via: skills
+  - from: Session
+    to: User
+    type: belongs_to
+    via: user
+  - from: Session
+    to: Scenario
+    type: belongs_to
+    via: scenario
+  - from: Assignment
+    to: User
+    type: belongs_to
+    via: user
+  - from: Assignment
+    to: Scenario
+    type: belongs_to
+    via: scenario
+  - from: KnowledgeHubPage
+    to: User
+    type: belongs_to
+    via: owner
+  - from: KnowledgeHubPage
+    to: KnowledgeHubFolder
+    type: has_many
+    via: folders
+  - from: KnowledgeHubPage
+    to: Skill
+    type: has_many
+    via: skills
+  - from: KnowledgeHubSource
+    to: User
+    type: belongs_to
+    via: created_by
+  - from: KnowledgeHubSource
+    to: KnowledgeHubFolder
+    type: has_many
+    via: folders
+  - from: KnowledgeHubFolder
+    to: KnowledgeHubFolder
+    type: belongs_to
+    via: parent
+  - from: Collection
+    to: Scenario
+    type: has_many
+    via: scenario_count
+notes: >-
+  Derived from OpenAPI component schemas ($ref links and id-reference fields).
+  The User entity is the hub connecting scenarios, sessions, assignments,
+  skill proficiency, and Knowledge Hub content.

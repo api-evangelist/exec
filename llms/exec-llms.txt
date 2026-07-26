@@ -1,0 +1,148 @@
+# Exec Docs
+
+## Docs
+
+- [Authentication](https://docs.exec.com/api-reference/authentication.md): Create and use API keys to authenticate requests
+- [List collections](https://docs.exec.com/api-reference/collections/list-collections.md): Returns a paginated list of collections in the workspace, ordered alphabetically by name.
+- [Get folder](https://docs.exec.com/api-reference/knowledge-hub--folders/get-folder.md): Returns a single Knowledge Hub folder by its UUID.
+- [List folders](https://docs.exec.com/api-reference/knowledge-hub--folders/list-folders.md): Returns a paginated list of Knowledge Hub folders (also called Spaces or Hubs) in the workspace.
+- [Archive page](https://docs.exec.com/api-reference/knowledge-hub--pages/archive-page.md): Archives (soft-deletes) a page. The page is hidden from lists but its history is preserved.
+- [Create page](https://docs.exec.com/api-reference/knowledge-hub--pages/create-page.md): Creates a Knowledge Hub page. New pages go through the draft → publish version flow: set `status` to `published` to publish immediately, or `draft` (the default) to save without publishing.
+- [Get page](https://docs.exec.com/api-reference/knowledge-hub--pages/get-page.md): Returns a single page with its published markdown body, attached sources, skills, and version info.
+- [List page versions](https://docs.exec.com/api-reference/knowledge-hub--pages/list-page-versions.md): Returns the version history for a page, newest first.
+- [List pages](https://docs.exec.com/api-reference/knowledge-hub--pages/list-pages.md): Returns a paginated list of Knowledge Hub pages. List rows are metadata only — the page body is omitted. Fetch a single page to get its content.
+- [Update page](https://docs.exec.com/api-reference/knowledge-hub--pages/update-page.md): Updates a page. Only the fields you provide are changed; omitted fields are left untouched. Editing `content` creates a new draft; set `status` to `published` to publish the new version.
+- [Create source](https://docs.exec.com/api-reference/knowledge-hub--sources/create-source.md): Creates a Knowledge Hub source from a URL. Text extraction runs asynchronously, so the source is returned with `status: pending` or `processing`; poll the detail endpoint until `status` is `ready`.
+- [Delete source](https://docs.exec.com/api-reference/knowledge-hub--sources/delete-source.md): Archives (soft-deletes) a source.
+- [Get source](https://docs.exec.com/api-reference/knowledge-hub--sources/get-source.md): Returns a single source by its UUID. Use `?include=content` to fetch the extracted text (read from object storage — heavier, so opt-in).
+- [List sources](https://docs.exec.com/api-reference/knowledge-hub--sources/list-sources.md): Returns a paginated list of Knowledge Hub sources. List rows are metadata only — pass `?include=content` on the detail endpoint to fetch the extracted text.
+- [API Overview](https://docs.exec.com/api-reference/overview.md): Programmatic access to your Exec workspace
+- [Quickstart](https://docs.exec.com/api-reference/quickstart.md): Make your first API request in 2 minutes
+- [Cancel Scenario job](https://docs.exec.com/api-reference/scenario-studio/cancel-scenario-job.md): Cancels a scenario creation job that is queued or processing.
+- [Create Scenario job](https://docs.exec.com/api-reference/scenario-studio/create-scenario-job.md): Creates an asynchronous scenario creation job. Returns immediately with a job ID that can be polled for status.
+- [Create Scenario Studio session](https://docs.exec.com/api-reference/scenario-studio/create-scenario-studio-session.md): Creates an interactive scenario creation session for a user. Returns a URL immediately that the user can visit to complete scenario creation in the Scenario Studio UI.
+- [Get Scenario job status](https://docs.exec.com/api-reference/scenario-studio/get-scenario-job-status.md): Returns the current status and result of a scenario creation job.
+- [Assign scenario to user](https://docs.exec.com/api-reference/scenarios/assign-scenario-to-user.md): Assign a scenario to a user as a task or homework assignment. The user will receive notification of the assignment and can track their progress.
+- [Check scenario access](https://docs.exec.com/api-reference/scenarios/check-scenario-access.md): Check if a user has access to a specific scenario and what permission level they have.
+- [Get scenario analytics summary](https://docs.exec.com/api-reference/scenarios/get-scenario-analytics-summary.md): Returns aggregate metrics for a scenario: participant count, total sessions, average best score and rank, average lift, total practice minutes, and average session duration. Accepts both UUID and slug for the scenario identifier.
+- [Get scenario participant analytics](https://docs.exec.com/api-reference/scenarios/get-scenario-participant-analytics.md): Returns a per-user performance table for a scenario with pagination and sorting. Shows each participant's first score, best score, lift, rank, session count, and total practice duration.
+- [Grant scenario access](https://docs.exec.com/api-reference/scenarios/grant-scenario-access.md): Grant a user access to a specific scenario with a specified permission level.
+- [List scenario assignments](https://docs.exec.com/api-reference/scenarios/list-scenario-assignments.md): Returns a paginated list of scenario assignments in the workspace.
+- [List scenarios](https://docs.exec.com/api-reference/scenarios/list-scenarios.md): Returns a paginated list of scenarios in the workspace.
+- [Get session detail](https://docs.exec.com/api-reference/sessions/get-session-detail.md): Returns full detail for a single roleplay session, including score, rank, duration, and feedback.
+- [List roleplay sessions](https://docs.exec.com/api-reference/sessions/list-roleplay-sessions.md): Returns a paginated list of roleplay sessions in the workspace with inline user and scenario data.
+- [Get skill proficiency by user](https://docs.exec.com/api-reference/skills/get-skill-proficiency-by-user.md): Returns per-user proficiency data for a specific skill.
+- [List skills](https://docs.exec.com/api-reference/skills/list-skills.md): Returns a paginated list of skills in the workspace, ordered alphabetically by name.
+- [Get workspace info](https://docs.exec.com/api-reference/workspace/get-workspace-info.md): Returns basic information about the authenticated workspace.
+- [List workspace groups](https://docs.exec.com/api-reference/workspace/list-workspace-groups.md): Returns a paginated list of groups in the workspace.
+- [List workspace members](https://docs.exec.com/api-reference/workspace/list-workspace-members.md): Returns a paginated list of workspace members with basic user info.
+- [Building Tips & Techniques](https://docs.exec.com/building-tips.md): A grab-bag of small, copyable techniques for building, refining, and remixing roleplay scenarios
+- [Call Analyst](https://docs.exec.com/calls/call-analyst.md): Ask questions about your calls in plain English — filter by metadata or search transcripts for specific topics
+- [Call Categories and Scorecards](https://docs.exec.com/calls/categories-and-scorecards.md): Define conversation types, the attributes you capture, and the scorecards calls are graded on
+- [Call Scoring Overview](https://docs.exec.com/calls/overview.md): Record and score your team's real calls automatically, the same way roleplays are scored
+- [Review Scored Calls](https://docs.exec.com/calls/review-scored-calls.md): Track call performance across your team and dig into any individual scored call
+- [Set Up Call Scoring](https://docs.exec.com/calls/set-up-call-scoring.md): Connect a call recorder and configure who and what gets scored
+- [Certify Others](https://docs.exec.com/certificates/certify-others.md): Issue certifications to learners in your workspace
+- [Create a Certification](https://docs.exec.com/certificates/create-certification.md): Formally recognize learners for completing training or demonstrating specific expertise
+- [View a Member's Coaching History](https://docs.exec.com/coaching/admin/coaching-history.md): How workspace admins see a member's coaching sessions, coach, and ratings
+- [Credit Expiration & Renewal](https://docs.exec.com/coaching/admin/credit-expiration.md): When your workspace's coaching credits expire and how to renew them
+- [A Guide to Groups](https://docs.exec.com/coaching/admin/groups.md): Create groups, manage members and credits, and use groups to organize and tag your workspace
+- [Add or Remove Member Credits](https://docs.exec.com/coaching/admin/member-credits.md): How workspace admins adjust coaching credits for people in their workspace
+- [Check Your Workspace Credit Balance](https://docs.exec.com/coaching/admin/workspace-credits.md): See how many coaching credits your workspace has available to distribute
+- [What to Expect in a Three-Way Alignment Call](https://docs.exec.com/coaching/alignment-call.md): How to set up an alignment call with your coach and manager, and what to cover
+- [Cancel a Coaching Session](https://docs.exec.com/coaching/cancel-session.md): Cancel a booked coaching session and get your credits back
+- [Choosing the Right Coach](https://docs.exec.com/coaching/choosing-a-coach.md): What to weigh when picking a coach from your matches
+- [Coaching Credits](https://docs.exec.com/coaching/credits.md): What coaching credits are, how to use them, and how to get more
+- [Find a Coach](https://docs.exec.com/coaching/find-a-coach.md): Use the matching survey to get paired with the right coach
+- [What to Expect in an Intro Session](https://docs.exec.com/coaching/intro-session.md): How to prepare for your first coaching session and what to ask
+- [Joining Your Coaching Session](https://docs.exec.com/coaching/joining-a-session.md): How to join the video call, find your meeting link, and what to do if you have trouble
+- [Reschedule a Coaching Session](https://docs.exec.com/coaching/reschedule-session.md): Move a booked coaching session to a new time
+- [Schedule a Coaching Session](https://docs.exec.com/coaching/schedule-session.md): Book a one-on-one session with your coach using your coaching credits
+- [Coaching Session Types](https://docs.exec.com/coaching/session-types.md): The kinds of coaching sessions you can book, plus the off-platform alignment call
+- [Rolling Exec Out to Your Team](https://docs.exec.com/guides/rollout.md): Invite teammates, assign your first scenarios, and build a practice habit that survives week two
+- [Training Customer Success Teams with Exec](https://docs.exec.com/guides/train-customer-success.md): Scenarios, skills, and a rhythm for renewals, QBRs, and expansion conversations
+- [Training Managers and Leaders with Exec](https://docs.exec.com/guides/train-managers.md): Scenarios, skills, and a cadence for feedback, reviews, and the conversations managers avoid
+- [Training Sales Teams with Exec](https://docs.exec.com/guides/train-sales-teams.md): Scenarios, skills, and a weekly rhythm for getting reps practicing the conversations that decide deals
+- [Training Support Teams with Exec](https://docs.exec.com/guides/train-support-teams.md): Scenarios, skills, and a weekly rhythm for getting agents ready for hard customer conversations
+- [Welcome to Exec](https://docs.exec.com/index.md): AI-powered roleplay training for building professional skills
+- [AI Chat](https://docs.exec.com/knowledge-hub/ai-chat.md): Co-create and refine Knowledge Hub pages with an AI agent that can read your sources
+- [Hubs and Organization](https://docs.exec.com/knowledge-hub/hubs.md): Use hubs to group related pages and sources and keep your Knowledge Hub findable
+- [Notion Integration](https://docs.exec.com/knowledge-hub/notion-integration.md): Connect a Notion workspace and pull pages into your Knowledge Hub
+- [Knowledge Hub Overview](https://docs.exec.com/knowledge-hub/overview.md): Organize training content in one place and make it available to your team and your AI scenarios
+- [Pages](https://docs.exec.com/knowledge-hub/pages.md): Create, edit, publish, and version rich-text pages in the Knowledge Hub
+- [Permissions and Sharing](https://docs.exec.com/knowledge-hub/permissions.md): Control who can see and edit pages and sources in your Knowledge Hub
+- [Sources](https://docs.exec.com/knowledge-hub/sources.md): Upload files and connect external content so the Knowledge Hub and AI agent can use it
+- [Using the Knowledge Hub in Roleplays](https://docs.exec.com/knowledge-hub/using-in-roleplays.md): Attach Knowledge Hub pages and sources to AI roleplays so the persona and feedback match your team's content
+- [LMS Integrations](https://docs.exec.com/lms-integration.md): Launch Exec from your Learning Management System with flexible integration options.
+- [Add Roleplays to a Course](https://docs.exec.com/lti/add-roleplays.md): Add Exec scenarios to an LMS course by picking them from inside the LMS, or by pasting a scenario_id custom parameter.
+- [Connect an LMS](https://docs.exec.com/lti/connect-lms.md): Register Exec as an LTI 1.3 tool in your LMS using dynamic registration or a manual connection.
+- [Grade Passback](https://docs.exec.com/lti/grade-passback.md): How Exec roleplay scores flow back into your LMS gradebook automatically.
+- [LTI 1.3 Overview](https://docs.exec.com/lti/overview.md): Connect Exec to your LMS so learners launch roleplays from course content with single sign-on and grade passback.
+- [LTI Troubleshooting](https://docs.exec.com/lti/troubleshooting.md): Diagnose launch failures, mismatched users, and grade passback issues.
+- [Platform Onboarding Guide](https://docs.exec.com/onboarding-guide.md): A guided video walkthrough for getting started on Exec
+- [Add a New User](https://docs.exec.com/platform/add-user.md): Give someone access to your Exec workspace
+- [Admin Capabilities](https://docs.exec.com/platform/admin-capabilities.md): Understand workspace admin and group admin roles and capabilities
+- [Basic Seats vs. Full Seats](https://docs.exec.com/platform/basic-full-seats.md): Understand the two seat types in Exec and how to manage them
+- [Create Your Exec Account](https://docs.exec.com/platform/create-account.md)
+- [Export Data](https://docs.exec.com/platform/export-data.md): Download CSV exports of your workspace sessions, users, and groups
+- [Embed Exec in an iframe](https://docs.exec.com/platform/iframe-embedding.md): Let external platforms embed your Exec workspace inside an iframe so learners never leave your app or LMS.
+- [Login and Access Issues](https://docs.exec.com/platform/login-issues.md): Fixes for invitation, password, and single sign-on problems that keep someone from logging in to Exec.
+- [Plans and Feature Availability](https://docs.exec.com/platform/plans.md): What each Exec plan includes, where the limits are, and how to upgrade
+- [Remove a User](https://docs.exec.com/platform/remove-user.md): Revoke someone's access to your Exec workspace
+- [Understand the Settings Tab](https://docs.exec.com/platform/settings-tab.md): Configure workspace settings including users, groups, billing, integrations, and more
+- [Network and Email Whitelist Requirements](https://docs.exec.com/platform/whitelist-requirements.md): Domains, ports, and email sender addresses to allow through your firewall and email security gateway.
+- [Add Program Components](https://docs.exec.com/programs/add-components.md): Build your learning path with announcements, surveys, roleplays, videos, articles, action items, coaching, and group meetings
+- [Programs and Certifications](https://docs.exec.com/programs/certifications.md): Automatically certify participants when they complete a program, and track progress through the certification pipeline
+- [Create a Program](https://docs.exec.com/programs/create-program.md): Start a new program manually, generate one with AI, or clone an existing program
+- [Launch and Manage Your Program](https://docs.exec.com/programs/launch-and-lifecycle.md): Understand the program lifecycle from design through completion, and how to launch, end, and archive programs
+- [Manage Program Participants](https://docs.exec.com/programs/manage-participants.md): Enroll participants, manage roles, grant extensions, and send reminders
+- [Programs Overview](https://docs.exec.com/programs/overview.md): Organize training into structured learning paths with deadlines, components, and progress tracking
+- [Track Program Progress](https://docs.exec.com/programs/track-progress.md): Monitor completion rates, view analytics, and keep participants on track
+- [Scenario Studio Prompt Library](https://docs.exec.com/prompt-library.md)
+- [Advanced Roleplay Building](https://docs.exec.com/roleplays/advanced-building.md): Build richer scenarios with Knowledge Hub sources, manual character tuning, conversation guidelines, and conditional context
+- [Creating Scenarios](https://docs.exec.com/roleplays/ai-agent.md): Use Scenario Studio to build custom roleplay scenarios through natural conversation
+- [Use the AI Coach](https://docs.exec.com/roleplays/ai-coach.md): Gain additional insight & feedback on your roleplay session
+- [Assign Scenarios](https://docs.exec.com/roleplays/assign-scenarios.md): Assign roleplay scenarios to individuals or groups with deadlines and completion requirements
+- [Using Sources](https://docs.exec.com/roleplays/attachments.md): Bring files, Knowledge Hub pages, and third-party docs into a scenario build
+- [Clone a Scenario](https://docs.exec.com/roleplays/clone-scenario.md): Quickly copy a scenario and make it your own
+- [Collections](https://docs.exec.com/roleplays/collections.md): Group scenarios together with a drag-and-drop sidebar
+- [Conditional Context](https://docs.exec.com/roleplays/conditional-context.md): Tailor AI character knowledge based on each participant's profile
+- [Conversation Guidelines](https://docs.exec.com/roleplays/conversation-guidelines.md): Define how the character responds in specific situations using structured sections or free-form text
+- [Delete a Session](https://docs.exec.com/roleplays/delete-session.md): Permanently remove a session from your history
+- [Sharing & Viewing Permissions](https://docs.exec.com/roleplays/distribute-roleplays.md): Control who can access, assign, monitor, or edit your roleplays
+- [Edit a Scenario](https://docs.exec.com/roleplays/edit-scenario.md): Refine a published scenario in Scenario Studio without remixing or rebuilding
+- [Filter to Find a Roleplay](https://docs.exec.com/roleplays/filter.md): Search and filter to quickly find the scenario you need
+- [Interpret Your Results](https://docs.exec.com/roleplays/interpret-results.md): Understand your score and turn feedback into improvement
+- [Manage Assignments](https://docs.exec.com/roleplays/manage-assignments.md): Track progress, filter, edit, and take bulk actions on roleplay assignments
+- [Multilingual Scenarios](https://docs.exec.com/roleplays/multilingual.md): Build roleplays in nine languages from a single prompt, with character voice and AI Coach feedback localized automatically
+- [View Previous Sessions](https://docs.exec.com/roleplays/previous-sessions.md): Review your past roleplay attempts, scores, and feedback
+- [Use the Remix Feature](https://docs.exec.com/roleplays/remix-scenario.md): Create new versions of existing roleplays while preserving the original
+- [Retake a Roleplay](https://docs.exec.com/roleplays/retake-roleplay.md): Practice as many times as you need to build confidence and improve your score
+- [Create a Rubric](https://docs.exec.com/roleplays/rubrics/create.md): Set consistent evaluation standards across multiple scenarios
+- [Customize Instructions per Scenario](https://docs.exec.com/roleplays/rubrics/customize-instructions.md): Add scenario-specific grading guidance without modifying the original rubric
+- [Edit a Rubric](https://docs.exec.com/roleplays/rubrics/edit.md): Update criteria, refine behaviors, or reuse parts of other rubrics
+- [Import a Rubric](https://docs.exec.com/roleplays/rubrics/import.md): Apply consistent evaluation criteria to roleplays without rebuilding from scratch
+- [Screen Sharing](https://docs.exec.com/roleplays/screenshare/enable.md): Let participants share live content with the AI character during a roleplay
+- [Session Visibility](https://docs.exec.com/roleplays/session-visibility.md): Understand who can see your practice session data
+- [Share Session Results](https://docs.exec.com/roleplays/share-session.md): Access your session history and share results with others
+- [Use a Template](https://docs.exec.com/roleplays/template.md): How to use pre-built templates to quickly build structured, effective roleplay scenarios
+- [Can't Hear the AI](https://docs.exec.com/roleplays/troubleshooting/cant-hear-ai.md): Fix audio issues during a roleplay session
+- [AI Can't See My Screen](https://docs.exec.com/roleplays/troubleshooting/cant-see-screen.md): Troubleshoot screen sharing issues during roleplays
+- [Roleplay Doesn't Load](https://docs.exec.com/roleplays/troubleshooting/doesnt-load.md): What to do if your roleplay won't start
+- [Feedback Page Not Loading](https://docs.exec.com/roleplays/troubleshooting/feedback-not-loading.md): What to do when your session results won't load
+- [Glitching AI](https://docs.exec.com/roleplays/troubleshooting/glitching.md): Troubleshoot lag, cutoffs, and unpredictable AI behavior during roleplays
+- [AI Interrupts Me](https://docs.exec.com/roleplays/troubleshooting/interrupting.md): Understand why the AI cuts you off and how to reduce it
+- [Microphone Not Working](https://docs.exec.com/roleplays/troubleshooting/microphone-not-working.md): Fix issues with the AI not hearing you during roleplays
+- [AI Asks "Are You Still There?"](https://docs.exec.com/roleplays/troubleshooting/still-there.md): Fix microphone issues that cause the AI to think you've gone silent
+- [Analyze Skill Performance](https://docs.exec.com/skills/analyze-performance.md): Understand how your team performs on skills across roleplays, scenarios, and calls
+- [Create and Manage Skills](https://docs.exec.com/skills/create-and-manage.md): Define skills, link them to rubrics, and manage your skills library
+- [Skill Insights and Resources](https://docs.exec.com/skills/insights-and-resources.md): Dive into a single skill: its dashboard, the roleplays and Knowledge Hub content tied to it, and the AI Analyst that generates new practice
+- [Skills Overview](https://docs.exec.com/skills/overview.md): Track and develop key competencies across your workspace
+- [Skill Proficiency and Reports](https://docs.exec.com/skills/proficiency-reports.md): Measure long-term skill development with proficiency scores and custom reports
+- [Understand Your Skill Scores](https://docs.exec.com/skills/understand-your-scores.md): What your scores mean and how to improve them
+- [Single Sign-On and Directory Sync](https://docs.exec.com/sso-directory-sync.md): Set up enterprise authentication and automated user provisioning for your Exec workspace.
+- [Complete Your First Roleplay](https://docs.exec.com/your-first-roleplay.md)
+
+## OpenAPI Specs
+
+- [openapi](https://docs.exec.com/api-reference/openapi.yaml)

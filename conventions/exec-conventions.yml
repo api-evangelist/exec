@@ -1,0 +1,63 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.exec.com/api-reference/overview
+docs: https://docs.exec.com/api-reference/overview
+authentication:
+  style: bearer-token
+  header: Authorization
+  format: 'Bearer exec_live_<40 alphanumeric>'
+  scopes: none
+  notes: >-
+    API keys grant full admin access to the workspace; there is no scope or
+    permission subdivision. See authentication/exec-authentication.yml.
+idempotency:
+  supported: true
+  mechanism: request-body-key
+  key_field: request_id
+  scope:
+    - POST /scenario-studio/jobs
+  retention: >-
+    A client-provided request_id de-duplicates scenario-creation jobs: if a job
+    with the same request_id already exists, the existing job is returned instead
+    of creating a new one.
+  notes: >-
+    Idempotency is applied to asynchronous scenario-creation jobs via the
+    request_id field in the request body (not a header). Derived from the
+    createScenarioJob operation in the OpenAPI.
+pagination:
+  style: page-number
+  params:
+    - page
+    - page_size
+  response_object: pagination
+  response_fields:
+    - page
+    - page_size
+    - total_count
+    - total_pages
+  data_field: data
+  notes: List endpoints return a `data` array plus a `pagination` object.
+error_envelope:
+  shape: '{ "error": { "type": string, "code": string, "message": string } }'
+  format: custom
+  ref: errors/exec-error-codes.yml
+rate_limiting:
+  signaled: true
+  status_code: 429
+  retry_field: retry_after
+  ref: rate-limits/exec-rate-limits.yml
+request_tracing:
+  request_id_header: null
+  notes: No response request-id/correlation header documented.
+versioning:
+  ref: lifecycle/exec-lifecycle.yml
+  scheme: uri-path
+  current: v1
+callbacks:
+  supported: true
+  mechanism: per-request callback_url
+  ref: asyncapi/exec-webhooks.yml
+  notes: >-
+    Scenario-creation jobs accept a callback_url (+ optional callback_headers) to
+    receive a webhook POST on completion. General event webhooks are documented
+    as "coming soon".

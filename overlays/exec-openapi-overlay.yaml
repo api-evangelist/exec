@@ -1,0 +1,36 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Exec API
+  version: 1.0.0
+extends: openapi/exec-openapi-original.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-provider: exec
+      x-apievangelist-review: >-
+        Exec API — REST access to an AI roleplay/sales-training workspace
+        (workspace, members, scenarios, sessions, skills, Scenario Studio,
+        Knowledge Hub). Bearer API-key auth (exec_live_), page-number pagination,
+        429 rate-limit signaling, request_id idempotency on scenario jobs, and a
+        per-request job-completion callback.
+  - target: $.info
+    update:
+      x-apievangelist-conventions: conventions/exec-conventions.yml
+      x-apievangelist-errors: errors/exec-error-codes.yml
+      x-apievangelist-rate-limits: rate-limits/exec-rate-limits.yml
+      x-apievangelist-lifecycle: lifecycle/exec-lifecycle.yml
+      x-apievangelist-data-model: data-model/exec-data-model.yml
+  - target: $.info
+    update:
+      x-idempotency:
+        supported: true
+        field: request_id
+        operations: [createScenarioJob]
+  - target: $.info
+    update:
+      x-ratelimit:
+        burst: 60/min
+        sustained: 1000/day
+        scenario_creation: 10/min
+        status_code: 429
+        retry_field: retry_after

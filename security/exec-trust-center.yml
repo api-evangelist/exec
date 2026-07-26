@@ -1,0 +1,20 @@
+generated: '2026-07-19'
+method: searched
+probe: false
+source: https://www.exec.com/enterprise-privacy
+url: https://app.vanta.com/exec.com/trust/j0xkhh5zesxvojinovqlpm
+certifications:
+  - SOC 2 Type II
+  - SOC 3
+encryption:
+  in_transit: TLS 1.2+
+  at_rest: true
+data_protection:
+  - Customer data never used for AI training or model improvement.
+  - Regular compliance audits and data protection impact assessments.
+evidence:
+  - source: https://www.exec.com/enterprise-privacy
+    keywords: [soc 2 type 2 certified, soc 3, vanta trust center, tls 1.2]
+notes: >-
+  Trust center is hosted on Vanta. No public bug-bounty or responsible-disclosure
+  policy or security contact was found during this pass.

@@ -1,0 +1,18 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.exec.com/api-reference/overview
+versioning:
+  scheme: uri-path
+  current: v1
+  base_url: https://api.exec.com/rest/v1
+  notes: Single version currently deployed at https://api.exec.com/rest/v1/.
+  docs: https://docs.exec.com/api-reference/overview
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: No published deprecation/Sunset policy found as of this pass.
+sla:
+  url: null
+  uptime_target: null
+status_page: https://status.exec.com
+deprecated_operations: []

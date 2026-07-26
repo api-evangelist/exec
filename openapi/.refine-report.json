@@ -1,0 +1,30 @@
+{
+  "provider": "exec",
+  "sources": [
+    "exec-collections-api-openapi.yml",
+    "exec-knowledge-hub-folders-api-openapi.yml",
+    "exec-knowledge-hub-pages-api-openapi.yml",
+    "exec-knowledge-hub-sources-api-openapi.yml",
+    "exec-scenario-studio-api-openapi.yml",
+    "exec-scenarios-api-openapi.yml",
+    "exec-sessions-api-openapi.yml",
+    "exec-skills-api-openapi.yml",
+    "exec-workspace-api-openapi.yml"
+  ],
+  "outputs": [
+    "exec-collections-api-openapi.yml",
+    "exec-knowledge-hub-folders-api-openapi.yml",
+    "exec-knowledge-hub-pages-api-openapi.yml",
+    "exec-knowledge-hub-sources-api-openapi.yml",
+    "exec-scenario-studio-api-openapi.yml",
+    "exec-scenarios-api-openapi.yml",
+    "exec-sessions-api-openapi.yml",
+    "exec-skills-api-openapi.yml",
+    "exec-workspace-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
