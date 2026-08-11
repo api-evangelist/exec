@@ -211,7 +211,7 @@ maintainers:
   email: info@apis.io
 common:
 - type: OpenAPI
-  url: openapi/exec-openapi-original.yml
+  url: openapi/_original/exec-openapi-original.yml
 - type: AgenticAccess
   url: agentic-access/exec-agentic-access.yml
 - type: DomainSecurity
