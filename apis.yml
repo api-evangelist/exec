@@ -1,16 +1,23 @@
 aid: exec
 accessModel:
-  pricing: unknown
+  pricing: freemium
   onboarding: self-serve
-  trial: false
+  trial: true
   try_now: false
   public: false
-  label: Self-serve signup
-  confidence: medium
+  label: Free tier, then self-serve checkout
+  confidence: high
   source:
   - authentication
-  generated: '2026-07-22'
-  method: derived
+  - https://www.exec.com/pricing
+  - https://docs.exec.com/platform/plans
+  generated: '2026-08-14'
+  method: searched
+  note: >-
+    Free plan is the default for every new workspace (1 admin + 3 basic seats, 5
+    roleplay sessions/year); Starter and Professional are self-serve checkout;
+    Enterprise is contact-sales. API keys still require an Exec workspace, so the
+    API itself is not anonymously callable.
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/exec.png
 name: Exec
 description: >-
@@ -30,7 +37,7 @@ x-tier: active
 x-tier-reason: enriched-api
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-19'
+modified: '2026-08-14'
 tags:
 - Company
 - Artificial Intelligence
@@ -244,8 +251,14 @@ common:
   url: asyncapi/exec-webhooks.yml
 - type: MCPServer
   url: mcp/exec-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/exec-tool-crosswalk.yml
 - type: AgentSkill
   url: skills/_index.yml
+- type: Components
+  url: components/exec-components.yml
+- type: Plans
+  url: plans/exec-plans-pricing.yml
 - type: LLMsTxt
   url: llms/exec-llms.txt
 - type: DeveloperPortal
@@ -273,7 +286,11 @@ common:
 - type: Website
   url: https://www.exec.com
 x-enrichment:
-  date: '2026-07-19'
-  status: backfilled
+  date: '2026-08-14'
+  status: enriched
+  artifacts_added: 5
   pass: local-v1
-  note: backfilled from .gitignore signal + verified work evidence
+  note: >-
+    Contract discovery found a live anonymous remote MCP server at
+    https://docs.exec.com/mcp and a provider-published Agent Skill served from it
+    as the mintlify://skills/exec resource. A2A agent card 404 on every host.
