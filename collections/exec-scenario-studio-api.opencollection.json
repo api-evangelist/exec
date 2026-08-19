@@ -1,0 +1,92 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Exec Collections Scenario Studio API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Scenario Studio",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Scenario Studio session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.exec.com/rest/v1/scenario-studio",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an interactive scenario creation session for a user.\nReturns a URL immediately that the user can visit to complete\nscenario creation in the Scenario Studio UI.\n\nThe session is pre-populated with the provided prompt, so when the user\nopens the URL, the AI agent immediately begins processing their request.\n"
+        },
+        {
+          "info": {
+            "name": "Create Scenario job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.exec.com/rest/v1/scenario-studio/jobs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an asynchronous scenario creation job.\nReturns immediately with a job ID that can be polled for status.\n\nThe AI agent processes the job in the background, typically completing\nwithin 5 minutes. Use the GET endpoint to poll for completion,\nor provide a `callback_url` to receive a webhook when the job finishes.\n\n**Remix mode**: Provide `scenario_slug` to create a variation of an existing\nscenario. The AI will use the source scenario as a starting point and apply\nyour prompt as modification"
+        },
+        {
+          "info": {
+            "name": "Get Scenario job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/scenario-studio/jobs/:job_id",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The job ID returned from job creation"
+              }
+            ]
+          },
+          "docs": "Returns the current status and result of a scenario creation job.\n\nPoll this endpoint to check job progress. Typical job duration is about 5 minutes.\n\n**Job statuses:**\n- `queued`: Job is waiting to be processed\n- `processing`: AI agent is actively creating the scenario\n- `completed`: Scenario created successfully (check `scenario` field)\n- `failed`: Job failed (check `error` field for details)\n- `cancelled`: Job was cancelled via DELETE\n"
+        },
+        {
+          "info": {
+            "name": "Cancel Scenario job",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.exec.com/rest/v1/scenario-studio/jobs/:job_id",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The job ID to cancel"
+              }
+            ]
+          },
+          "docs": "Cancels a scenario creation job that is queued or processing.\n\n- **Queued jobs**: Marked as cancelled immediately\n- **Processing jobs**: The background task is terminated and the job is marked cancelled\n- **Completed/failed/cancelled jobs**: Returns 400 error (cannot cancel terminal states)\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,98 @@
+generated: '2026-08-14'
+method: searched
+source: https://www.exec.com/pricing
+docs: https://docs.exec.com/platform/plans
+currency: USD
+plan_count: 4
+summary: >-
+  Exec publishes four public tiers — Free, Starter, Professional and Enterprise.
+  Starter and Professional are self-serve checkout; Enterprise is contact-sales.
+  The pricing page quotes per-seat rates with seat minimums; the docs plans page
+  quotes the resulting workspace totals. Both are recorded below and they
+  reconcile ($20/seat x 5 seat minimum = $100/mo = $1,200/yr Starter;
+  $39/seat x 15 seat minimum = $585/mo = $7,020/yr Professional).
+plans:
+  - name: Free
+    price: 0
+    currency: USD
+    billing_period: n/a
+    how_to_buy: default for new workspaces
+    included:
+      seats: 1 admin + 3 basic seats
+      roleplay_sessions: 5 per year
+      custom_scenarios: 2
+      courses: up to 2
+      knowledge_hub_storage: 5 GB
+      call_scoring: usage-based
+      ai_course_generation: one-time signup bonus of platform credits
+    limits:
+      - Publishing a 3rd custom scenario is blocked until upgrade.
+      - New sessions pause when the 5-session annual pool is exhausted.
+      - Course create/import/AI-generate buttons disable at the course cap.
+    excluded: [Programs, AI Coach, Certifications, analytics, screen sharing, SSO, directory sync]
+  - name: Starter
+    price_per_seat_month: 20
+    seat_minimum: 5
+    price_month: 120
+    price_year: 1200
+    currency: USD
+    billing_period: monthly or annual
+    how_to_buy: self-serve checkout
+    included:
+      seats: up to 50
+      groups: 5
+      roleplay_sessions: unlimited
+      custom_scenarios: 50
+      courses: up to 10
+      programs: up to 5 active
+      platform_credits: 500 per month
+      call_scoring: usage-based
+    excluded: [AI Coach, Certifications, coaching/roleplay/skill analytics, screen sharing, SSO, directory sync]
+  - name: Professional
+    price_per_seat_month: 39
+    seat_minimum: 15
+    price_year: 7020
+    currency: USD
+    billing_period: annual
+    how_to_buy: self-serve checkout
+    included:
+      seats: up to 200
+      groups: 50
+      roleplay_sessions: unlimited
+      custom_scenarios: 50
+      courses: up to 50
+      programs: included
+      platform_credits: 750 per month
+      call_scoring: usage-based
+      features: [AI Coach, Certifications, coaching/roleplay/skill analytics, screen sharing in roleplays]
+    excluded: [SSO, directory sync, custom skills ontology]
+  - name: Enterprise
+    price: custom
+    currency: USD
+    billing_period: annual
+    how_to_buy: contact sales (hello@exec.com)
+    included:
+      seats: unlimited
+      groups: custom
+      roleplay_sessions: unlimited
+      custom_scenarios: custom
+      courses: unlimited
+      platform_credits: 1000 per month
+      call_scoring: usage-based
+      features: [everything in Professional, SSO, directory sync (SCIM), custom skills ontology]
+usage_based:
+  - name: Call Scoring
+    model: pay per call scored
+    availability: all plans
+  - name: Platform credits
+    model: monthly credit allowance; AI course generation consumes credits once per new course outline
+    note: Later edits, re-runs on the same course, and manual sections are free.
+api_access:
+  gated_by_plan: false
+  note: >-
+    The plans table does not gate the REST API by tier. API keys are created in
+    Settings > API by a workspace admin; no plan-specific API quota is published.
+    Rate limits are workspace-wide (see rate-limits/exec-rate-limits.yml).
+x-evidence:
+  - {url: 'https://www.exec.com/pricing', http_status: 200, fetched: '2026-08-14'}
+  - {url: 'https://docs.exec.com/platform/plans.md', http_status: 200, fetched: '2026-08-14'}

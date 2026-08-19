@@ -26,6 +26,31 @@ schemes:
   sources:
   - openapi/exec-openapi-original.yml
   docs: https://docs.exec.com/api-reference/authentication
+platform_sso:
+  scope: workspace sign-in, not API authorization
+  availability: Enterprise plan
+  provider: WorkOS
+  docs: https://docs.exec.com/sso-directory-sync
+  protocols:
+    - {id: saml-2.0, details: SP-initiated and IdP-initiated SSO flows}
+    - {id: oidc, details: OAuth 2.0 authorization code grant with ID tokens}
+    - {id: scim-2.0, details: Automated user and group provisioning and deprovisioning}
+  identity_providers_tested: [Okta, Microsoft Entra ID, Google Workspace, OneLogin, PingFederate,
+    PingOne, JumpCloud, Duo, AD FS, Rippling, CyberArk]
+  behavior:
+    mandatory_once_enabled: true
+    jit_provisioning: false
+    note: >-
+      SSO alone does not create accounts; users must be invited into Exec unless
+      SCIM directory sync is also enabled.
+  self_service: Workspace admins configure SSO in Settings > Security without contacting support.
+lti_1_3:
+  scope: LMS launch identity, not API authorization
+  docs: https://docs.exec.com/lti/overview
+  endpoints_published: [OIDC login, launch, JWKS, OpenID configuration]
+  registration: [dynamic registration, manual connection]
 notes: >-
-  No test/sandbox key variant is documented (only exec_live_). No OAuth or scope
-  surface, so scopes/ is intentionally omitted for this provider.
+  No test/sandbox key variant is documented (only exec_live_). The REST API has no
+  OAuth or scope surface, so scopes/ is intentionally omitted for this provider.
+  Enterprise SSO (SAML/OIDC) and SCIM directory sync govern human sign-in and user
+  provisioning only — they issue no API credential and grant no API scope.

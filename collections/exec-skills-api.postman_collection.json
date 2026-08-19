@@ -1,0 +1,541 @@
+{
+  "item": [
+    {
+      "id": "b69588c1-7e05-4257-ac0a-1ebad0a6f331",
+      "name": "Skills",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e097faae-93ab-4d5a-aa87-168c3136b4e7",
+          "name": "List skills",
+          "request": {
+            "name": "List skills",
+            "description": {
+              "content": "Returns a paginated list of skills in the workspace, ordered alphabetically by name.\n\nSkills represent competencies that are evaluated during roleplay sessions and calls\n(e.g. \"Discovery Questions\", \"Objection Handling\", \"Procurement Selling\"). Each skill\ncan be linked to evaluation criteria across multiple scenarios.\n\nUse `?include=proficiency` to add aggregate proficiency stats per skill (participant\ncount, scored participant count, percentage proficient+, and average score). This is\ncomputed across all workspace members who have practiced each skill.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "skills"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "Comma-separated list of optional data to include.\nAvailable values: `proficiency` (aggregate proficiency stats per skill).\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (1-indexed)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "50",
+                  "description": "Number of results per page (max 100)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "55277e64-6c41-4496-808b-889e161d0d7d",
+              "name": "Paginated list of skills",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "skills"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "proficiency"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"sk1a2b3c4d5e\",\n      \"name\": \"Procurement Selling\",\n      \"slug\": \"procurement-selling\",\n      \"description\": \"Ability to identify and sell procurement solutions effectively.\",\n      \"created_at\": \"2026-01-10T09:00:00Z\",\n      \"proficiency_summary\": {\n        \"participant_count\": 25,\n        \"scored_participant_count\": 20,\n        \"pct_proficient_plus\": 60,\n        \"avg_score\": 72.5\n      }\n    },\n    {\n      \"id\": \"sk6f7g8h9i0j\",\n      \"name\": \"Objection Handling\",\n      \"slug\": \"objection-handling\",\n      \"description\": \"Skill in addressing and overcoming prospect objections.\",\n      \"created_at\": \"2026-01-15T14:30:00Z\",\n      \"proficiency_summary\": {\n        \"participant_count\": 18,\n        \"scored_participant_count\": 15,\n        \"pct_proficient_plus\": 40,\n        \"avg_score\": 65.3\n      }\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 50,\n    \"total_count\": 2,\n    \"total_pages\": 1\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ac22347c-4786-4126-a568-48bc0b0c3de5",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "skills"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "proficiency"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d7f012f1-211f-4bfa-a4ce-6bdac8e4182a",
+          "name": "Get skill proficiency by user",
+          "request": {
+            "name": "Get skill proficiency by user",
+            "description": {
+              "content": "Returns per-user proficiency data for a specific skill.\n\nProficiency uses time-decay weighted scoring across all observations (roleplay sessions\nand calls combined). Recent observations count more than older ones (30-day half-life).\nA minimum of 3 observations is required before a proficiency score is calculated.\n\nProficiency tiers: `excellent` (≥90), `proficient` (≥75), `developing` (≥50),\n`needs_work` (<50), `insufficient_data` (<3 observations).\n\nOnly users with at least one observation are included in the response. If no user\nfilters are provided, returns proficiency for all workspace members who have practiced\nthis skill.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "skills",
+                ":skill_id",
+                "proficiency"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "user_ids",
+                  "value": "<string>",
+                  "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included)."
+                },
+                {
+                  "disabled": false,
+                  "key": "user_emails",
+                  "value": "<string>",
+                  "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included)."
+                },
+                {
+                  "disabled": false,
+                  "key": "group_ids",
+                  "value": "<string>",
+                  "description": "Comma-separated workspace group IDs to filter by"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<dateTime>",
+                  "description": "Calculate proficiency as of this date (ISO 8601). Defaults to now."
+                },
+                {
+                  "disabled": false,
+                  "key": "exclude_system_users",
+                  "value": "false",
+                  "description": "Exclude sessions from system users (emails ending in @exec.com). Default false."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (1-indexed)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "50",
+                  "description": "Number of results per page (max 100)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "skill_id",
+                  "description": "(Required) The skill's unique identifier (UUID)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "704ae4c4-e283-4d8b-bf8f-bcc4548fc59b",
+              "name": "Per-user proficiency data for the skill",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "skills",
+                    ":skill_id",
+                    "proficiency"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_emails",
+                      "value": "jane@acme.com,bob@acme.com"
+                    },
+                    {
+                      "key": "group_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "exclude_system_users",
+                      "value": "false"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "skill_id",
+                      "description": "(Required) The skill's unique identifier (UUID)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"user\": {\n        \"id\": \"u1a2b3c4d5e6\",\n        \"email\": \"jane@acme.com\",\n        \"first_name\": \"Jane\",\n        \"last_name\": \"Smith\"\n      },\n      \"score\": 82,\n      \"tier\": \"proficient\",\n      \"observation_count\": 14,\n      \"last_practiced_at\": \"2026-03-12T10:00:00Z\"\n    },\n    {\n      \"user\": {\n        \"id\": \"u7v8w9x0y1z2\",\n        \"email\": \"bob@acme.com\",\n        \"first_name\": \"Bob\",\n        \"last_name\": \"Jones\"\n      },\n      \"score\": null,\n      \"tier\": \"insufficient_data\",\n      \"observation_count\": 2,\n      \"last_practiced_at\": \"2026-03-10T15:30:00Z\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 50,\n    \"total_count\": 2,\n    \"total_pages\": 1\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "00be4c86-6c1e-4119-8805-08633012a6ea",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "skills",
+                    ":skill_id",
+                    "proficiency"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_emails",
+                      "value": "jane@acme.com,bob@acme.com"
+                    },
+                    {
+                      "key": "group_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "exclude_system_users",
+                      "value": "false"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "skill_id",
+                      "description": "(Required) The skill's unique identifier (UUID)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bc7ebcb7-0f0a-4d66-9925-764f04c2f7e8",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "skills",
+                    ":skill_id",
+                    "proficiency"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_emails",
+                      "value": "jane@acme.com,bob@acme.com"
+                    },
+                    {
+                      "key": "group_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "exclude_system_users",
+                      "value": "false"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "skill_id",
+                      "description": "(Required) The skill's unique identifier (UUID)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"not_found\",\n    \"message\": \"Scenario not found: abc123\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.exec.com/rest/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "b412ff29-9bf0-441e-b1a8-b89260b79553",
+    "name": "Exec Collections Skills API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for programmatic access to your Exec workspace.\n\nUse the Exec API to read workspace data, list members, retrieve group information,\nand create interactive scenario creation sessions.\n\n## Authentication\nAll requests require a valid API key passed in the Authorization header:\n```\nAuthorization: Bearer exec_live_...\n```\n\nCreate API keys in your workspace settings under **Settings > API**.\n",
+      "type": "text/plain"
+    }
+  }
+}

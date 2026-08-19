@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Exec Collections API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Collections",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List collections",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/collections",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-indexed)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (max 100)"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of collections in the workspace, ordered\nalphabetically by name.\n\nCollections group related scenarios together (e.g. \"Procurement Scenarios\",\n\"Onboarding\"). Use collection IDs to filter sessions, skills, and scenario\nanalytics by collection.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

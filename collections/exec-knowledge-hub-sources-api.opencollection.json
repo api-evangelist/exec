@@ -1,0 +1,138 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Exec Collections Knowledge Hub - Sources API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Knowledge Hub - Sources",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List sources",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/knowledge-hub/sources",
+            "params": [
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by source type"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by extraction status"
+              },
+              {
+                "name": "folder_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by folder UUID"
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "Case-insensitive search over source titles"
+              },
+              {
+                "name": "page_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to sources attached to this page (page UUID)"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Pagination page number (1-indexed) — which page of results to return, not a Knowledge Hub page."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (max 100)"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of Knowledge Hub sources. List rows are metadata\nonly — pass `?include=content` on the detail endpoint to fetch the\nextracted text.\n\nFilter by type, status, folder, or free-text query.\n"
+        },
+        {
+          "info": {
+            "name": "Create source",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.exec.com/rest/v1/knowledge-hub/sources",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a Knowledge Hub source from a URL. Text extraction runs\nasynchronously, so the source is returned with `status: pending` or\n`processing`; poll the detail endpoint until `status` is `ready`.\n\nURL sources are de-duplicated within the workspace: if the URL already\nexists, the existing source is returned with status `200` instead of\n`201`.\n\n> File upload via the REST API is not yet supported — use URL ingest.\n"
+        },
+        {
+          "info": {
+            "name": "Get source",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/knowledge-hub/sources/:source_id",
+            "params": [
+              {
+                "name": "source_id",
+                "value": "",
+                "type": "path",
+                "description": "The source's unique identifier (UUID)"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of optional sections to include.\nAvailable values: `content` (the extracted text).\n"
+              }
+            ]
+          },
+          "docs": "Returns a single source by its UUID. Use `?include=content` to fetch the\nextracted text (read from object storage — heavier, so opt-in).\n"
+        },
+        {
+          "info": {
+            "name": "Delete source",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.exec.com/rest/v1/knowledge-hub/sources/:source_id",
+            "params": [
+              {
+                "name": "source_id",
+                "value": "",
+                "type": "path",
+                "description": "The source's unique identifier (UUID)"
+              }
+            ]
+          },
+          "docs": "Archives (soft-deletes) a source."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

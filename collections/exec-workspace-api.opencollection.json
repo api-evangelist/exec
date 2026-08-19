@@ -1,0 +1,91 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Exec Collections Workspace API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Workspace",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get workspace info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/workspace"
+          },
+          "docs": "Returns basic information about the authenticated workspace."
+        },
+        {
+          "info": {
+            "name": "List workspace members",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/workspace/members",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-indexed)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (max 100)"
+              },
+              {
+                "name": "group_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated workspace group IDs to filter by"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of workspace members with basic user info."
+        },
+        {
+          "info": {
+            "name": "List workspace groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/workspace/groups",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-indexed)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (max 100)"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of groups in the workspace."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

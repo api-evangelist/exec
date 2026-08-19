@@ -1,0 +1,146 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Exec Collections Sessions API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sessions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List roleplay sessions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/sessions",
+            "params": [
+              {
+                "name": "user_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included)."
+              },
+              {
+                "name": "user_emails",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included)."
+              },
+              {
+                "name": "scenario_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated scenario IDs to filter by"
+              },
+              {
+                "name": "collection_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated collection IDs to filter by"
+              },
+              {
+                "name": "skill_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated skill IDs to filter by"
+              },
+              {
+                "name": "program_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated program IDs to filter by"
+              },
+              {
+                "name": "group_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated workspace group IDs to filter by"
+              },
+              {
+                "name": "rank",
+                "value": "",
+                "type": "query",
+                "description": "Filter by one or more performance ranks"
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601 datetime — only include sessions created on or after this date"
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601 datetime — only include sessions created on or before this date"
+              },
+              {
+                "name": "exclude_system_users",
+                "value": "",
+                "type": "query",
+                "description": "Exclude sessions from system users (emails ending in @exec.com). Default false."
+              },
+              {
+                "name": "sorting",
+                "value": "",
+                "type": "query",
+                "description": "Sort field. Prefix with `-` for descending order."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-indexed)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (max 100)"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of roleplay sessions in the workspace with inline user and scenario data.\n\nSessions represent individual practice attempts on AI roleplay scenarios. Each session\nincludes the participant's score, rank, duration, and metadata. Use filters to narrow\nresults by user, scenario, skill, program, group, or date range.\n\nNote: Sessions may include users who are no longer active workspace members (e.g., users\nwho have been removed). These users will not appear in GET /workspace/me"
+        },
+        {
+          "info": {
+            "name": "Get session detail",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/sessions/:session_id",
+            "params": [
+              {
+                "name": "session_id",
+                "value": "",
+                "type": "path",
+                "description": "The session's unique identifier (UUID)"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of optional sections to include in the response.\nAvailable values: `transcript` (conversation lines), `evaluations` (rubric criteria with grades).\n"
+              }
+            ]
+          },
+          "docs": "Returns full detail for a single roleplay session, including score, rank, duration,\nand feedback.\n\nUse the `include` parameter to fetch optional heavy fields like the full conversation\ntranscript or evaluation criteria with grades. These are omitted by default to keep\nresponses lean.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

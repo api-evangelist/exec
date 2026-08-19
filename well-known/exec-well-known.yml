@@ -1,9 +1,13 @@
-generated: '2026-07-19'
-method: searched
+generated: '2026-08-14'
+method: probed
 source: live probes of /.well-known/ on Exec hosts
 summary: >-
-  No /.well-known/ discovery documents are published on any Exec host. All
-  probes returned 404. Recorded for auditability; no canonical pointer emitted.
+  No /.well-known/ discovery documents are published on any Exec host. Every path
+  probed on api.exec.com, www.exec.com and docs.exec.com returned 404, including
+  both A2A agent-card locations and both OAuth discovery documents on the host
+  that actually serves an MCP server. Recorded for auditability; NO WellKnown,
+  SecurityTxt or AgentCard pointer is emitted, because a 404 is an absence, not a
+  surface.
 hosts:
   - host: https://api.exec.com
     documents:
@@ -12,6 +16,8 @@ hosts:
       - {path: /.well-known/oauth-authorization-server, status: 404}
       - {path: /.well-known/api-catalog, status: 404}
       - {path: /.well-known/ai-plugin.json, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
   - host: https://www.exec.com
     documents:
       - {path: /.well-known/security.txt, status: 404}
@@ -19,10 +25,21 @@ hosts:
       - {path: /.well-known/oauth-authorization-server, status: 404}
       - {path: /.well-known/api-catalog, status: 404}
       - {path: /.well-known/ai-plugin.json, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
   - host: https://docs.exec.com
     documents:
       - {path: /.well-known/security.txt, status: 404}
       - {path: /.well-known/openid-configuration, status: 404}
       - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/oauth-protected-resource, status: 404}
       - {path: /.well-known/api-catalog, status: 404}
       - {path: /.well-known/ai-plugin.json, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
+notes: >-
+  The docs.exec.com OAuth probes matter beyond bookkeeping: that host serves a
+  live MCP server at /mcp, and the absence of both RFC 8414 and RFC 9728
+  documents confirms the server is genuinely anonymous rather than
+  OAuth-protected. See mcp/exec-mcp.yml.
+re_checked: '2026-08-14'

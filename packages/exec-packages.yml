@@ -1,0 +1,26 @@
+generated: '2026-08-14'
+method: searched
+source: >-
+  registry.npmjs.org, pypi.org, rubygems.org, crates.io, api.github.com and the
+  Exec documentation index (https://docs.exec.com/llms.txt)
+package_count: 0
+official_package_count: 0
+packages: []
+summary: >-
+  Exec publishes no first-party client libraries. Its documentation teaches the
+  API with raw cURL, Python `requests` and browser `fetch` examples only
+  (https://docs.exec.com/api-reference/quickstart), and no SDK, client-library or
+  CLI page exists anywhere in the docs index. No SDKs pointer is emitted in
+  apis.yml because there is nothing to point at — an honest zero, not an
+  unchecked field.
+registries_searched:
+  - {registry: npm, query: 'exec.com / execdotcom / @exec/sdk / exec-api', result: no first-party package, status: 200}
+  - {registry: pypi, query: 'exec-sdk / execcom / exec-api / execapi', result: 404 on every candidate, status: 404}
+  - {registry: rubygems, query: exec-api, result: 404, status: 404}
+  - {registry: crates.io, query: exec-api, result: not found, status: 403}
+  - {registry: github, query: 'orgs/exec, orgs/exec-com, orgs/execdotcom', result: no Exec GitHub organization, status: 404}
+notes: >-
+  npm's `exec-*` namespace is crowded with unrelated shell-execution utilities
+  (exec-sh, execa and similar); none is published by or for exec.com and none is
+  recorded here. No public Exec GitHub organization was found, so there is no
+  source-code home from which an unpublished SDK could be derived either.

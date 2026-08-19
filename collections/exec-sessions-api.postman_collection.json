@@ -1,0 +1,683 @@
+{
+  "item": [
+    {
+      "id": "7078c451-1fc2-49db-b139-e03bfc722da0",
+      "name": "Sessions",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4423500d-2fd1-4407-a118-b053cb19666f",
+          "name": "List roleplay sessions",
+          "request": {
+            "name": "List roleplay sessions",
+            "description": {
+              "content": "Returns a paginated list of roleplay sessions in the workspace with inline user and scenario data.\n\nSessions represent individual practice attempts on AI roleplay scenarios. Each session\nincludes the participant's score, rank, duration, and metadata. Use filters to narrow\nresults by user, scenario, skill, program, group, or date range.\n\nNote: Sessions may include users who are no longer active workspace members (e.g., users\nwho have been removed). These users will not appear in GET /workspace/members but their\nhistorical session data is preserved.\n\nResults are ordered by creation date (newest first) by default.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "sessions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "user_ids",
+                  "value": "<string>",
+                  "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included)."
+                },
+                {
+                  "disabled": false,
+                  "key": "user_emails",
+                  "value": "<string>",
+                  "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included)."
+                },
+                {
+                  "disabled": false,
+                  "key": "scenario_ids",
+                  "value": "<string>",
+                  "description": "Comma-separated scenario IDs to filter by"
+                },
+                {
+                  "disabled": false,
+                  "key": "collection_ids",
+                  "value": "<string>",
+                  "description": "Comma-separated collection IDs to filter by"
+                },
+                {
+                  "disabled": false,
+                  "key": "skill_ids",
+                  "value": "<string>",
+                  "description": "Comma-separated skill IDs to filter by"
+                },
+                {
+                  "disabled": false,
+                  "key": "program_ids",
+                  "value": "<string>",
+                  "description": "Comma-separated program IDs to filter by"
+                },
+                {
+                  "disabled": false,
+                  "key": "group_ids",
+                  "value": "<string>",
+                  "description": "Comma-separated workspace group IDs to filter by"
+                },
+                {
+                  "disabled": false,
+                  "key": "rank",
+                  "value": "<string>,<string>",
+                  "description": "Filter by one or more performance ranks"
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<dateTime>",
+                  "description": "ISO 8601 datetime — only include sessions created on or after this date"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<dateTime>",
+                  "description": "ISO 8601 datetime — only include sessions created on or before this date"
+                },
+                {
+                  "disabled": false,
+                  "key": "exclude_system_users",
+                  "value": "false",
+                  "description": "Exclude sessions from system users (emails ending in @exec.com). Default false."
+                },
+                {
+                  "disabled": false,
+                  "key": "sorting",
+                  "value": "-created_at",
+                  "description": "Sort field. Prefix with `-` for descending order."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (1-indexed)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "50",
+                  "description": "Number of results per page (max 100)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6f4e7779-d070-4a58-878d-9effbe7f146d",
+              "name": "Paginated list of roleplay sessions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "user_ids",
+                      "value": "u1a2b3c4d5e6,u7v8w9x0y1z2"
+                    },
+                    {
+                      "key": "user_emails",
+                      "value": "jane@acme.com,bob@acme.com"
+                    },
+                    {
+                      "key": "scenario_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "collection_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skill_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "program_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "group_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "rank",
+                      "value": "gold,silver"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "exclude_system_users",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sorting",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"abc123def456\",\n      \"user\": {\n        \"id\": \"u1a2b3c4d5e6\",\n        \"email\": \"jane@acme.com\",\n        \"first_name\": \"Jane\",\n        \"last_name\": \"Smith\"\n      },\n      \"scenario\": {\n        \"id\": \"s1a2b3c4d5e6\",\n        \"name\": \"Procurement Discovery\",\n        \"slug\": \"procurement-discovery\"\n      },\n      \"score\": 82.5,\n      \"rank\": \"gold\",\n      \"duration_seconds\": 347,\n      \"is_valid_attempt\": true,\n      \"created_at\": \"2026-03-15T14:30:00Z\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 50,\n    \"total_count\": 128,\n    \"total_pages\": 3\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "51eba95d-d779-45a6-9910-abb4c6440ff2",
+              "name": "Invalid request parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "user_ids",
+                      "value": "u1a2b3c4d5e6,u7v8w9x0y1z2"
+                    },
+                    {
+                      "key": "user_emails",
+                      "value": "jane@acme.com,bob@acme.com"
+                    },
+                    {
+                      "key": "scenario_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "collection_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skill_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "program_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "group_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "rank",
+                      "value": "gold,silver"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "exclude_system_users",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sorting",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request\",\n    \"code\": \"invalid_pagination\",\n    \"message\": \"Invalid pagination parameters\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f219ee1f-88a2-414d-8db0-7b812065e300",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "user_ids",
+                      "value": "u1a2b3c4d5e6,u7v8w9x0y1z2"
+                    },
+                    {
+                      "key": "user_emails",
+                      "value": "jane@acme.com,bob@acme.com"
+                    },
+                    {
+                      "key": "scenario_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "collection_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skill_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "program_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "group_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "rank",
+                      "value": "gold,silver"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "exclude_system_users",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sorting",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "27572d68-a324-4bfd-bf34-505b10ae0023",
+          "name": "Get session detail",
+          "request": {
+            "name": "Get session detail",
+            "description": {
+              "content": "Returns full detail for a single roleplay session, including score, rank, duration,\nand feedback.\n\nUse the `include` parameter to fetch optional heavy fields like the full conversation\ntranscript or evaluation criteria with grades. These are omitted by default to keep\nresponses lean.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "sessions",
+                ":session_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "Comma-separated list of optional sections to include in the response.\nAvailable values: `transcript` (conversation lines), `evaluations` (rubric criteria with grades).\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "session_id",
+                  "description": "(Required) The session's unique identifier (UUID)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "94bfb6bb-b819-4e57-a23c-4f5163793fd5",
+              "name": "Session detail",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "sessions",
+                    ":session_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "transcript,evaluations"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "session_id",
+                      "description": "(Required) The session's unique identifier (UUID)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"abc123def456\",\n  \"user\": {\n    \"id\": \"u1a2b3c4d5e6\",\n    \"email\": \"jane@acme.com\",\n    \"first_name\": \"Jane\",\n    \"last_name\": \"Smith\"\n  },\n  \"scenario\": {\n    \"id\": \"s1a2b3c4d5e6\",\n    \"name\": \"Procurement Discovery\",\n    \"slug\": \"procurement-discovery\"\n  },\n  \"score\": 82.5,\n  \"rank\": \"gold\",\n  \"duration_seconds\": 347,\n  \"is_valid_attempt\": true,\n  \"outcome_feedback\": \"Strong discovery questioning with good rapport building.\",\n  \"positive_feedback\": \"Excellent use of open-ended questions to uncover needs.\",\n  \"constructive_feedback\": \"Consider probing deeper into budget constraints.\",\n  \"created_at\": \"2026-03-15T14:30:00Z\",\n  \"transcript\": [\n    {\n      \"speaker\": \"ai\",\n      \"text\": \"Hi, I'm the procurement lead at Globex. Thanks for meeting with me today.\",\n      \"seconds_from_start\": 0\n    },\n    {\n      \"speaker\": \"user\",\n      \"text\": \"Thanks for your time. I'd love to learn more about your current process.\",\n      \"seconds_from_start\": 4.2\n    }\n  ],\n  \"evaluations\": [\n    {\n      \"criterion_name\": \"Communication Skills\",\n      \"items\": [\n        {\n          \"name\": \"Discovery Questions\",\n          \"grade\": \"good\",\n          \"feedback\": \"Asked targeted questions about pain points and current workflow.\",\n          \"feedback_examples\": [\n            {\n              \"quote\": \"Tell me about your current procurement process.\",\n              \"feedback\": \"Great open-ended discovery question.\",\n              \"suggestion_quote\": null,\n              \"grade\": \"good\",\n              \"salience\": \"high\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"criterion_name\": \"Objection Handling\",\n      \"items\": [\n        {\n          \"name\": \"Budget Concerns\",\n          \"grade\": \"mid\",\n          \"feedback\": \"Addressed the budget concern but could have reframed value more clearly.\",\n          \"feedback_examples\": []\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ca432276-e6c6-4665-8a22-28545dd15b98",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "sessions",
+                    ":session_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "transcript,evaluations"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "session_id",
+                      "description": "(Required) The session's unique identifier (UUID)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c1b25fcf-341e-47b6-a685-26c572ac4947",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "sessions",
+                    ":session_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "transcript,evaluations"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "session_id",
+                      "description": "(Required) The session's unique identifier (UUID)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"not_found\",\n    \"message\": \"Scenario not found: abc123\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.exec.com/rest/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "9965f14b-3d9d-4394-b638-3a207f299405",
+    "name": "Exec Collections Sessions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for programmatic access to your Exec workspace.\n\nUse the Exec API to read workspace data, list members, retrieve group information,\nand create interactive scenario creation sessions.\n\n## Authentication\nAll requests require a valid API key passed in the Authorization header:\n```\nAuthorization: Bearer exec_live_...\n```\n\nCreate API keys in your workspace settings under **Settings > API**.\n",
+      "type": "text/plain"
+    }
+  }
+}

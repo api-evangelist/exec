@@ -1,0 +1,74 @@
+generated: '2026-08-14'
+method: derived
+source: mcp/exec-mcp.yml + openapi/_original/exec-openapi-original.yml
+summary: >-
+  Exec's MCP surface and its REST surface do not overlap at all. The live MCP
+  server (https://docs.exec.com/mcp) is a documentation server — search, read and
+  feedback over docs.exec.com content — while the OpenAPI describes the workspace
+  REST API at https://api.exec.com/rest/v1. No MCP tool is backed by a REST
+  operation, and no REST operation has an MCP tool. Recording that divergence
+  honestly is the point of this file: an agent that connects to Exec's MCP server
+  can read the docs but cannot list a session, assign a scenario, or create a
+  Knowledge Hub page.
+surfaces:
+  openapi:
+    file: openapi/_original/exec-openapi-original.yml
+    base_url: https://api.exec.com/rest/v1
+    auth: bearer API key (exec_live_)
+    gated: true
+    note: Operations require a workspace API key; the spec itself is public.
+  mcp:
+    url: https://docs.exec.com/mcp
+    gated: false
+    note: tools/list and resources/list answered anonymously on 2026-08-14.
+  graphql:
+    endpoint: null
+    note: No GraphQL surface. https://api.exec.com/graphql returned 404.
+crosswalk: []
+mcp_only:
+- tool: search_exec_docs
+  reason: >-
+    Documentation search over docs.exec.com. No REST operation exposes docs
+    content — the Knowledge Hub operations manage a customer's own workspace
+    content, not Exec's product documentation.
+- tool: query_docs_filesystem_exec_docs
+  reason: >-
+    Read-only virtualized filesystem over the docs corpus and its OpenAPI files.
+    A docs-platform capability with no API-side equivalent.
+- tool: submit_feedback
+  reason: >-
+    Files documentation feedback to Exec's docs team. The only non-read-only tool
+    on the server, and it has no public REST operation.
+rest_only:
+- capability: Workspace
+  operations: [getWorkspace, listWorkspaceMembers, listWorkspaceGroups]
+- capability: Scenarios
+  operations: [listScenarios, checkScenarioAccess, grantScenarioAccess, assignScenario, listAssignments,
+    getScenarioAnalyticsSummary, getScenarioAnalyticsParticipants]
+- capability: Collections
+  operations: [listCollections]
+- capability: Sessions
+  operations: [listSessions, getSession]
+- capability: Skills
+  operations: [listSkills, getSkillProficiency]
+- capability: Scenario Studio
+  operations: [createScenarioStudioSession, createScenarioJob, getScenarioJob, cancelScenarioJob]
+- capability: Knowledge Hub
+  operations: [listKnowledgeHubFolders, getKnowledgeHubFolder, listKnowledgeHubPages, createKnowledgeHubPage,
+    getKnowledgeHubPage, updateKnowledgeHubPage, replaceKnowledgeHubPage, archiveKnowledgeHubPage,
+    listKnowledgeHubPageVersions, listKnowledgeHubSources, createKnowledgeHubSource,
+    getKnowledgeHubSource, deleteKnowledgeHubSource]
+coverage:
+  mcp_tools_total: 3
+  mcp_tools_bound_to_rest: 0
+  mcp_only: 3
+  rest_operations_total: 32
+  rest_operations_with_tool: 0
+  overlap_percent: 0
+notes: >-
+  Not a gap to paper over: Exec's docs MCP server is a genuine agent surface and
+  the REST API is a genuine developer surface, but they are disjoint. The
+  provider-published Agent Skill (skills/exec-provider-skill.md, served as the
+  mintlify://skills/exec resource on the same server) is what bridges them today —
+  it teaches an agent the REST endpoints in prose rather than exposing them as
+  callable tools.

@@ -1,0 +1,62 @@
+generated: '2026-08-14'
+method: searched
+source: https://docs.exec.com/platform/iframe-embedding
+docs: https://docs.exec.com/lms-integration
+summary: >-
+  Exec ships no JavaScript element library or web-component package. What it does
+  publish are two hosted embed surfaces that let another product render the Exec
+  workspace inside itself: a same-workspace iframe embed governed by an
+  admin-managed allowed-origins list, and an LTI 1.3 tool launch for LMS
+  platforms with single sign-on and grade passback. Both are configured in the
+  Exec UI, not installed from a registry.
+component_families:
+  - family: Iframe embed
+    kind: hosted-embed
+    docs: https://docs.exec.com/platform/iframe-embedding
+    loader: null
+    description: >-
+      Embed a full Exec workspace inside another site (customer learning portal,
+      internal LMS, partner app) so learners run roleplays, view Skills and
+      complete assignments without leaving the parent experience.
+    embed_url_form: 'https://<workspace>.exec.com'
+    required_iframe_permissions:
+      - storage-access   # required for Safari / third-party-cookie blocking
+      - camera           # required for voice roleplays
+      - microphone       # required for voice roleplays
+      - clipboard-write  # transcript copy / share links
+    configuration:
+      location: Settings > Security > Iframe Embedding
+      model: allowlist of origins (scheme + host + optional port, https only, no paths)
+      max_origins: 20
+      propagation: about one minute
+      default: disabled — Exec blocks all iframe embedding until an admin opts in
+      wildcard_option: >-
+        "Allow any origin to embed this workspace" exists but the docs warn it
+        removes clickjacking protection and should be a last resort.
+    constraints:
+      - Parent site must be served over HTTPS (browsers reject mixed-content cross-origin iframes).
+      - Subdomains are not implied — each embedding origin must be listed explicitly.
+      - No single sign-on or grade passback; use LTI 1.3 when those are needed.
+  - family: LTI 1.3 tool
+    kind: hosted-embed
+    docs: https://docs.exec.com/lti/overview
+    loader: null
+    description: >-
+      Register Exec as an LTI 1.3 tool in an LMS so learners launch roleplays
+      from course content with single sign-on, and roleplay scores post back to
+      the LMS gradebook automatically.
+    registration:
+      methods: [dynamic registration, manual connection]
+      endpoints_provided: [OIDC login, launch, JWKS, OpenID configuration]
+      location: Settings > Integrations > LTI 1.3
+    placement:
+      method: LMS deep-link picker, or paste a scenario_id custom parameter on an external-tool activity
+      docs: https://docs.exec.com/lti/add-roleplays
+    grade_passback:
+      supported: true
+      docs: https://docs.exec.com/lti/grade-passback
+javascript_packages: []
+notes: >-
+  Recorded as Components rather than SDKs deliberately: these are client-side
+  surfaces a host application renders, not server-side client libraries. Exec
+  publishes no client libraries at all (see packages/exec-packages.yml).

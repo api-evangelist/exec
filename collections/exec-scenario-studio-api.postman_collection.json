@@ -1,0 +1,1012 @@
+{
+  "item": [
+    {
+      "id": "b9274dcc-f9f1-4622-8922-d5752a436736",
+      "name": "Scenario Studio",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "21c29beb-9d81-4f92-9888-d82db67e447f",
+          "name": "Create Scenario Studio session",
+          "request": {
+            "name": "Create Scenario Studio session",
+            "description": {
+              "content": "Creates an interactive scenario creation session for a user.\nReturns a URL immediately that the user can visit to complete\nscenario creation in the Scenario Studio UI.\n\nThe session is pre-populated with the provided prompt, so when the user\nopens the URL, the AI agent immediately begins processing their request.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "scenario-studio"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_email\": \"<email>\",\n  \"prompt\": \"<string>\",\n  \"request_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "20b003fe-64f0-43a6-aa04-c156e7af2a6e",
+              "name": "Session created successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenario-studio"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_email\": \"jane@acme.com\",\n  \"prompt\": \"Create a discovery call scenario for enterprise software sales with a skeptical IT director\",\n  \"request_id\": \"meeting-123-scenario\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"x9y8z7w6v5u4\",\n  \"url\": \"https://acme-corp.app.exec.com/chat/x9y8z7w6v5u4\",\n  \"is_new\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e8a70db8-77e9-4f24-bbdb-e96e72332bf0",
+              "name": "Invalid request parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenario-studio"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_email\": \"jane@acme.com\",\n  \"prompt\": \"Create a discovery call scenario for enterprise software sales with a skeptical IT director\",\n  \"request_id\": \"meeting-123-scenario\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request\",\n    \"code\": \"invalid_pagination\",\n    \"message\": \"Invalid pagination parameters\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1317e318-9159-4514-a5c3-5d2324753dc8",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenario-studio"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_email\": \"jane@acme.com\",\n  \"prompt\": \"Create a discovery call scenario for enterprise software sales with a skeptical IT director\",\n  \"request_id\": \"meeting-123-scenario\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "786c0560-4338-40e8-ba99-cd7963bbea48",
+          "name": "Create Scenario job",
+          "request": {
+            "name": "Create Scenario job",
+            "description": {
+              "content": "Creates an asynchronous scenario creation job.\nReturns immediately with a job ID that can be polled for status.\n\nThe AI agent processes the job in the background, typically completing\nwithin 5 minutes. Use the GET endpoint to poll for completion,\nor provide a `callback_url` to receive a webhook when the job finishes.\n\n**Remix mode**: Provide `scenario_slug` to create a variation of an existing\nscenario. The AI will use the source scenario as a starting point and apply\nyour prompt as modifications.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "scenario-studio",
+                "jobs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_email\": \"<email>\",\n  \"prompt\": \"<string>\",\n  \"context\": \"<string>\",\n  \"scenario_slug\": \"<string>\",\n  \"request_id\": \"<string>\",\n  \"callback_url\": \"<uri>\",\n  \"callback_headers\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c632a886-9436-4931-95dc-4647a37ef243",
+              "name": "Existing job returned (idempotent duplicate — a job with this request_id already exists)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenario-studio",
+                    "jobs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_email\": \"jane@acme.com\",\n  \"prompt\": \"Create a discovery call scenario with a skeptical IT director who is concerned about integration complexity\",\n  \"context\": \"## Prospect Information\\n- Company: TechCorp Inc.\\n- Industry: Financial Services\\n- Size: 500 employees\\n- Current pain point: Manual data entry across systems\\n\",\n  \"request_id\": \"salesforce-opp-12345\",\n  \"callback_url\": \"https://hooks.acme.com/exec-scenarios\",\n  \"callback_headers\": {\n    \"Authorization\": \"Bearer webhook-secret-token\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"j1o2b3i4d5x6\",\n  \"status\": \"completed\",\n  \"scenario\": {\n    \"id\": \"s1c2e3n4a5r6\",\n    \"slug\": \"discovery-call-skeptical-it-director\",\n    \"name\": \"Discovery Call with IT Director\"\n  },\n  \"error\": null,\n  \"created_at\": \"2024-03-01T10:00:00Z\",\n  \"started_at\": \"2024-03-01T10:00:05Z\",\n  \"completed_at\": \"2024-03-01T10:02:30Z\",\n  \"duration_seconds\": 145,\n  \"is_new\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3d75b45e-e3ef-4b2b-bdba-e3e4c8731753",
+              "name": "Job created successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenario-studio",
+                    "jobs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_email\": \"jane@acme.com\",\n  \"prompt\": \"Create a discovery call scenario with a skeptical IT director who is concerned about integration complexity\",\n  \"context\": \"## Prospect Information\\n- Company: TechCorp Inc.\\n- Industry: Financial Services\\n- Size: 500 employees\\n- Current pain point: Manual data entry across systems\\n\",\n  \"request_id\": \"salesforce-opp-12345\",\n  \"callback_url\": \"https://hooks.acme.com/exec-scenarios\",\n  \"callback_headers\": {\n    \"Authorization\": \"Bearer webhook-secret-token\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"j1o2b3i4d5x6\",\n  \"status\": \"queued\",\n  \"scenario\": null,\n  \"error\": null,\n  \"created_at\": \"2024-03-01T10:00:00Z\",\n  \"started_at\": null,\n  \"completed_at\": null,\n  \"duration_seconds\": null,\n  \"is_new\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a5cf1107-a5a4-4b04-9bc0-0debae4aea0d",
+              "name": "Validation error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenario-studio",
+                    "jobs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_email\": \"jane@acme.com\",\n  \"prompt\": \"Create a discovery call scenario with a skeptical IT director who is concerned about integration complexity\",\n  \"context\": \"## Prospect Information\\n- Company: TechCorp Inc.\\n- Industry: Financial Services\\n- Size: 500 employees\\n- Current pain point: Manual data entry across systems\\n\",\n  \"request_id\": \"salesforce-opp-12345\",\n  \"callback_url\": \"https://hooks.acme.com/exec-scenarios\",\n  \"callback_headers\": {\n    \"Authorization\": \"Bearer webhook-secret-token\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request\",\n    \"message\": \"prompt is required\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f26ef570-7168-415f-8047-d3cc02e7d02d",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenario-studio",
+                    "jobs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_email\": \"jane@acme.com\",\n  \"prompt\": \"Create a discovery call scenario with a skeptical IT director who is concerned about integration complexity\",\n  \"context\": \"## Prospect Information\\n- Company: TechCorp Inc.\\n- Industry: Financial Services\\n- Size: 500 employees\\n- Current pain point: Manual data entry across systems\\n\",\n  \"request_id\": \"salesforce-opp-12345\",\n  \"callback_url\": \"https://hooks.acme.com/exec-scenarios\",\n  \"callback_headers\": {\n    \"Authorization\": \"Bearer webhook-secret-token\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9779f0a5-ff7e-47e5-b54b-ae1acd704ba7",
+              "name": "Scenario not found (when using scenario_slug for remix)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenario-studio",
+                    "jobs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_email\": \"jane@acme.com\",\n  \"prompt\": \"Create a discovery call scenario with a skeptical IT director who is concerned about integration complexity\",\n  \"context\": \"## Prospect Information\\n- Company: TechCorp Inc.\\n- Industry: Financial Services\\n- Size: 500 employees\\n- Current pain point: Manual data entry across systems\\n\",\n  \"request_id\": \"salesforce-opp-12345\",\n  \"callback_url\": \"https://hooks.acme.com/exec-scenarios\",\n  \"callback_headers\": {\n    \"Authorization\": \"Bearer webhook-secret-token\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"not_found\",\n    \"message\": \"Scenario not found: invalid-slug\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7631da40-1287-44f7-bce4-bd9fd0603f5b",
+          "name": "Get Scenario job status",
+          "request": {
+            "name": "Get Scenario job status",
+            "description": {
+              "content": "Returns the current status and result of a scenario creation job.\n\nPoll this endpoint to check job progress. Typical job duration is about 5 minutes.\n\n**Job statuses:**\n- `queued`: Job is waiting to be processed\n- `processing`: AI agent is actively creating the scenario\n- `completed`: Scenario created successfully (check `scenario` field)\n- `failed`: Job failed (check `error` field for details)\n- `cancelled`: Job was cancelled via DELETE\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "scenario-studio",
+                "jobs",
+                ":job_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "job_id",
+                  "description": "(Required) The job ID returned from job creation"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f5990325-aefb-4ec5-b026-cefc18a19012",
+              "name": "Job status and result",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenario-studio",
+                    "jobs",
+                    ":job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "job_id",
+                      "description": "(Required) The job ID returned from job creation"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"j1o2b3i4d5x6\",\n  \"status\": \"queued\",\n  \"scenario\": null,\n  \"error\": null,\n  \"created_at\": \"2024-03-01T10:00:00Z\",\n  \"started_at\": null,\n  \"completed_at\": null,\n  \"duration_seconds\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "921a3289-85d4-4d39-9c2a-077bdf6cf3ff",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenario-studio",
+                    "jobs",
+                    ":job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "job_id",
+                      "description": "(Required) The job ID returned from job creation"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a15195ea-e030-4920-9447-0d5f7d655a86",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenario-studio",
+                    "jobs",
+                    ":job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "job_id",
+                      "description": "(Required) The job ID returned from job creation"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"not_found\",\n    \"message\": \"Scenario not found: abc123\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b8ce3d04-adb4-4a33-9742-2ee8164c0704",
+          "name": "Cancel Scenario job",
+          "request": {
+            "name": "Cancel Scenario job",
+            "description": {
+              "content": "Cancels a scenario creation job that is queued or processing.\n\n- **Queued jobs**: Marked as cancelled immediately\n- **Processing jobs**: The background task is terminated and the job is marked cancelled\n- **Completed/failed/cancelled jobs**: Returns 400 error (cannot cancel terminal states)\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "scenario-studio",
+                "jobs",
+                ":job_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "job_id",
+                  "description": "(Required) The job ID to cancel"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b64190c8-03ee-4723-9d3e-beaa71c87eda",
+              "name": "Job cancelled successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenario-studio",
+                    "jobs",
+                    ":job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "job_id",
+                      "description": "(Required) The job ID to cancel"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"j1o2b3i4d5x6\",\n  \"status\": \"cancelled\",\n  \"scenario\": null,\n  \"error\": null,\n  \"created_at\": \"2024-03-01T10:00:00Z\",\n  \"started_at\": \"2024-03-01T10:00:05Z\",\n  \"completed_at\": \"2024-03-01T10:00:10Z\",\n  \"duration_seconds\": 5\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "82c8e456-ceb7-46ae-9b8f-586cc436de40",
+              "name": "Job cannot be cancelled (already in terminal state)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenario-studio",
+                    "jobs",
+                    ":job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "job_id",
+                      "description": "(Required) The job ID to cancel"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request\",\n    \"code\": \"job_not_cancellable\",\n    \"message\": \"Cannot cancel job in 'completed' state\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "25f88998-8bd4-4079-8e5e-4ae32197ecc2",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenario-studio",
+                    "jobs",
+                    ":job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "job_id",
+                      "description": "(Required) The job ID to cancel"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "243131fd-d258-40ba-bb1c-40191eb8f75c",
+              "name": "Job not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenario-studio",
+                    "jobs",
+                    ":job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "job_id",
+                      "description": "(Required) The job ID to cancel"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"not_found\",\n    \"code\": \"job_not_found\",\n    \"message\": \"Job not found: j1o2b3i4d5x6\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.exec.com/rest/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "718502bf-7255-4aa9-8df8-5a732a1e8127",
+    "name": "Exec Collections Scenario Studio API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for programmatic access to your Exec workspace.\n\nUse the Exec API to read workspace data, list members, retrieve group information,\nand create interactive scenario creation sessions.\n\n## Authentication\nAll requests require a valid API key passed in the Authorization header:\n```\nAuthorization: Bearer exec_live_...\n```\n\nCreate API keys in your workspace settings under **Settings > API**.\n",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Exec Collections Knowledge Hub - Folders API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Knowledge Hub - Folders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List folders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/knowledge-hub/folders",
+            "params": [
+              {
+                "name": "parent_id",
+                "value": "",
+                "type": "query",
+                "description": "Return only the direct children of this folder (folder UUID). Omit to list all folders."
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "Case-insensitive search over folder names"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Pagination page number (1-indexed) — which page of results to return, not a Knowledge Hub page."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (max 100)"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of Knowledge Hub folders (also called Spaces or\nHubs) in the workspace.\n\nFolders group pages and sources, and can be nested to form a hierarchy.\nPass `parent` to list the direct children of a folder, or omit it to list\nevery folder in the workspace.\n\nAPI keys are workspace-scoped and admin-created, so the response includes\nevery non-archived folder regardless of its visibility scope.\n"
+        },
+        {
+          "info": {
+            "name": "Get folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/knowledge-hub/folders/:folder_id",
+            "params": [
+              {
+                "name": "folder_id",
+                "value": "",
+                "type": "path",
+                "description": "The folder's unique identifier (UUID)"
+              }
+            ]
+          },
+          "docs": "Returns a single Knowledge Hub folder by its UUID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

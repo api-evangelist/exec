@@ -1,0 +1,345 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Exec Collections Scenarios API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Scenarios",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List scenario assignments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/scenarios/assignments",
+            "params": [
+              {
+                "name": "user_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included)."
+              },
+              {
+                "name": "user_emails",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included)."
+              },
+              {
+                "name": "scenario_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated scenario IDs to filter by"
+              },
+              {
+                "name": "program_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated program IDs to filter by"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by one or more assignment statuses"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-indexed)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (max 100)"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of scenario assignments in the workspace.\n\nAssignments represent tasks given to users to practice specific scenarios. Each\nassignment tracks status (not_started, in_progress, completed, past_due, did_not_pass),\nbest score, attempt count, and completion requirements.\n\nFilter by user, scenario, program, or status to find specific assignments.\n"
+        },
+        {
+          "info": {
+            "name": "Get scenario analytics summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/scenarios/:scenario_id/analytics/summary",
+            "params": [
+              {
+                "name": "scenario_id",
+                "value": "",
+                "type": "path",
+                "description": "Scenario identifier (UUID or slug)"
+              },
+              {
+                "name": "user_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included)."
+              },
+              {
+                "name": "user_emails",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included)."
+              },
+              {
+                "name": "group_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated workspace group IDs to filter by"
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601 datetime — only include sessions on or after this date"
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601 datetime — only include sessions on or before this date"
+              },
+              {
+                "name": "exclude_system_users",
+                "value": "",
+                "type": "query",
+                "description": "Exclude sessions from system users (emails ending in @exec.com). Default false."
+              }
+            ]
+          },
+          "docs": "Returns aggregate metrics for a scenario: participant count, total sessions,\naverage best score and rank, average lift, total practice minutes, and average\nsession duration. Accepts both UUID and slug for the scenario identifier.\n"
+        },
+        {
+          "info": {
+            "name": "Get scenario participant analytics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/scenarios/:scenario_id/analytics/participants",
+            "params": [
+              {
+                "name": "scenario_id",
+                "value": "",
+                "type": "path",
+                "description": "Scenario identifier (UUID or slug)"
+              },
+              {
+                "name": "user_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included)."
+              },
+              {
+                "name": "user_emails",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included)."
+              },
+              {
+                "name": "group_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated workspace group IDs to filter by"
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601 datetime — only include sessions on or after this date"
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601 datetime — only include sessions on or before this date"
+              },
+              {
+                "name": "exclude_system_users",
+                "value": "",
+                "type": "query",
+                "description": "Exclude sessions from system users (emails ending in @exec.com). Default false."
+              },
+              {
+                "name": "sorting",
+                "value": "",
+                "type": "query",
+                "description": "Sort field. Prefix with `-` for descending order."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-indexed)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (max 100)"
+              }
+            ]
+          },
+          "docs": "Returns a per-user performance table for a scenario with pagination and sorting.\nShows each participant's first score, best score, lift, rank, session count,\nand total practice duration.\n"
+        },
+        {
+          "info": {
+            "name": "List scenarios",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/scenarios",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-indexed)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (max 100)"
+              },
+              {
+                "name": "owner_email",
+                "value": "",
+                "type": "query",
+                "description": "Filter by scenario owner's email address"
+              },
+              {
+                "name": "visible_to_email",
+                "value": "",
+                "type": "query",
+                "description": "Filter by who can access the scenario (checks owner, user shares, group shares, workspace shares)"
+              },
+              {
+                "name": "visibility",
+                "value": "",
+                "type": "query",
+                "description": "Filter by visibility scope"
+              },
+              {
+                "name": "include_archived",
+                "value": "",
+                "type": "query",
+                "description": "Include archived scenarios in results"
+              },
+              {
+                "name": "skill_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated skill IDs to filter by"
+              },
+              {
+                "name": "collection_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated collection IDs to filter by"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of optional data to include.\nAvailable values: `skills` (list of skills evaluated by each scenario).\n"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of scenarios in the workspace.\n\nBy default, returns all scenarios in the workspace (admin view).\nUse filters to narrow down results by owner, visibility, or access.\n"
+        },
+        {
+          "info": {
+            "name": "Check scenario access",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/scenarios/:scenario_id/access",
+            "params": [
+              {
+                "name": "scenario_id",
+                "value": "",
+                "type": "path",
+                "description": "Scenario identifier"
+              },
+              {
+                "name": "user_email",
+                "value": "",
+                "type": "query",
+                "description": "Email of the user to check access for"
+              }
+            ]
+          },
+          "docs": "Check if a user has access to a specific scenario and what permission level they have.\n"
+        },
+        {
+          "info": {
+            "name": "Grant scenario access",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.exec.com/rest/v1/scenarios/:scenario_id/access",
+            "params": [
+              {
+                "name": "scenario_id",
+                "value": "",
+                "type": "path",
+                "description": "Scenario identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Grant a user access to a specific scenario with a specified permission level.\n"
+        },
+        {
+          "info": {
+            "name": "Assign scenario to user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.exec.com/rest/v1/scenarios/:scenario_id/assignments",
+            "params": [
+              {
+                "name": "scenario_id",
+                "value": "",
+                "type": "path",
+                "description": "Scenario identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Assign a scenario to a user as a task or homework assignment.\nThe user will receive notification of the assignment and can track their progress.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

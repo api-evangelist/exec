@@ -1,16 +1,41 @@
-generated: '2026-07-19'
-method: generated
-source: openapi/exec-openapi-original.yml
+generated: '2026-08-14'
+method: searched
+source: >-
+  mintlify://skills/exec resource on Exec's own MCP server (https://docs.exec.com/mcp)
+  for the provider-published skill; openapi/_original/exec-openapi-original.yml for
+  the API Evangelist generated skills.
 skills:
+  - file: exec-provider-skill.md
+    name: Exec Skill Playbook
+    method: searched
+    source: https://docs.exec.com/mcp
+    resource_uri: mintlify://skills/exec
+    publisher: Exec
+    description: >-
+      Provider-published Agent Skill playbook, saved verbatim. Covers when to reach
+      for Exec, API authentication and core endpoints, scenario-building methods,
+      assignment completion criteria, skill proficiency tiers, rate limits, decision
+      guidance (program vs course, edit vs remix vs clone), LTI 1.3 setup, common
+      gotchas, and a verification checklist.
+    api: openapi/_original/exec-openapi-original.yml
+    operations: [getWorkspace, listScenarios, grantScenarioAccess, listSessions, getSkillProficiency,
+      createScenarioJob, getScenarioJob]
   - file: exec-create-scenario.md
     name: Create an AI roleplay scenario with Exec Scenario Studio
-    api: openapi/exec-openapi-original.yml
+    method: generated
+    api: openapi/_original/exec-openapi-original.yml
     operations: [createScenarioJob, getScenarioJob, cancelScenarioJob, createScenarioStudioSession]
   - file: exec-assign-and-track.md
     name: Assign a scenario and track team performance
-    api: openapi/exec-openapi-original.yml
+    method: generated
+    api: openapi/_original/exec-openapi-original.yml
     operations: [listScenarios, checkScenarioAccess, grantScenarioAccess, assignScenario, listSessions, getSession, getScenarioAnalyticsSummary, getScenarioAnalyticsParticipants]
   - file: exec-knowledge-hub.md
     name: Manage Knowledge Hub pages and sources
-    api: openapi/exec-openapi-original.yml
+    method: generated
+    api: openapi/_original/exec-openapi-original.yml
     operations: [listKnowledgeHubFolders, createKnowledgeHubPage, getKnowledgeHubPage, updateKnowledgeHubPage, createKnowledgeHubSource, getKnowledgeHubSource]
+notes: >-
+  The provider-published playbook is served as an MCP resource rather than at a
+  conventional /AGENTS.md or /skills path; it was discovered via resources/list on
+  https://docs.exec.com/mcp. Saved verbatim — not edited or reformatted.

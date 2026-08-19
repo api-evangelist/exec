@@ -1,0 +1,233 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Exec Collections Knowledge Hub - Pages API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Knowledge Hub - Pages",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List pages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/knowledge-hub/pages",
+            "params": [
+              {
+                "name": "folder_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by folder UUID"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by page status"
+              },
+              {
+                "name": "owner_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the page owner's user UUID"
+              },
+              {
+                "name": "skill_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by an associated skill UUID"
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "Case-insensitive search over page titles"
+              },
+              {
+                "name": "updated_after",
+                "value": "",
+                "type": "query",
+                "description": "Only include pages updated on or after this date (ISO 8601)"
+              },
+              {
+                "name": "updated_before",
+                "value": "",
+                "type": "query",
+                "description": "Only include pages updated on or before this date (ISO 8601)"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort field. `updated_at` and `created_at` are newest-first; `title`\nis A–Z.\n"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Pagination page number (1-indexed) — which page of results to return, not a Knowledge Hub page."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (max 100)"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of Knowledge Hub pages. List rows are metadata\nonly — the page body is omitted. Fetch a single page to get its content.\n\nFilter by folder, status, owner, skill, free-text query, or update-date\nrange. Results are sorted by `updated_at` (newest first) by default.\n\nAPI keys are workspace-scoped and admin-created, so the response includes\nevery non-archived page in the workspace — including private and draft\npages — regardless of visibility.\n"
+        },
+        {
+          "info": {
+            "name": "Create page",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.exec.com/rest/v1/knowledge-hub/pages",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a Knowledge Hub page. New pages go through the draft → publish\nversion flow: set `status` to `published` to publish immediately, or\n`draft` (the default) to save without publishing.\n\nReturns the created page with its body (`201`).\n"
+        },
+        {
+          "info": {
+            "name": "Get page",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/knowledge-hub/pages/:page_id",
+            "params": [
+              {
+                "name": "page_id",
+                "value": "",
+                "type": "path",
+                "description": "The page's unique identifier (UUID)"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of optional sections to include.\nAvailable values: `draft` (the current draft title and body).\n"
+              }
+            ]
+          },
+          "docs": "Returns a single page with its published markdown body, attached sources,\nskills, and version info.\n\nUse `?include=draft` to also return the current draft body\n(`draft.title` and `draft.content`).\n"
+        },
+        {
+          "info": {
+            "name": "Update page (PUT)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.exec.com/rest/v1/knowledge-hub/pages/:page_id",
+            "params": [
+              {
+                "name": "page_id",
+                "value": "",
+                "type": "path",
+                "description": "The page's unique identifier (UUID)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Alias of `PATCH /knowledge-hub/pages/{page_id}`; see that operation."
+        },
+        {
+          "info": {
+            "name": "Update page",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.exec.com/rest/v1/knowledge-hub/pages/:page_id",
+            "params": [
+              {
+                "name": "page_id",
+                "value": "",
+                "type": "path",
+                "description": "The page's unique identifier (UUID)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a page. Only the fields you provide are changed; omitted fields\nare left untouched. Editing `content` creates a new draft; set `status`\nto `published` to publish the new version.\n\n`PUT` is also accepted and behaves the same way.\n"
+        },
+        {
+          "info": {
+            "name": "Archive page",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.exec.com/rest/v1/knowledge-hub/pages/:page_id",
+            "params": [
+              {
+                "name": "page_id",
+                "value": "",
+                "type": "path",
+                "description": "The page's unique identifier (UUID)"
+              }
+            ]
+          },
+          "docs": "Archives (soft-deletes) a page. The page is hidden from lists but its history is preserved."
+        },
+        {
+          "info": {
+            "name": "List page versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/knowledge-hub/pages/:page_id/versions",
+            "params": [
+              {
+                "name": "page_id",
+                "value": "",
+                "type": "path",
+                "description": "The page's unique identifier (UUID)"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Pagination page number (1-indexed) — which page of results to return, not a Knowledge Hub page."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (max 100)"
+              }
+            ]
+          },
+          "docs": "Returns the version history for a page, newest first."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

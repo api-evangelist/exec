@@ -1,0 +1,116 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Exec Collections Skills API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Skills",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List skills",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/skills",
+            "params": [
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of optional data to include.\nAvailable values: `proficiency` (aggregate proficiency stats per skill).\n"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-indexed)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (max 100)"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of skills in the workspace, ordered alphabetically by name.\n\nSkills represent competencies that are evaluated during roleplay sessions and calls\n(e.g. \"Discovery Questions\", \"Objection Handling\", \"Procurement Selling\"). Each skill\ncan be linked to evaluation criteria across multiple scenarios.\n\nUse `?include=proficiency` to add aggregate proficiency stats per skill (participant\ncount, scored participant count, percentage proficient+, and average score). This is\ncomputed "
+        },
+        {
+          "info": {
+            "name": "Get skill proficiency by user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.exec.com/rest/v1/skills/:skill_id/proficiency",
+            "params": [
+              {
+                "name": "skill_id",
+                "value": "",
+                "type": "path",
+                "description": "The skill's unique identifier (UUID)"
+              },
+              {
+                "name": "user_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included)."
+              },
+              {
+                "name": "user_emails",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included)."
+              },
+              {
+                "name": "group_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated workspace group IDs to filter by"
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "Calculate proficiency as of this date (ISO 8601). Defaults to now."
+              },
+              {
+                "name": "exclude_system_users",
+                "value": "",
+                "type": "query",
+                "description": "Exclude sessions from system users (emails ending in @exec.com). Default false."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-indexed)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (max 100)"
+              }
+            ]
+          },
+          "docs": "Returns per-user proficiency data for a specific skill.\n\nProficiency uses time-decay weighted scoring across all observations (roleplay sessions\nand calls combined). Recent observations count more than older ones (30-day half-life).\nA minimum of 3 observations is required before a proficiency score is calculated.\n\nProficiency tiers: `excellent` (≥90), `proficient` (≥75), `developing` (≥50),\n`needs_work` (<50), `insufficient_data` (<3 observations).\n\nOnly users with at least one observation are i"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

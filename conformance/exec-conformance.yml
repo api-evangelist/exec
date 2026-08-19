@@ -1,18 +1,69 @@
-generated: '2026-07-19'
+generated: '2026-08-14'
 method: searched
-source: openapi/exec-openapi-original.yml
+source: openapi/_original/exec-openapi-original.yml
 docs: https://www.exec.com/enterprise-privacy
 standards:
   - id: oauth2
     conforms: false
-    evidence: API uses static bearer API keys (exec_live_), not OAuth2 flows.
+    evidence: >-
+      The REST API uses static bearer API keys (exec_live_), not OAuth2 flows.
+      Enterprise workspace sign-in does use OIDC/OAuth 2.0 via WorkOS, but that
+      is platform authentication, not API authorization.
   - id: oidc
+    conforms: true
+    scope: platform-sso
+    evidence: >-
+      "OpenID Connect (OIDC) — OAuth 2.0 authorization code grant with ID tokens"
+      listed as a supported SSO protocol (Enterprise plan), powered by WorkOS.
+    source: https://docs.exec.com/sso-directory-sync
+  - id: saml-2.0
+    conforms: true
+    scope: platform-sso
+    evidence: >-
+      "SAML 2.0 — Full support for SP-initiated and IdP-initiated SSO flows"
+      (Enterprise plan), powered by WorkOS.
+    source: https://docs.exec.com/sso-directory-sync
+  - id: scim-2.0
+    conforms: true
+    scope: platform-provisioning
+    evidence: >-
+      "SCIM 2.0 — Automated user and group provisioning and deprovisioning."
+      Tested directory-sync providers include Okta, Microsoft Entra ID, Google
+      Workspace, OneLogin, PingFederate, JumpCloud, Rippling and CyberArk.
+    source: https://docs.exec.com/sso-directory-sync
+  - id: lti-1.3
+    conforms: true
+    evidence: >-
+      Exec ships an LTI 1.3 tool with dynamic registration, OIDC login/launch/JWKS
+      endpoints, deep linking, and grade passback to the LMS gradebook.
+    source: https://docs.exec.com/lti/overview
+  - id: mcp
+    conforms: true
+    evidence: >-
+      Live remote MCP server at https://docs.exec.com/mcp, Streamable HTTP,
+      protocolVersion 2025-11-25, anonymous, 3 tools + 1 resource. Probed 2026-08-14.
+    source: mcp/exec-mcp.yml
+  - id: a2a
     conforms: false
+    evidence: >-
+      No agent card served. /.well-known/agent-card.json and /.well-known/agent.json
+      both returned 404 on api.exec.com, www.exec.com and docs.exec.com (2026-08-14).
   - id: rfc9457-problem-details
     conforms: false
     evidence: >-
       Errors use a custom { error: { type, code, message } } envelope, not
       application/problem+json.
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: /.well-known/security.txt returned 404 on every Exec host (2026-08-14).
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: No deprecation or Sunset/Deprecation header policy is published.
+  - id: llms-txt
+    conforms: true
+    evidence: >-
+      https://docs.exec.com/llms.txt is served and enumerates the full docs index
+      plus the OpenAPI location; every docs page also has a .md twin.
   - id: pagination
     conforms: true
     evidence: Page-number pagination (page/page_size/total_count/total_pages).
@@ -22,9 +73,6 @@ standards:
   - id: rate-limiting
     conforms: true
     evidence: HTTP 429 with retry_after signaling.
-  - id: lti-1.3
-    conforms: true
-    evidence: Exec ships an LTI 1.3 tool integration for LMS launch + grade passback.
   - id: soc2-type2
     conforms: true
     evidence: >-

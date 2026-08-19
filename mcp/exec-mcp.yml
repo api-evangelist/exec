@@ -1,108 +1,143 @@
-# Candidate MCP server derived from the Exec OpenAPI (no official server published).
-generated: '2026-07-19'
-method: derived
-status: candidate
-source: openapi/exec-openapi-original.yml
+generated: '2026-08-14'
+method: probed
+status: published
+source: https://docs.exec.com/mcp
+summary: >-
+  Exec ships a real, anonymous, remote MCP server on its own documentation host:
+  https://docs.exec.com/mcp. It answers initialize/tools/list/resources/list over
+  Streamable HTTP (text/event-stream) with no credentials. It is a DOCUMENTATION
+  server, not a wrapper over the Exec REST API — its three tools search and read
+  docs.exec.com and file docs feedback; none of them call api.exec.com/rest/v1.
+  The REST surface has no MCP server of its own, so the one-tool-per-operation
+  list derived from the OpenAPI is retained separately below as candidates.
+deployment:
+  mode: remote
+  endpoint: https://docs.exec.com/mcp
+  install: null
+  package: null
+  auth: none
+  verified: probed
+  notes: >-
+    Probed 2026-08-14. POST initialize returned protocolVersion 2025-11-25 and
+    serverInfo {name: "Exec Docs", version: "1.0.0"} with no auth challenge.
+    /.well-known/oauth-authorization-server and /.well-known/oauth-protected-resource
+    both 404 on docs.exec.com — the server is genuinely anonymous, not gated.
+    Hosted on Mintlify infrastructure (x-matched-path /_mintlify/mcp/[subdomain]/[transport])
+    but served from Exec's own docs.exec.com host and self-identified as "Exec Docs",
+    so it is Exec's published surface.
 server:
-  name: exec
+  name: Exec Docs
+  version: '1.0.0'
   transport: http
-  url: null
-  notes: No official hosted/remote MCP server found. Candidate tool list derived one-per-operation from
-    the Exec OpenAPI.
+  protocol_version: '2025-11-25'
+  url: https://docs.exec.com/mcp
+  capabilities:
+    tools:
+      listChanged: true
+    resources:
+      listChanged: true
+  instructions_excerpt: >-
+    "This Model Context Protocol server provides search and retrieval tools for
+    the Exec Docs site... Apart from the submit_feedback tool, the server is
+    read-only and scoped to Exec Docs."
 tools:
-- name: getWorkspace
-  description: Get workspace info
-  source_operation: openapi/exec-openapi-original.yml#getWorkspace
-- name: listWorkspaceMembers
-  description: List workspace members
-  source_operation: openapi/exec-openapi-original.yml#listWorkspaceMembers
-- name: listWorkspaceGroups
-  description: List workspace groups
-  source_operation: openapi/exec-openapi-original.yml#listWorkspaceGroups
-- name: listAssignments
-  description: List scenario assignments
-  source_operation: openapi/exec-openapi-original.yml#listAssignments
-- name: listCollections
-  description: List collections
-  source_operation: openapi/exec-openapi-original.yml#listCollections
-- name: listSessions
-  description: List roleplay sessions
-  source_operation: openapi/exec-openapi-original.yml#listSessions
-- name: getSession
-  description: Get session detail
-  source_operation: openapi/exec-openapi-original.yml#getSession
-- name: listSkills
-  description: List skills
-  source_operation: openapi/exec-openapi-original.yml#listSkills
-- name: getSkillProficiency
-  description: Get skill proficiency by user
-  source_operation: openapi/exec-openapi-original.yml#getSkillProficiency
-- name: getScenarioAnalyticsSummary
-  description: Get scenario analytics summary
-  source_operation: openapi/exec-openapi-original.yml#getScenarioAnalyticsSummary
-- name: getScenarioAnalyticsParticipants
-  description: Get scenario participant analytics
-  source_operation: openapi/exec-openapi-original.yml#getScenarioAnalyticsParticipants
-- name: listScenarios
-  description: List scenarios
-  source_operation: openapi/exec-openapi-original.yml#listScenarios
-- name: checkScenarioAccess
-  description: Check scenario access
-  source_operation: openapi/exec-openapi-original.yml#checkScenarioAccess
-- name: grantScenarioAccess
-  description: Grant scenario access
-  source_operation: openapi/exec-openapi-original.yml#grantScenarioAccess
-- name: assignScenario
-  description: Assign scenario to user
-  source_operation: openapi/exec-openapi-original.yml#assignScenario
-- name: createScenarioStudioSession
-  description: Create Scenario Studio session
-  source_operation: openapi/exec-openapi-original.yml#createScenarioStudioSession
-- name: createScenarioJob
-  description: Create Scenario job
-  source_operation: openapi/exec-openapi-original.yml#createScenarioJob
-- name: getScenarioJob
-  description: Get Scenario job status
-  source_operation: openapi/exec-openapi-original.yml#getScenarioJob
-- name: cancelScenarioJob
-  description: Cancel Scenario job
-  source_operation: openapi/exec-openapi-original.yml#cancelScenarioJob
-- name: listKnowledgeHubFolders
-  description: List folders
-  source_operation: openapi/exec-openapi-original.yml#listKnowledgeHubFolders
-- name: getKnowledgeHubFolder
-  description: Get folder
-  source_operation: openapi/exec-openapi-original.yml#getKnowledgeHubFolder
-- name: listKnowledgeHubPages
-  description: List pages
-  source_operation: openapi/exec-openapi-original.yml#listKnowledgeHubPages
-- name: createKnowledgeHubPage
-  description: Create page
-  source_operation: openapi/exec-openapi-original.yml#createKnowledgeHubPage
-- name: getKnowledgeHubPage
-  description: Get page
-  source_operation: openapi/exec-openapi-original.yml#getKnowledgeHubPage
-- name: updateKnowledgeHubPage
-  description: Update page
-  source_operation: openapi/exec-openapi-original.yml#updateKnowledgeHubPage
-- name: replaceKnowledgeHubPage
-  description: Update page (PUT)
-  source_operation: openapi/exec-openapi-original.yml#replaceKnowledgeHubPage
-- name: archiveKnowledgeHubPage
-  description: Archive page
-  source_operation: openapi/exec-openapi-original.yml#archiveKnowledgeHubPage
-- name: listKnowledgeHubPageVersions
-  description: List page versions
-  source_operation: openapi/exec-openapi-original.yml#listKnowledgeHubPageVersions
-- name: listKnowledgeHubSources
-  description: List sources
-  source_operation: openapi/exec-openapi-original.yml#listKnowledgeHubSources
-- name: createKnowledgeHubSource
-  description: Create source
-  source_operation: openapi/exec-openapi-original.yml#createKnowledgeHubSource
-- name: getKnowledgeHubSource
-  description: Get source
-  source_operation: openapi/exec-openapi-original.yml#getKnowledgeHubSource
-- name: deleteKnowledgeHubSource
-  description: Delete source
-  source_operation: openapi/exec-openapi-original.yml#deleteKnowledgeHubSource
+- name: search_exec_docs
+  title: Search documentation
+  description: >-
+    Search across the Exec Docs knowledge base to find relevant information, code
+    examples, API references, and guides.
+  input_schema:
+    type: object
+    required: [query]
+    properties:
+      query: {type: string, description: Search query}
+  annotations: {readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false}
+- name: query_docs_filesystem_exec_docs
+  description: >-
+    Run a read-only shell-like query (rg/grep/find/tree/ls/cat/head/tail/jq/...)
+    against a virtualized in-memory filesystem containing only the Exec Docs
+    pages and OpenAPI specs. Stateless per call; output truncated to 30KB.
+  input_schema:
+    type: object
+    required: [command]
+    properties:
+      command: {type: string, description: A shell command to run against the virtualized documentation filesystem}
+  annotations: {readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false}
+- name: submit_feedback
+  title: Submit documentation feedback
+  description: Report a problem with a documentation page so the docs team can fix it.
+  input_schema:
+    type: object
+    required: [path, feedback]
+    properties:
+      path: {type: string, minLength: 1, description: The documentation page path the feedback is about}
+      feedback: {type: string, minLength: 1, description: A clear description of the documentation issue or suggestion}
+  annotations: {readOnlyHint: false}
+resources:
+- uri: mintlify://skills/exec
+  name: exec
+  mime_type: text/markdown
+  description: >-
+    Provider-published Agent Skill playbook for Exec (name/description
+    frontmatter + product summary, API quick reference, decision guidance,
+    gotchas, verification checklist). Saved verbatim to
+    skills/exec-provider-skill.md.
+candidate_rest_tools:
+  status: candidate
+  method: derived
+  source: openapi/_original/exec-openapi-original.yml
+  note: >-
+    No MCP server exposes the Exec REST API. These are one-tool-per-operation
+    candidates derived from the OpenAPI, not tools anyone can call today.
+  tools:
+  - {name: getWorkspace, description: Get workspace info}
+  - {name: listWorkspaceMembers, description: List workspace members}
+  - {name: listWorkspaceGroups, description: List workspace groups}
+  - {name: listAssignments, description: List scenario assignments}
+  - {name: listCollections, description: List collections}
+  - {name: listSessions, description: List roleplay sessions}
+  - {name: getSession, description: Get session detail}
+  - {name: listSkills, description: List skills}
+  - {name: getSkillProficiency, description: Get skill proficiency by user}
+  - {name: getScenarioAnalyticsSummary, description: Get scenario analytics summary}
+  - {name: getScenarioAnalyticsParticipants, description: Get scenario participant analytics}
+  - {name: listScenarios, description: List scenarios}
+  - {name: checkScenarioAccess, description: Check scenario access}
+  - {name: grantScenarioAccess, description: Grant scenario access}
+  - {name: assignScenario, description: Assign scenario to user}
+  - {name: createScenarioStudioSession, description: Create Scenario Studio session}
+  - {name: createScenarioJob, description: Create Scenario job}
+  - {name: getScenarioJob, description: Get Scenario job status}
+  - {name: cancelScenarioJob, description: Cancel Scenario job}
+  - {name: listKnowledgeHubFolders, description: List folders}
+  - {name: getKnowledgeHubFolder, description: Get folder}
+  - {name: listKnowledgeHubPages, description: List pages}
+  - {name: createKnowledgeHubPage, description: Create page}
+  - {name: getKnowledgeHubPage, description: Get page}
+  - {name: updateKnowledgeHubPage, description: Update page}
+  - {name: replaceKnowledgeHubPage, description: Update page (PUT)}
+  - {name: archiveKnowledgeHubPage, description: Archive page}
+  - {name: listKnowledgeHubPageVersions, description: List page versions}
+  - {name: listKnowledgeHubSources, description: List sources}
+  - {name: createKnowledgeHubSource, description: Create source}
+  - {name: getKnowledgeHubSource, description: Get source}
+  - {name: deleteKnowledgeHubSource, description: Delete source}
+rejected_hosts:
+- host: https://mcp.exec.com
+  status: 200
+  reason: >-
+    Wildcard DNS catch-all serving the exec.com marketing homepage (<title> "Exec –
+    AI Training Platform..."). Not an MCP endpoint. Same false positive as
+    trust.exec.com.
+- host: https://api.exec.com/mcp
+  status: 404
+- host: https://www.exec.com/mcp
+  status: 404
+x-evidence:
+  fetched: '2026-08-14'
+  url: https://docs.exec.com/mcp
+  http_status: 200
+  content_type: text/event-stream
+  methods_probed: [initialize, tools/list, resources/list, resources/read]
+  tool_count: 3
+  resource_count: 1
