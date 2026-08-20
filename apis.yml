@@ -46,6 +46,16 @@ tags:
 - Roleplay
 - Coaching
 - Learning
+- Knowledge-Management
+- LMS
+tags_raw:
+- Company
+- Artificial Intelligence
+- Sales Enablement
+- Training
+- Roleplay
+- Coaching
+- Learning
 - Knowledge Management
 - LMS
 apis:
@@ -55,6 +65,8 @@ apis:
   humanURL: https://docs.exec.com/api-reference/overview
   baseURL: https://api.exec.com/rest/v1
   tags:
+  - Collection
+  tags_raw:
   - Collections
   properties:
   - type: OpenAPI
