@@ -1,0 +1,34 @@
+slug: exec
+provider: Exec
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Education
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: Scenarios
+  spec_file: exec-scenarios-api-openapi.yml
+  capability_id: BC-300.40
+  capability_id_l1: BC-300
+  capability_name: Learning & Development Management
+  confidence: 0.75
+  evidence: POST /scenarios/{scenario_id}/assignments  assignScenario  Assign scenario to user; GET /scenarios/{scenario_id}/analytics/participants
+  reason: Assigning training scenarios to users and reporting participant analytics is corporate training
+    administration (learning assignment and completion tracking).
+- tag: Sessions
+  spec_file: exec-sessions-api-openapi.yml
+  capability_id: BC-300.40
+  capability_id_l1: BC-300
+  capability_name: Learning & Development Management
+  confidence: 0.7
+  evidence: GET /sessions  listSessions  List roleplay sessions; schemas EvaluationCriterion, FeedbackExample,
+    TranscriptLine
+  reason: Records of completed roleplay training sessions with evaluation criteria and feedback represent
+    delivery and scoring of corporate learning activity.
