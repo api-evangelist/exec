@@ -1,0 +1,27 @@
+# Front Door AI Index — exec — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: exec
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.exec.com
+  final_host: www.exec.com
+  ownership: own
+  owner: exec
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 14
+  host_score: 14
+  density: 14.63
+  words: 957
+  tiers:
+    agentic: 0
+    core: 14
+    model: 0
+  ambiguous: 5
+  top_terms:
+    AI: 14
+    intelligence: 4
+    agent: 1

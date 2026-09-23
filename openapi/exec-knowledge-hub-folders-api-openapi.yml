@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Exec Collections Knowledge Hub - Folders API
+  title: Exec Knowledge Hub - Folders API
   version: '1.0'
   description: 'REST API for programmatic access to your Exec workspace.
 
@@ -21,9 +21,7 @@ info:
     ```
 
 
-    Create API keys in your workspace settings under **Settings > API**.
-
-    '
+    Create API keys in your workspace settings under **Settings > API**.'
 servers:
 - url: https://api.exec.com/rest/v1
   description: Production
@@ -51,9 +49,7 @@ paths:
 
         API keys are workspace-scoped and admin-created, so the response includes
 
-        every non-archived folder regardless of its visibility scope.
-
-        '
+        every non-archived folder regardless of its visibility scope.'
       tags:
       - Knowledge Hub - Folders
       parameters:
@@ -152,6 +148,39 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: invalid_request
+              code: invalid_pagination
+              message: Invalid pagination parameters
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authentication_error
+              code: invalid_api_key
+              message: Invalid or inactive API key
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: not_found
+              message: 'Scenario not found: abc123'
   schemas:
     ValidationErrorDetail:
       type: object
@@ -168,6 +197,21 @@ components:
             message:
               type: string
               description: Human-readable error message
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
     KnowledgeHubFolder:
       type: object
       description: A Knowledge Hub folder (also called a Space or Hub) that groups pages and sources.
@@ -179,12 +223,14 @@ components:
           type: string
           description: Folder name
         emoji:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Emoji icon shown next to the folder
         parent:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: UUID of the parent folder, or null for a top-level folder
         visibility:
           type: string
@@ -205,54 +251,6 @@ components:
         updated_at:
           type: string
           format: date-time
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Current page number
-        page_size:
-          type: integer
-          description: Number of items per page
-        total_count:
-          type: integer
-          description: Total number of items
-        total_pages:
-          type: integer
-          description: Total number of pages
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: authentication_error
-              code: invalid_api_key
-              message: Invalid or inactive API key
-    BadRequest:
-      description: Invalid request parameters
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: invalid_request
-              code: invalid_pagination
-              message: Invalid pagination parameters
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: not_found
-              message: 'Scenario not found: abc123'
   securitySchemes:
     bearerAuth:
       type: http

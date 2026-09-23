@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Exec Collections Skills API
+  title: Exec Skills API
   version: '1.0'
   description: 'REST API for programmatic access to your Exec workspace.
 
@@ -21,9 +21,7 @@ info:
     ```
 
 
-    Create API keys in your workspace settings under **Settings > API**.
-
-    '
+    Create API keys in your workspace settings under **Settings > API**.'
 servers:
 - url: https://api.exec.com/rest/v1
   description: Production
@@ -50,9 +48,7 @@ paths:
 
         count, scored participant count, percentage proficient+, and average score). This is
 
-        computed across all workspace members who have practiced each skill.
-
-        '
+        computed across all workspace members who have practiced each skill.'
       tags:
       - Skills
       parameters:
@@ -147,9 +143,7 @@ paths:
 
         filters are provided, returns proficiency for all workspace members who have practiced
 
-        this skill.
-
-        '
+        this skill.'
       tags:
       - Skills
       parameters:
@@ -247,37 +241,35 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    User:
+    SkillProficiencyEntry:
       type: object
+      description: Proficiency data for a single user on a skill.
       properties:
-        id:
+        user:
+          $ref: '#/components/schemas/User'
+        score:
+          type:
+          - number
+          - 'null'
+          description: Proficiency score (0-100). Null if fewer than 3 observations.
+        tier:
           type: string
-          description: Unique user identifier
-        email:
-          type: string
-          format: email
-          description: User's email address
-        first_name:
-          type: string
-          description: User's first name
-        last_name:
-          type: string
-          description: User's last name
-    ValidationErrorDetail:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              description: Error category (e.g., "invalid_request")
-            code:
-              type: string
-              description: Specific error code (e.g., "user_not_found")
-            message:
-              type: string
-              description: Human-readable error message
+          enum:
+          - excellent
+          - proficient
+          - developing
+          - needs_work
+          - insufficient_data
+          description: Proficiency tier based on score thresholds
+        observation_count:
+          type: integer
+          description: Total observations (roleplay sessions + calls) within the lookback window
+        last_practiced_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the most recent observation occurred
     Skill:
       type: object
       description: A competency that is evaluated during roleplay sessions and calls.
@@ -300,52 +292,22 @@ components:
           description: When the skill was created
         proficiency_summary:
           $ref: '#/components/schemas/SkillProficiencySummary'
-          nullable: true
           description: Aggregate proficiency stats (only included when requested via `?include=proficiency`)
-    SkillProficiencyEntry:
+    ValidationErrorDetail:
       type: object
-      description: Proficiency data for a single user on a skill.
       properties:
-        user:
-          $ref: '#/components/schemas/User'
-        score:
-          type: number
-          nullable: true
-          description: Proficiency score (0-100). Null if fewer than 3 observations.
-        tier:
-          type: string
-          enum:
-          - excellent
-          - proficient
-          - developing
-          - needs_work
-          - insufficient_data
-          description: Proficiency tier based on score thresholds
-        observation_count:
-          type: integer
-          description: Total observations (roleplay sessions + calls) within the lookback window
-        last_practiced_at:
-          type: string
-          format: date-time
-          nullable: true
-          description: When the most recent observation occurred
-    SkillProficiencySummary:
-      type: object
-      description: Aggregate proficiency stats for a skill across all workspace members.
-      properties:
-        participant_count:
-          type: integer
-          description: Number of users with at least one observation on this skill
-        scored_participant_count:
-          type: integer
-          description: Number of users with enough observations (3+) for a proficiency score
-        pct_proficient_plus:
-          type: integer
-          description: Percentage of scored users at Proficient or Excellent tier
-        avg_score:
-          type: number
-          nullable: true
-          description: Average proficiency score across scored users (0-100)
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
     Pagination:
       type: object
       properties:
@@ -361,6 +323,40 @@ components:
         total_pages:
           type: integer
           description: Total number of pages
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique user identifier
+        email:
+          type: string
+          format: email
+          description: User's email address
+        first_name:
+          type: string
+          description: User's first name
+        last_name:
+          type: string
+          description: User's last name
+    SkillProficiencySummary:
+      type: object
+      description: Aggregate proficiency stats for a skill across all workspace members.
+      properties:
+        participant_count:
+          type: integer
+          description: Number of users with at least one observation on this skill
+        scored_participant_count:
+          type: integer
+          description: Number of users with enough observations (3+) for a proficiency score
+        pct_proficient_plus:
+          type: integer
+          description: Percentage of scored users at Proficient or Excellent tier
+        avg_score:
+          type:
+          - number
+          - 'null'
+          description: Average proficiency score across scored users (0-100)
   responses:
     Unauthorized:
       description: Missing or invalid API key

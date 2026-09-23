@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: Exec Collections API
   version: '1.0'
@@ -21,9 +21,7 @@ info:
     ```
 
 
-    Create API keys in your workspace settings under **Settings > API**.
-
-    '
+    Create API keys in your workspace settings under **Settings > API**.'
 servers:
 - url: https://api.exec.com/rest/v1
   description: Production
@@ -45,9 +43,7 @@ paths:
 
         "Onboarding"). Use collection IDs to filter sessions, skills, and scenario
 
-        analytics by collection.
-
-        '
+        analytics by collection.'
       tags:
       - Collections
       parameters:
@@ -96,34 +92,32 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: authentication_error
-              code: invalid_api_key
-              message: Invalid or inactive API key
   schemas:
-    Pagination:
+    Collection:
       type: object
+      description: A collection that groups related scenarios together.
       properties:
-        page:
+        id:
+          type: string
+          description: Unique collection identifier
+        name:
+          type: string
+          description: Collection name
+        slug:
+          type: string
+          description: URL-friendly collection identifier
+        description:
+          type:
+          - string
+          - 'null'
+          description: Collection description
+        scenario_count:
           type: integer
-          description: Current page number
-        page_size:
-          type: integer
-          description: Number of items per page
-        total_count:
-          type: integer
-          description: Total number of items
-        total_pages:
-          type: integer
-          description: Total number of pages
+          description: Number of scenarios in this collection
+        created_at:
+          type: string
+          format: date-time
+          description: When the collection was created
     ValidationErrorDetail:
       type: object
       properties:
@@ -139,30 +133,33 @@ components:
             message:
               type: string
               description: Human-readable error message
-    Collection:
+    Pagination:
       type: object
-      description: A collection that groups related scenarios together.
       properties:
-        id:
-          type: string
-          description: Unique collection identifier
-        name:
-          type: string
-          description: Collection name
-        slug:
-          type: string
-          description: URL-friendly collection identifier
-        description:
-          type: string
-          nullable: true
-          description: Collection description
-        scenario_count:
+        page:
           type: integer
-          description: Number of scenarios in this collection
-        created_at:
-          type: string
-          format: date-time
-          description: When the collection was created
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authentication_error
+              code: invalid_api_key
+              message: Invalid or inactive API key
   securitySchemes:
     bearerAuth:
       type: http

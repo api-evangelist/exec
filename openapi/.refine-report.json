@@ -1,15 +1,7 @@
 {
   "provider": "exec",
   "sources": [
-    "exec-collections-api-openapi.yml",
-    "exec-knowledge-hub-folders-api-openapi.yml",
-    "exec-knowledge-hub-pages-api-openapi.yml",
-    "exec-knowledge-hub-sources-api-openapi.yml",
-    "exec-scenario-studio-api-openapi.yml",
-    "exec-scenarios-api-openapi.yml",
-    "exec-sessions-api-openapi.yml",
-    "exec-skills-api-openapi.yml",
-    "exec-workspace-api-openapi.yml"
+    "_original/exec-openapi-original.yml"
   ],
   "outputs": [
     "exec-collections-api-openapi.yml",
@@ -25,6 +17,26 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "exec-openapi-original.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "exec-openapi-original.yml: declared missing tag: Collections",
+    "exec-openapi-original.yml: declared missing tag: Scenario Studio",
+    "exec-openapi-original.yml: declared missing tag: Scenarios",
+    "exec-openapi-original.yml: declared missing tag: Sessions",
+    "exec-openapi-original.yml: declared missing tag: Skills",
+    "exec-openapi-original.yml: declared missing tag: Workspace",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "exec-collections-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "exec-knowledge-hub-folders-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "exec-knowledge-hub-pages-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "exec-knowledge-hub-sources-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "exec-scenario-studio-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "exec-scenarios-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "exec-sessions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "exec-skills-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "exec-workspace-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

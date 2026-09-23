@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Exec Collections Sessions API
+  title: Exec Sessions API
   version: '1.0'
   description: 'REST API for programmatic access to your Exec workspace.
 
@@ -21,9 +21,7 @@ info:
     ```
 
 
-    Create API keys in your workspace settings under **Settings > API**.
-
-    '
+    Create API keys in your workspace settings under **Settings > API**.'
 servers:
 - url: https://api.exec.com/rest/v1
   description: Production
@@ -53,9 +51,7 @@ paths:
         historical session data is preserved.
 
 
-        Results are ordered by creation date (newest first) by default.
-
-        '
+        Results are ordered by creation date (newest first) by default.'
       tags:
       - Sessions
       parameters:
@@ -212,9 +208,7 @@ paths:
 
         transcript or evaluation criteria with grades. These are omitted by default to keep
 
-        responses lean.
-
-        '
+        responses lean.'
       tags:
       - Sessions
       parameters:
@@ -290,7 +284,207 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: invalid_request
+              code: invalid_pagination
+              message: Invalid pagination parameters
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authentication_error
+              code: invalid_api_key
+              message: Invalid or inactive API key
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: not_found
+              message: 'Scenario not found: abc123'
   schemas:
+    SessionListItem:
+      type: object
+      description: A roleplay session summary for list responses.
+      properties:
+        id:
+          type: string
+          description: Unique session identifier
+        user:
+          $ref: '#/components/schemas/User'
+          description: The user who participated in this session
+        scenario:
+          $ref: '#/components/schemas/ScenarioRef'
+          description: The scenario that was practiced
+        score:
+          type:
+          - number
+          - 'null'
+          description: Session score (0-100 scale)
+        rank:
+          type:
+          - string
+          - 'null'
+          enum:
+          - gold
+          - silver
+          - bronze
+          - unranked
+          description: Performance rank based on score
+        duration_seconds:
+          type:
+          - number
+          - 'null'
+          description: Session duration in seconds
+        is_valid_attempt:
+          type: boolean
+          description: Whether this session counts as a valid graded attempt. A session is valid when it was completed (not abandoned), received AI grading, and has a score. Use valid attempts for analytics; non-valid sessions may be incomplete or ungraded.
+        created_at:
+          type: string
+          format: date-time
+          description: When the session was created
+    SessionDetail:
+      type: object
+      description: Full roleplay session detail with optional transcript and evaluations.
+      properties:
+        id:
+          type: string
+          description: Unique session identifier
+        user:
+          $ref: '#/components/schemas/User'
+        scenario:
+          $ref: '#/components/schemas/ScenarioRef'
+        score:
+          type:
+          - number
+          - 'null'
+          description: Session score (0-100 scale)
+        rank:
+          type:
+          - string
+          - 'null'
+          enum:
+          - gold
+          - silver
+          - bronze
+          - unranked
+          description: Performance rank based on score
+        duration_seconds:
+          type:
+          - number
+          - 'null'
+          description: Session duration in seconds
+        is_valid_attempt:
+          type: boolean
+          description: Whether this session counts as a valid graded attempt. A session is valid when it was completed (not abandoned), received AI grading, and has a score. Use valid attempts for analytics; non-valid sessions may be incomplete or ungraded.
+        outcome_feedback:
+          type:
+          - string
+          - 'null'
+          description: Overall outcome summary from the AI evaluator
+        positive_feedback:
+          type:
+          - string
+          - 'null'
+          description: What the participant did well
+        constructive_feedback:
+          type:
+          - string
+          - 'null'
+          description: Areas for improvement
+        transcript:
+          type:
+          - array
+          - 'null'
+          description: Conversation transcript lines, excluding system messages (only included when requested via `?include=transcript`)
+          items:
+            $ref: '#/components/schemas/TranscriptLine'
+        evaluations:
+          type:
+          - array
+          - 'null'
+          description: Evaluation criteria with grades (only included when requested via `?include=evaluations`)
+          items:
+            $ref: '#/components/schemas/EvaluationCriterion'
+        created_at:
+          type: string
+          format: date-time
+          description: When the session was created
+    ScenarioRef:
+      type: object
+      description: A compact scenario reference for embedding in other responses.
+      properties:
+        id:
+          type: string
+          description: Unique scenario identifier
+        name:
+          type: string
+          description: Scenario name
+        slug:
+          type: string
+          description: URL-friendly scenario identifier
+    TranscriptLine:
+      type: object
+      description: A single line in the session transcript.
+      properties:
+        speaker:
+          type:
+          - string
+          - 'null'
+          description: Speaker identifier (e.g. "ai" for the AI character, "user" for the participant)
+        text:
+          type: string
+          description: The spoken text
+        seconds_from_start:
+          type:
+          - number
+          - 'null'
+          description: Seconds elapsed from the start of the session
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
     User:
       type: object
       properties:
@@ -307,6 +501,33 @@ components:
         last_name:
           type: string
           description: User's last name
+    EvaluationItem:
+      type: object
+      description: An individual evaluation item with grade, feedback, and evidence.
+      properties:
+        name:
+          type: string
+          description: Name of the evaluation item
+        grade:
+          type:
+          - string
+          - 'null'
+          enum:
+          - good
+          - mid
+          - bad
+          - not_relevant
+          description: Grade received on this item
+        feedback:
+          type:
+          - string
+          - 'null'
+          description: Detailed feedback for this item
+        feedback_examples:
+          type: array
+          description: Specific transcript evidence supporting the evaluation (filtered to High/Mid salience)
+          items:
+            $ref: '#/components/schemas/FeedbackExample'
     FeedbackExample:
       type: object
       description: A specific piece of evidence from the transcript supporting an evaluation.
@@ -315,16 +536,19 @@ components:
           type: string
           description: Transcript excerpt
         feedback:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Explanation of what was good or could be improved
         suggestion_quote:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Suggested alternative phrasing
         grade:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           enum:
           - good
           - mid
@@ -332,87 +556,14 @@ components:
           - not_relevant
           description: Grade for this specific moment
         salience:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           enum:
           - high
           - mid
           - low
           description: Importance level of this feedback
-    ValidationErrorDetail:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              description: Error category (e.g., "invalid_request")
-            code:
-              type: string
-              description: Specific error code (e.g., "user_not_found")
-            message:
-              type: string
-              description: Human-readable error message
-    SessionDetail:
-      type: object
-      description: Full roleplay session detail with optional transcript and evaluations.
-      properties:
-        id:
-          type: string
-          description: Unique session identifier
-        user:
-          $ref: '#/components/schemas/User'
-        scenario:
-          $ref: '#/components/schemas/ScenarioRef'
-        score:
-          type: number
-          nullable: true
-          description: Session score (0-100 scale)
-        rank:
-          type: string
-          nullable: true
-          enum:
-          - gold
-          - silver
-          - bronze
-          - unranked
-          description: Performance rank based on score
-        duration_seconds:
-          type: number
-          nullable: true
-          description: Session duration in seconds
-        is_valid_attempt:
-          type: boolean
-          description: Whether this session counts as a valid graded attempt. A session is valid when it was completed (not abandoned), received AI grading, and has a score. Use valid attempts for analytics; non-valid sessions may be incomplete or ungraded.
-        outcome_feedback:
-          type: string
-          nullable: true
-          description: Overall outcome summary from the AI evaluator
-        positive_feedback:
-          type: string
-          nullable: true
-          description: What the participant did well
-        constructive_feedback:
-          type: string
-          nullable: true
-          description: Areas for improvement
-        transcript:
-          type: array
-          nullable: true
-          description: Conversation transcript lines, excluding system messages (only included when requested via `?include=transcript`)
-          items:
-            $ref: '#/components/schemas/TranscriptLine'
-        evaluations:
-          type: array
-          nullable: true
-          description: Evaluation criteria with grades (only included when requested via `?include=evaluations`)
-          items:
-            $ref: '#/components/schemas/EvaluationCriterion'
-        created_at:
-          type: string
-          format: date-time
-          description: When the session was created
     EvaluationCriterion:
       type: object
       description: A rubric criterion with its evaluated items and feedback examples.
@@ -425,144 +576,6 @@ components:
           description: Evaluated items under this criterion
           items:
             $ref: '#/components/schemas/EvaluationItem'
-    SessionListItem:
-      type: object
-      description: A roleplay session summary for list responses.
-      properties:
-        id:
-          type: string
-          description: Unique session identifier
-        user:
-          $ref: '#/components/schemas/User'
-          description: The user who participated in this session
-        scenario:
-          $ref: '#/components/schemas/ScenarioRef'
-          description: The scenario that was practiced
-        score:
-          type: number
-          nullable: true
-          description: Session score (0-100 scale)
-        rank:
-          type: string
-          nullable: true
-          enum:
-          - gold
-          - silver
-          - bronze
-          - unranked
-          description: Performance rank based on score
-        duration_seconds:
-          type: number
-          nullable: true
-          description: Session duration in seconds
-        is_valid_attempt:
-          type: boolean
-          description: Whether this session counts as a valid graded attempt. A session is valid when it was completed (not abandoned), received AI grading, and has a score. Use valid attempts for analytics; non-valid sessions may be incomplete or ungraded.
-        created_at:
-          type: string
-          format: date-time
-          description: When the session was created
-    EvaluationItem:
-      type: object
-      description: An individual evaluation item with grade, feedback, and evidence.
-      properties:
-        name:
-          type: string
-          description: Name of the evaluation item
-        grade:
-          type: string
-          nullable: true
-          enum:
-          - good
-          - mid
-          - bad
-          - not_relevant
-          description: Grade received on this item
-        feedback:
-          type: string
-          nullable: true
-          description: Detailed feedback for this item
-        feedback_examples:
-          type: array
-          description: Specific transcript evidence supporting the evaluation (filtered to High/Mid salience)
-          items:
-            $ref: '#/components/schemas/FeedbackExample'
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Current page number
-        page_size:
-          type: integer
-          description: Number of items per page
-        total_count:
-          type: integer
-          description: Total number of items
-        total_pages:
-          type: integer
-          description: Total number of pages
-    TranscriptLine:
-      type: object
-      description: A single line in the session transcript.
-      properties:
-        speaker:
-          type: string
-          nullable: true
-          description: Speaker identifier (e.g. "ai" for the AI character, "user" for the participant)
-        text:
-          type: string
-          description: The spoken text
-        seconds_from_start:
-          type: number
-          nullable: true
-          description: Seconds elapsed from the start of the session
-    ScenarioRef:
-      type: object
-      description: A compact scenario reference for embedding in other responses.
-      properties:
-        id:
-          type: string
-          description: Unique scenario identifier
-        name:
-          type: string
-          description: Scenario name
-        slug:
-          type: string
-          description: URL-friendly scenario identifier
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: authentication_error
-              code: invalid_api_key
-              message: Invalid or inactive API key
-    BadRequest:
-      description: Invalid request parameters
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: invalid_request
-              code: invalid_pagination
-              message: Invalid pagination parameters
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: not_found
-              message: 'Scenario not found: abc123'
   securitySchemes:
     bearerAuth:
       type: http

@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Exec Collections Scenarios API
+  title: Exec Scenarios API
   version: '1.0'
   description: 'REST API for programmatic access to your Exec workspace.
 
@@ -21,9 +21,7 @@ info:
     ```
 
 
-    Create API keys in your workspace settings under **Settings > API**.
-
-    '
+    Create API keys in your workspace settings under **Settings > API**.'
 servers:
 - url: https://api.exec.com/rest/v1
   description: Production
@@ -46,9 +44,7 @@ paths:
         best score, attempt count, and completion requirements.
 
 
-        Filter by user, scenario, program, or status to find specific assignments.
-
-        '
+        Filter by user, scenario, program, or status to find specific assignments.'
       tags:
       - Scenarios
       parameters:
@@ -158,9 +154,7 @@ paths:
 
         average best score and rank, average lift, total practice minutes, and average
 
-        session duration. Accepts both UUID and slug for the scenario identifier.
-
-        '
+        session duration. Accepts both UUID and slug for the scenario identifier.'
       tags:
       - Scenarios
       parameters:
@@ -243,9 +237,7 @@ paths:
 
         Shows each participant''s first score, best score, lift, rank, session count,
 
-        and total practice duration.
-
-        '
+        and total practice duration.'
       tags:
       - Scenarios
       parameters:
@@ -366,9 +358,7 @@ paths:
 
         By default, returns all scenarios in the workspace (admin view).
 
-        Use filters to narrow down results by owner, visibility, or access.
-
-        '
+        Use filters to narrow down results by owner, visibility, or access.'
       tags:
       - Scenarios
       parameters:
@@ -487,9 +477,7 @@ paths:
     get:
       operationId: checkScenarioAccess
       summary: Check scenario access
-      description: 'Check if a user has access to a specific scenario and what permission level they have.
-
-        '
+      description: Check if a user has access to a specific scenario and what permission level they have.
       tags:
       - Scenarios
       parameters:
@@ -531,9 +519,7 @@ paths:
     post:
       operationId: grantScenarioAccess
       summary: Grant scenario access
-      description: 'Grant a user access to a specific scenario with a specified permission level.
-
-        '
+      description: Grant a user access to a specific scenario with a specified permission level.
       tags:
       - Scenarios
       parameters:
@@ -592,9 +578,7 @@ paths:
       summary: Assign scenario to user
       description: 'Assign a scenario to a user as a task or homework assignment.
 
-        The user will receive notification of the assignment and can track their progress.
-
-        '
+        The user will receive notification of the assignment and can track their progress.'
       tags:
       - Scenarios
       parameters:
@@ -688,149 +672,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique user identifier
-        email:
-          type: string
-          format: email
-          description: User's email address
-        first_name:
-          type: string
-          description: User's first name
-        last_name:
-          type: string
-          description: User's last name
-    ValidationErrorDetail:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              description: Error category (e.g., "invalid_request")
-            code:
-              type: string
-              description: Specific error code (e.g., "user_not_found")
-            message:
-              type: string
-              description: Human-readable error message
-    ScenarioParticipantEntry:
-      type: object
-      description: Per-user performance data for a scenario.
-      properties:
-        user:
-          $ref: '#/components/schemas/User'
-        session_count:
-          type: integer
-          description: Number of sessions the user completed
-        first_score:
-          type: number
-          nullable: true
-          description: Score from the user's first attempt
-        first_rank:
-          type: string
-          nullable: true
-          enum:
-          - gold
-          - silver
-          - bronze
-          - unranked
-          description: Rank from the first attempt
-        best_score:
-          type: number
-          nullable: true
-          description: User's highest score
-        best_rank:
-          type: string
-          nullable: true
-          enum:
-          - gold
-          - silver
-          - bronze
-          - unranked
-          description: Rank from the best score
-        lift_percentage:
-          type: number
-          nullable: true
-          description: Improvement from first to best score
-        total_duration_seconds:
-          type: number
-          description: Total practice time in seconds
-    Assignment:
-      type: object
-      description: A scenario assignment given to a user as a practice task.
-      properties:
-        id:
-          type: string
-          description: Unique assignment identifier
-        user:
-          $ref: '#/components/schemas/User'
-        scenario:
-          $ref: '#/components/schemas/ScenarioRef'
-        status:
-          type: string
-          enum:
-          - not_started
-          - in_progress
-          - completed
-          - past_due
-          - did_not_pass
-          description: Current assignment status
-        due_date:
-          type: string
-          format: date-time
-          nullable: true
-          description: When the assignment is due
-        best_score:
-          type: number
-          nullable: true
-          description: Highest score achieved on this assignment
-        best_rank:
-          type: string
-          nullable: true
-          enum:
-          - gold
-          - silver
-          - bronze
-          - unranked
-          description: Rank from the best scoring attempt
-        attempt_count:
-          type: integer
-          description: Number of completed attempts
-        attempt_min:
-          type: integer
-          nullable: true
-          description: Minimum attempts required
-        attempt_max:
-          type: integer
-          nullable: true
-          description: Maximum attempts allowed
-        rank_min:
-          type: string
-          nullable: true
-          enum:
-          - gold
-          - silver
-          - bronze
-          - unranked
-          description: Minimum rank required to pass
-        program:
-          type: object
-          nullable: true
-          description: Program this assignment belongs to (null if standalone)
-          properties:
-            id:
-              type: string
-            name:
-              type: string
-        created_at:
-          type: string
-          format: date-time
     ScenarioAccessResponse:
       type: object
       properties:
@@ -856,19 +697,230 @@ components:
             can_edit:
               type: boolean
               description: Whether the user can edit the scenario
-    SkillRef:
+    ScenarioRef:
       type: object
-      description: A compact skill reference for embedding in other responses.
+      description: A compact scenario reference for embedding in other responses.
       properties:
         id:
           type: string
-          description: Unique skill identifier
+          description: Unique scenario identifier
         name:
           type: string
-          description: Skill name
+          description: Scenario name
         slug:
           type: string
-          description: URL-friendly skill identifier
+          description: URL-friendly scenario identifier
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique user identifier
+        email:
+          type: string
+          format: email
+          description: User's email address
+        first_name:
+          type: string
+          description: User's first name
+        last_name:
+          type: string
+          description: User's last name
+    ScenarioParticipantEntry:
+      type: object
+      description: Per-user performance data for a scenario.
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        session_count:
+          type: integer
+          description: Number of sessions the user completed
+        first_score:
+          type:
+          - number
+          - 'null'
+          description: Score from the user's first attempt
+        first_rank:
+          type:
+          - string
+          - 'null'
+          enum:
+          - gold
+          - silver
+          - bronze
+          - unranked
+          description: Rank from the first attempt
+        best_score:
+          type:
+          - number
+          - 'null'
+          description: User's highest score
+        best_rank:
+          type:
+          - string
+          - 'null'
+          enum:
+          - gold
+          - silver
+          - bronze
+          - unranked
+          description: Rank from the best score
+        lift_percentage:
+          type:
+          - number
+          - 'null'
+          description: Improvement from first to best score
+        total_duration_seconds:
+          type: number
+          description: Total practice time in seconds
+    GrantAccessResponse:
+      type: object
+      properties:
+        user_email:
+          type: string
+          format: email
+          description: Email of the user granted access
+        scenario_id:
+          type: string
+          description: Scenario identifier
+        permission_level:
+          type: string
+          enum:
+          - view
+          - share
+          - monitor
+          - edit
+          description: Permission level granted
+        granted:
+          type: boolean
+          description: Whether the access was successfully granted
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
+    Assignment:
+      type: object
+      description: A scenario assignment given to a user as a practice task.
+      properties:
+        id:
+          type: string
+          description: Unique assignment identifier
+        user:
+          $ref: '#/components/schemas/User'
+        scenario:
+          $ref: '#/components/schemas/ScenarioRef'
+        status:
+          type: string
+          enum:
+          - not_started
+          - in_progress
+          - completed
+          - past_due
+          - did_not_pass
+          description: Current assignment status
+        due_date:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the assignment is due
+        best_score:
+          type:
+          - number
+          - 'null'
+          description: Highest score achieved on this assignment
+        best_rank:
+          type:
+          - string
+          - 'null'
+          enum:
+          - gold
+          - silver
+          - bronze
+          - unranked
+          description: Rank from the best scoring attempt
+        attempt_count:
+          type: integer
+          description: Number of completed attempts
+        attempt_min:
+          type:
+          - integer
+          - 'null'
+          description: Minimum attempts required
+        attempt_max:
+          type:
+          - integer
+          - 'null'
+          description: Maximum attempts allowed
+        rank_min:
+          type:
+          - string
+          - 'null'
+          enum:
+          - gold
+          - silver
+          - bronze
+          - unranked
+          description: Minimum rank required to pass
+        program:
+          type:
+          - object
+          - 'null'
+          description: Program this assignment belongs to (null if standalone)
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+        created_at:
+          type: string
+          format: date-time
+    ScenarioScoreDistribution:
+      type: array
+      description: Rank distribution across participants based on best scores (Gold ≥90, Silver ≥75, Bronze ≥50, Unranked <50).
+      items:
+        type: object
+        properties:
+          rank:
+            type: string
+            enum:
+            - gold
+            - silver
+            - bronze
+            - unranked
+            description: Performance rank
+          count:
+            type: integer
+            description: Number of participants at this rank
+          percentage:
+            type: number
+            description: Percentage of participants at this rank
     ScenarioAnalyticsSummary:
       type: object
       description: Aggregate analytics metrics for a scenario.
@@ -901,27 +953,6 @@ components:
           description: Average duration per session in seconds
         score_distribution:
           $ref: '#/components/schemas/ScenarioScoreDistribution'
-    GrantAccessResponse:
-      type: object
-      properties:
-        user_email:
-          type: string
-          format: email
-          description: Email of the user granted access
-        scenario_id:
-          type: string
-          description: Scenario identifier
-        permission_level:
-          type: string
-          enum:
-          - view
-          - share
-          - monitor
-          - edit
-          description: Permission level granted
-        granted:
-          type: boolean
-          description: Whether the access was successfully granted
     Scenario:
       type: object
       properties:
@@ -932,8 +963,9 @@ components:
           type: string
           description: Scenario name
         description:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Short description of the scenario
         slug:
           type: string
@@ -952,8 +984,9 @@ components:
           - very_hard
           - custom
         context:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: 'The scenario''s context - background and setup information that frames
 
             the roleplay (e.g., the buyer''s company, current situation, recent
@@ -965,8 +998,9 @@ components:
             '
           example: The buyer is the VP of Engineering at a Series B fintech. They have an active RFP out for an observability tool and your competitor presented yesterday.
         objective:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: 'The learner''s objective for the scenario. The value is markdown and
 
             includes an embedded "Outcomes to Avoid" subsection separated by the
@@ -1000,7 +1034,6 @@ components:
           - workspace
         owner:
           $ref: '#/components/schemas/User'
-          nullable: true
           description: User who owns the scenario
         created_at:
           type: string
@@ -1011,71 +1044,26 @@ components:
           format: date-time
           description: When the scenario was last updated
         skills:
-          type: array
-          nullable: true
+          type:
+          - array
+          - 'null'
           description: Skills evaluated by this scenario (only included when requested via `?include=skills`)
           items:
             $ref: '#/components/schemas/SkillRef'
-    ScenarioScoreDistribution:
-      type: array
-      description: Rank distribution across participants based on best scores (Gold ≥90, Silver ≥75, Bronze ≥50, Unranked <50).
-      items:
-        type: object
-        properties:
-          rank:
-            type: string
-            enum:
-            - gold
-            - silver
-            - bronze
-            - unranked
-            description: Performance rank
-          count:
-            type: integer
-            description: Number of participants at this rank
-          percentage:
-            type: number
-            description: Percentage of participants at this rank
-    Pagination:
+    SkillRef:
       type: object
-      properties:
-        page:
-          type: integer
-          description: Current page number
-        page_size:
-          type: integer
-          description: Number of items per page
-        total_count:
-          type: integer
-          description: Total number of items
-        total_pages:
-          type: integer
-          description: Total number of pages
-    ScenarioRef:
-      type: object
-      description: A compact scenario reference for embedding in other responses.
+      description: A compact skill reference for embedding in other responses.
       properties:
         id:
           type: string
-          description: Unique scenario identifier
+          description: Unique skill identifier
         name:
           type: string
-          description: Scenario name
+          description: Skill name
         slug:
           type: string
-          description: URL-friendly scenario identifier
+          description: URL-friendly skill identifier
   responses:
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: authentication_error
-              code: invalid_api_key
-              message: Invalid or inactive API key
     BadRequest:
       description: Invalid request parameters
       content:
@@ -1087,6 +1075,17 @@ components:
               type: invalid_request
               code: invalid_pagination
               message: Invalid pagination parameters
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authentication_error
+              code: invalid_api_key
+              message: Invalid or inactive API key
     NotFound:
       description: Resource not found
       content:
