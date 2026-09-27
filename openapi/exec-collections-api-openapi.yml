@@ -93,31 +93,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Collection:
-      type: object
-      description: A collection that groups related scenarios together.
-      properties:
-        id:
-          type: string
-          description: Unique collection identifier
-        name:
-          type: string
-          description: Collection name
-        slug:
-          type: string
-          description: URL-friendly collection identifier
-        description:
-          type:
-          - string
-          - 'null'
-          description: Collection description
-        scenario_count:
-          type: integer
-          description: Number of scenarios in this collection
-        created_at:
-          type: string
-          format: date-time
-          description: When the collection was created
     ValidationErrorDetail:
       type: object
       properties:
@@ -148,6 +123,31 @@ components:
         total_pages:
           type: integer
           description: Total number of pages
+    Collection:
+      type: object
+      description: A collection that groups related scenarios together.
+      properties:
+        id:
+          type: string
+          description: Unique collection identifier
+        name:
+          type: string
+          description: Collection name
+        slug:
+          type: string
+          description: URL-friendly collection identifier
+        description:
+          type:
+          - string
+          - 'null'
+          description: Collection description
+        scenario_count:
+          type: integer
+          description: Number of scenarios in this collection
+        created_at:
+          type: string
+          format: date-time
+          description: When the collection was created
   responses:
     Unauthorized:
       description: Missing or invalid API key

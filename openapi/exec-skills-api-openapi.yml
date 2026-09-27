@@ -241,35 +241,24 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    SkillProficiencyEntry:
+    SkillProficiencySummary:
       type: object
-      description: Proficiency data for a single user on a skill.
+      description: Aggregate proficiency stats for a skill across all workspace members.
       properties:
-        user:
-          $ref: '#/components/schemas/User'
-        score:
+        participant_count:
+          type: integer
+          description: Number of users with at least one observation on this skill
+        scored_participant_count:
+          type: integer
+          description: Number of users with enough observations (3+) for a proficiency score
+        pct_proficient_plus:
+          type: integer
+          description: Percentage of scored users at Proficient or Excellent tier
+        avg_score:
           type:
           - number
           - 'null'
-          description: Proficiency score (0-100). Null if fewer than 3 observations.
-        tier:
-          type: string
-          enum:
-          - excellent
-          - proficient
-          - developing
-          - needs_work
-          - insufficient_data
-          description: Proficiency tier based on score thresholds
-        observation_count:
-          type: integer
-          description: Total observations (roleplay sessions + calls) within the lookback window
-        last_practiced_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: When the most recent observation occurred
+          description: Average proficiency score across scored users (0-100)
     Skill:
       type: object
       description: A competency that is evaluated during roleplay sessions and calls.
@@ -293,6 +282,22 @@ components:
         proficiency_summary:
           $ref: '#/components/schemas/SkillProficiencySummary'
           description: Aggregate proficiency stats (only included when requested via `?include=proficiency`)
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique user identifier
+        email:
+          type: string
+          format: email
+          description: User's email address
+        first_name:
+          type: string
+          description: User's first name
+        last_name:
+          type: string
+          description: User's last name
     ValidationErrorDetail:
       type: object
       properties:
@@ -323,40 +328,35 @@ components:
         total_pages:
           type: integer
           description: Total number of pages
-    User:
+    SkillProficiencyEntry:
       type: object
+      description: Proficiency data for a single user on a skill.
       properties:
-        id:
-          type: string
-          description: Unique user identifier
-        email:
-          type: string
-          format: email
-          description: User's email address
-        first_name:
-          type: string
-          description: User's first name
-        last_name:
-          type: string
-          description: User's last name
-    SkillProficiencySummary:
-      type: object
-      description: Aggregate proficiency stats for a skill across all workspace members.
-      properties:
-        participant_count:
-          type: integer
-          description: Number of users with at least one observation on this skill
-        scored_participant_count:
-          type: integer
-          description: Number of users with enough observations (3+) for a proficiency score
-        pct_proficient_plus:
-          type: integer
-          description: Percentage of scored users at Proficient or Excellent tier
-        avg_score:
+        user:
+          $ref: '#/components/schemas/User'
+        score:
           type:
           - number
           - 'null'
-          description: Average proficiency score across scored users (0-100)
+          description: Proficiency score (0-100). Null if fewer than 3 observations.
+        tier:
+          type: string
+          enum:
+          - excellent
+          - proficient
+          - developing
+          - needs_work
+          - insufficient_data
+          description: Proficiency tier based on score thresholds
+        observation_count:
+          type: integer
+          description: Total observations (roleplay sessions + calls) within the lookback window
+        last_practiced_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the most recent observation occurred
   responses:
     Unauthorized:
       description: Missing or invalid API key

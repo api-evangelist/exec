@@ -58,7 +58,7 @@ tags:
 - Roleplay
 - Coaching
 - Learning
-- Knowledge-Management
+- Knowledge Management
 - LMS
 tags_raw:
 - Company
@@ -70,6 +70,7 @@ tags_raw:
 - Learning
 - Knowledge Management
 - LMS
+- Knowledge-Management
 apis:
 - aid: exec:exec-collections-api
   name: Exec Collections API

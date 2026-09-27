@@ -168,17 +168,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   responses:
-    BadRequest:
-      description: Invalid request parameters
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: invalid_request
-              code: invalid_pagination
-              message: Invalid pagination parameters
     Unauthorized:
       description: Missing or invalid API key
       content:
@@ -190,6 +179,17 @@ components:
               type: authentication_error
               code: invalid_api_key
               message: Invalid or inactive API key
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: invalid_request
+              code: invalid_pagination
+              message: Invalid pagination parameters
     Forbidden:
       description: Workspace is inactive
       content:
@@ -202,6 +202,34 @@ components:
               code: workspace_inactive
               message: Workspace is inactive
   schemas:
+    WorkspaceGroup:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique group identifier
+        name:
+          type: string
+          description: Group name
+        created_at:
+          type: string
+          format: date-time
+          description: When the group was created
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
     Workspace:
       type: object
       properties:
@@ -218,19 +246,21 @@ components:
           type: string
           format: date-time
           description: When the workspace was created
-    WorkspaceGroup:
+    Pagination:
       type: object
       properties:
-        id:
-          type: string
-          description: Unique group identifier
-        name:
-          type: string
-          description: Group name
-        created_at:
-          type: string
-          format: date-time
-          description: When the group was created
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
     WorkspaceMember:
       type: object
       description: A workspace member. The id is the user's unique identifier, consistent with user objects across all endpoints.
@@ -259,36 +289,6 @@ components:
           type: string
           format: date-time
           description: When the member was added
-    ValidationErrorDetail:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              description: Error category (e.g., "invalid_request")
-            code:
-              type: string
-              description: Specific error code (e.g., "user_not_found")
-            message:
-              type: string
-              description: Human-readable error message
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Current page number
-        page_size:
-          type: integer
-          description: Number of items per page
-        total_count:
-          type: integer
-          description: Total number of items
-        total_pages:
-          type: integer
-          description: Total number of pages
   securitySchemes:
     bearerAuth:
       type: http

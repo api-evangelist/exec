@@ -572,57 +572,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    KnowledgeHubPageDraft:
-      type: object
-      description: The unpublished draft of a page.
-      properties:
-        title:
-          type: string
-          description: Draft title
-        content:
-          type:
-          - string
-          - 'null'
-          description: Markdown body of the draft
-    DeleteResult:
-      type: object
-      description: Returned by archive/delete endpoints.
-      properties:
-        id:
-          type: string
-          description: Identifier of the archived/deleted resource
-        deleted:
-          type: boolean
-          description: Always true on success
-    KnowledgeHubSkillRef:
-      type: object
-      description: A compact skill reference embedded in pages.
-      properties:
-        id:
-          type: string
-          description: Unique skill identifier (UUID)
-        name:
-          type: string
-          description: Skill name
-    KnowledgeHubPageDetail:
-      description: A single page with its published body, attached sources, and (optionally) its draft.
-      allOf:
-      - $ref: '#/components/schemas/KnowledgeHubPage'
-      - type: object
-        properties:
-          content:
-            type:
-            - string
-            - 'null'
-            description: Markdown body of the published version (null if unpublished)
-          sources:
-            type: array
-            description: Sources attached to the page
-            items:
-              $ref: '#/components/schemas/KnowledgeHubSource'
-          draft:
-            $ref: '#/components/schemas/KnowledgeHubPageDraft'
-            description: Current draft (only included when requested via `?include=draft`)
     KnowledgeHubPage:
       type: object
       description: A Knowledge Hub page. List responses return this metadata-only shape (no body).
@@ -683,36 +632,31 @@ components:
         updated_at:
           type: string
           format: date-time
-    ValidationErrorDetail:
+    KnowledgeHubFolderRef:
       type: object
+      description: A compact folder reference embedded in pages and sources.
       properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              description: Error category (e.g., "invalid_request")
-            code:
-              type: string
-              description: Specific error code (e.g., "user_not_found")
-            message:
-              type: string
-              description: Human-readable error message
-    Pagination:
+        id:
+          type: string
+          description: Unique folder identifier (UUID)
+        name:
+          type: string
+          description: Folder name
+        emoji:
+          type:
+          - string
+          - 'null'
+          description: Emoji icon shown next to the folder
+    KnowledgeHubSkillRef:
       type: object
+      description: A compact skill reference embedded in pages.
       properties:
-        page:
-          type: integer
-          description: Current page number
-        page_size:
-          type: integer
-          description: Number of items per page
-        total_count:
-          type: integer
-          description: Total number of items
-        total_pages:
-          type: integer
-          description: Total number of pages
+        id:
+          type: string
+          description: Unique skill identifier (UUID)
+        name:
+          type: string
+          description: Skill name
     User:
       type: object
       properties:
@@ -729,6 +673,49 @@ components:
         last_name:
           type: string
           description: User's last name
+    KnowledgeHubPageVersion:
+      type: object
+      description: A single entry in a page's version history.
+      properties:
+        version:
+          type: integer
+          description: Version number
+        title:
+          type: string
+          description: Page title at this version
+        change_type:
+          type: string
+          enum:
+          - created
+          - ai_generation
+          - manual_edit
+          - restore
+          - clone
+          description: What kind of change produced this version
+        created_by:
+          $ref: '#/components/schemas/User'
+          description: User who created this version (null for system/AI changes)
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
     KnowledgeHubSource:
       type: object
       description: A Knowledge Hub source — an uploaded file or ingested URL whose text is extracted and indexed.
@@ -814,61 +801,63 @@ components:
           - string
           - 'null'
           description: Extracted text (only included when requested via `?include=content`)
-    KnowledgeHubFolderRef:
+    KnowledgeHubPageDraft:
       type: object
-      description: A compact folder reference embedded in pages and sources.
+      description: The unpublished draft of a page.
       properties:
-        id:
+        title:
           type: string
-          description: Unique folder identifier (UUID)
-        name:
-          type: string
-          description: Folder name
-        emoji:
+          description: Draft title
+        content:
           type:
           - string
           - 'null'
-          description: Emoji icon shown next to the folder
-    KnowledgeHubPageVersion:
+          description: Markdown body of the draft
+    KnowledgeHubPageDetail:
+      description: A single page with its published body, attached sources, and (optionally) its draft.
+      allOf:
+      - $ref: '#/components/schemas/KnowledgeHubPage'
+      - type: object
+        properties:
+          content:
+            type:
+            - string
+            - 'null'
+            description: Markdown body of the published version (null if unpublished)
+          sources:
+            type: array
+            description: Sources attached to the page
+            items:
+              $ref: '#/components/schemas/KnowledgeHubSource'
+          draft:
+            $ref: '#/components/schemas/KnowledgeHubPageDraft'
+            description: Current draft (only included when requested via `?include=draft`)
+    Pagination:
       type: object
-      description: A single entry in a page's version history.
       properties:
-        version:
+        page:
           type: integer
-          description: Version number
-        title:
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
+    DeleteResult:
+      type: object
+      description: Returned by archive/delete endpoints.
+      properties:
+        id:
           type: string
-          description: Page title at this version
-        change_type:
-          type: string
-          enum:
-          - created
-          - ai_generation
-          - manual_edit
-          - restore
-          - clone
-          description: What kind of change produced this version
-        created_by:
-          $ref: '#/components/schemas/User'
-          description: User who created this version (null for system/AI changes)
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
+          description: Identifier of the archived/deleted resource
+        deleted:
+          type: boolean
+          description: Always true on success
   responses:
-    BadRequest:
-      description: Invalid request parameters
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: invalid_request
-              code: invalid_pagination
-              message: Invalid pagination parameters
     Unauthorized:
       description: Missing or invalid API key
       content:
@@ -880,6 +869,17 @@ components:
               type: authentication_error
               code: invalid_api_key
               message: Invalid or inactive API key
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: invalid_request
+              code: invalid_pagination
+              message: Invalid pagination parameters
     NotFound:
       description: Resource not found
       content:
