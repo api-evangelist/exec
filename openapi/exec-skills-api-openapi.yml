@@ -241,47 +241,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    SkillProficiencySummary:
-      type: object
-      description: Aggregate proficiency stats for a skill across all workspace members.
-      properties:
-        participant_count:
-          type: integer
-          description: Number of users with at least one observation on this skill
-        scored_participant_count:
-          type: integer
-          description: Number of users with enough observations (3+) for a proficiency score
-        pct_proficient_plus:
-          type: integer
-          description: Percentage of scored users at Proficient or Excellent tier
-        avg_score:
-          type:
-          - number
-          - 'null'
-          description: Average proficiency score across scored users (0-100)
-    Skill:
-      type: object
-      description: A competency that is evaluated during roleplay sessions and calls.
-      properties:
-        id:
-          type: string
-          description: Unique skill identifier
-        name:
-          type: string
-          description: Skill name
-        slug:
-          type: string
-          description: URL-friendly skill identifier
-        description:
-          type: string
-          description: Description of the skill
-        created_at:
-          type: string
-          format: date-time
-          description: When the skill was created
-        proficiency_summary:
-          $ref: '#/components/schemas/SkillProficiencySummary'
-          description: Aggregate proficiency stats (only included when requested via `?include=proficiency`)
     User:
       type: object
       properties:
@@ -313,6 +272,29 @@ components:
             message:
               type: string
               description: Human-readable error message
+    Skill:
+      type: object
+      description: A competency that is evaluated during roleplay sessions and calls.
+      properties:
+        id:
+          type: string
+          description: Unique skill identifier
+        name:
+          type: string
+          description: Skill name
+        slug:
+          type: string
+          description: URL-friendly skill identifier
+        description:
+          type: string
+          description: Description of the skill
+        created_at:
+          type: string
+          format: date-time
+          description: When the skill was created
+        proficiency_summary:
+          $ref: '#/components/schemas/SkillProficiencySummary'
+          description: Aggregate proficiency stats (only included when requested via `?include=proficiency`)
     Pagination:
       type: object
       properties:
@@ -328,6 +310,24 @@ components:
         total_pages:
           type: integer
           description: Total number of pages
+    SkillProficiencySummary:
+      type: object
+      description: Aggregate proficiency stats for a skill across all workspace members.
+      properties:
+        participant_count:
+          type: integer
+          description: Number of users with at least one observation on this skill
+        scored_participant_count:
+          type: integer
+          description: Number of users with enough observations (3+) for a proficiency score
+        pct_proficient_plus:
+          type: integer
+          description: Percentage of scored users at Proficient or Excellent tier
+        avg_score:
+          type:
+          - number
+          - 'null'
+          description: Average proficiency score across scored users (0-100)
     SkillProficiencyEntry:
       type: object
       description: Proficiency data for a single user on a skill.
@@ -358,6 +358,16 @@ components:
           format: date-time
           description: When the most recent observation occurred
   responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: not_found
+              message: 'Scenario not found: abc123'
     Unauthorized:
       description: Missing or invalid API key
       content:
@@ -369,16 +379,6 @@ components:
               type: authentication_error
               code: invalid_api_key
               message: Invalid or inactive API key
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: not_found
-              message: 'Scenario not found: abc123'
   securitySchemes:
     bearerAuth:
       type: http
