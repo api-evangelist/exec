@@ -93,6 +93,21 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
     Collection:
       type: object
       description: A collection that groups related scenarios together.
@@ -118,21 +133,6 @@ components:
           type: string
           format: date-time
           description: When the collection was created
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Current page number
-        page_size:
-          type: integer
-          description: Number of items per page
-        total_count:
-          type: integer
-          description: Total number of items
-        total_pages:
-          type: integer
-          description: Total number of pages
     ValidationErrorDetail:
       type: object
       properties:

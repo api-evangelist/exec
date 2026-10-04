@@ -284,7 +284,143 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: invalid_request
+              code: invalid_pagination
+              message: Invalid pagination parameters
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authentication_error
+              code: invalid_api_key
+              message: Invalid or inactive API key
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: not_found
+              message: 'Scenario not found: abc123'
   schemas:
+    EvaluationItem:
+      type: object
+      description: An individual evaluation item with grade, feedback, and evidence.
+      properties:
+        name:
+          type: string
+          description: Name of the evaluation item
+        grade:
+          type:
+          - string
+          - 'null'
+          enum:
+          - good
+          - mid
+          - bad
+          - not_relevant
+          description: Grade received on this item
+        feedback:
+          type:
+          - string
+          - 'null'
+          description: Detailed feedback for this item
+        feedback_examples:
+          type: array
+          description: Specific transcript evidence supporting the evaluation (filtered to High/Mid salience)
+          items:
+            $ref: '#/components/schemas/FeedbackExample'
+    EvaluationCriterion:
+      type: object
+      description: A rubric criterion with its evaluated items and feedback examples.
+      properties:
+        criterion_name:
+          type: string
+          description: Name of the parent evaluation criterion
+        items:
+          type: array
+          description: Evaluated items under this criterion
+          items:
+            $ref: '#/components/schemas/EvaluationItem'
+    FeedbackExample:
+      type: object
+      description: A specific piece of evidence from the transcript supporting an evaluation.
+      properties:
+        quote:
+          type: string
+          description: Transcript excerpt
+        feedback:
+          type:
+          - string
+          - 'null'
+          description: Explanation of what was good or could be improved
+        suggestion_quote:
+          type:
+          - string
+          - 'null'
+          description: Suggested alternative phrasing
+        grade:
+          type:
+          - string
+          - 'null'
+          enum:
+          - good
+          - mid
+          - bad
+          - not_relevant
+          description: Grade for this specific moment
+        salience:
+          type:
+          - string
+          - 'null'
+          enum:
+          - high
+          - mid
+          - low
+          description: Importance level of this feedback
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
+    ScenarioRef:
+      type: object
+      description: A compact scenario reference for embedding in other responses.
+      properties:
+        id:
+          type: string
+          description: Unique scenario identifier
+        name:
+          type: string
+          description: Scenario name
+        slug:
+          type: string
+          description: URL-friendly scenario identifier
     SessionListItem:
       type: object
       description: A roleplay session summary for list responses.
@@ -341,18 +477,21 @@ components:
         last_name:
           type: string
           description: User's last name
-    EvaluationCriterion:
+    Pagination:
       type: object
-      description: A rubric criterion with its evaluated items and feedback examples.
       properties:
-        criterion_name:
-          type: string
-          description: Name of the parent evaluation criterion
-        items:
-          type: array
-          description: Evaluated items under this criterion
-          items:
-            $ref: '#/components/schemas/EvaluationItem'
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
     SessionDetail:
       type: object
       description: Full roleplay session detail with optional transcript and evaluations.
@@ -420,21 +559,6 @@ components:
           type: string
           format: date-time
           description: When the session was created
-    ValidationErrorDetail:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              description: Error category (e.g., "invalid_request")
-            code:
-              type: string
-              description: Specific error code (e.g., "user_not_found")
-            message:
-              type: string
-              description: Human-readable error message
     TranscriptLine:
       type: object
       description: A single line in the session transcript.
@@ -452,130 +576,6 @@ components:
           - number
           - 'null'
           description: Seconds elapsed from the start of the session
-    EvaluationItem:
-      type: object
-      description: An individual evaluation item with grade, feedback, and evidence.
-      properties:
-        name:
-          type: string
-          description: Name of the evaluation item
-        grade:
-          type:
-          - string
-          - 'null'
-          enum:
-          - good
-          - mid
-          - bad
-          - not_relevant
-          description: Grade received on this item
-        feedback:
-          type:
-          - string
-          - 'null'
-          description: Detailed feedback for this item
-        feedback_examples:
-          type: array
-          description: Specific transcript evidence supporting the evaluation (filtered to High/Mid salience)
-          items:
-            $ref: '#/components/schemas/FeedbackExample'
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Current page number
-        page_size:
-          type: integer
-          description: Number of items per page
-        total_count:
-          type: integer
-          description: Total number of items
-        total_pages:
-          type: integer
-          description: Total number of pages
-    ScenarioRef:
-      type: object
-      description: A compact scenario reference for embedding in other responses.
-      properties:
-        id:
-          type: string
-          description: Unique scenario identifier
-        name:
-          type: string
-          description: Scenario name
-        slug:
-          type: string
-          description: URL-friendly scenario identifier
-    FeedbackExample:
-      type: object
-      description: A specific piece of evidence from the transcript supporting an evaluation.
-      properties:
-        quote:
-          type: string
-          description: Transcript excerpt
-        feedback:
-          type:
-          - string
-          - 'null'
-          description: Explanation of what was good or could be improved
-        suggestion_quote:
-          type:
-          - string
-          - 'null'
-          description: Suggested alternative phrasing
-        grade:
-          type:
-          - string
-          - 'null'
-          enum:
-          - good
-          - mid
-          - bad
-          - not_relevant
-          description: Grade for this specific moment
-        salience:
-          type:
-          - string
-          - 'null'
-          enum:
-          - high
-          - mid
-          - low
-          description: Importance level of this feedback
-  responses:
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: not_found
-              message: 'Scenario not found: abc123'
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: authentication_error
-              code: invalid_api_key
-              message: Invalid or inactive API key
-    BadRequest:
-      description: Invalid request parameters
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: invalid_request
-              code: invalid_pagination
-              message: Invalid pagination parameters
   securitySchemes:
     bearerAuth:
       type: http

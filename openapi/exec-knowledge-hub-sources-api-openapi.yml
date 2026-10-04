@@ -308,6 +308,39 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: invalid_request
+              code: invalid_pagination
+              message: Invalid pagination parameters
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: authentication_error
+              code: invalid_api_key
+              message: Invalid or inactive API key
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: not_found
+              message: 'Scenario not found: abc123'
   schemas:
     KnowledgeHubSource:
       type: object
@@ -394,6 +427,46 @@ components:
           - string
           - 'null'
           description: Extracted text (only included when requested via `?include=content`)
+    KnowledgeHubFolderRef:
+      type: object
+      description: A compact folder reference embedded in pages and sources.
+      properties:
+        id:
+          type: string
+          description: Unique folder identifier (UUID)
+        name:
+          type: string
+          description: Folder name
+        emoji:
+          type:
+          - string
+          - 'null'
+          description: Emoji icon shown next to the folder
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
+    DeleteResult:
+      type: object
+      description: Returned by archive/delete endpoints.
+      properties:
+        id:
+          type: string
+          description: Identifier of the archived/deleted resource
+        deleted:
+          type: boolean
+          description: Always true on success
     User:
       type: object
       properties:
@@ -410,21 +483,6 @@ components:
         last_name:
           type: string
           description: User's last name
-    ValidationErrorDetail:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              description: Error category (e.g., "invalid_request")
-            code:
-              type: string
-              description: Specific error code (e.g., "user_not_found")
-            message:
-              type: string
-              description: Human-readable error message
     Pagination:
       type: object
       properties:
@@ -440,64 +498,6 @@ components:
         total_pages:
           type: integer
           description: Total number of pages
-    DeleteResult:
-      type: object
-      description: Returned by archive/delete endpoints.
-      properties:
-        id:
-          type: string
-          description: Identifier of the archived/deleted resource
-        deleted:
-          type: boolean
-          description: Always true on success
-    KnowledgeHubFolderRef:
-      type: object
-      description: A compact folder reference embedded in pages and sources.
-      properties:
-        id:
-          type: string
-          description: Unique folder identifier (UUID)
-        name:
-          type: string
-          description: Folder name
-        emoji:
-          type:
-          - string
-          - 'null'
-          description: Emoji icon shown next to the folder
-  responses:
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: not_found
-              message: 'Scenario not found: abc123'
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: authentication_error
-              code: invalid_api_key
-              message: Invalid or inactive API key
-    BadRequest:
-      description: Invalid request parameters
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: invalid_request
-              code: invalid_pagination
-              message: Invalid pagination parameters
   securitySchemes:
     bearerAuth:
       type: http

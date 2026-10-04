@@ -241,37 +241,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique user identifier
-        email:
-          type: string
-          format: email
-          description: User's email address
-        first_name:
-          type: string
-          description: User's first name
-        last_name:
-          type: string
-          description: User's last name
-    ValidationErrorDetail:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              description: Error category (e.g., "invalid_request")
-            code:
-              type: string
-              description: Specific error code (e.g., "user_not_found")
-            message:
-              type: string
-              description: Human-readable error message
     Skill:
       type: object
       description: A competency that is evaluated during roleplay sessions and calls.
@@ -295,39 +264,6 @@ components:
         proficiency_summary:
           $ref: '#/components/schemas/SkillProficiencySummary'
           description: Aggregate proficiency stats (only included when requested via `?include=proficiency`)
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Current page number
-        page_size:
-          type: integer
-          description: Number of items per page
-        total_count:
-          type: integer
-          description: Total number of items
-        total_pages:
-          type: integer
-          description: Total number of pages
-    SkillProficiencySummary:
-      type: object
-      description: Aggregate proficiency stats for a skill across all workspace members.
-      properties:
-        participant_count:
-          type: integer
-          description: Number of users with at least one observation on this skill
-        scored_participant_count:
-          type: integer
-          description: Number of users with enough observations (3+) for a proficiency score
-        pct_proficient_plus:
-          type: integer
-          description: Percentage of scored users at Proficient or Excellent tier
-        avg_score:
-          type:
-          - number
-          - 'null'
-          description: Average proficiency score across scored users (0-100)
     SkillProficiencyEntry:
       type: object
       description: Proficiency data for a single user on a skill.
@@ -357,17 +293,71 @@ components:
           - 'null'
           format: date-time
           description: When the most recent observation occurred
+    SkillProficiencySummary:
+      type: object
+      description: Aggregate proficiency stats for a skill across all workspace members.
+      properties:
+        participant_count:
+          type: integer
+          description: Number of users with at least one observation on this skill
+        scored_participant_count:
+          type: integer
+          description: Number of users with enough observations (3+) for a proficiency score
+        pct_proficient_plus:
+          type: integer
+          description: Percentage of scored users at Proficient or Excellent tier
+        avg_score:
+          type:
+          - number
+          - 'null'
+          description: Average proficiency score across scored users (0-100)
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique user identifier
+        email:
+          type: string
+          format: email
+          description: User's email address
+        first_name:
+          type: string
+          description: User's first name
+        last_name:
+          type: string
+          description: User's last name
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
   responses:
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          example:
-            error:
-              type: not_found
-              message: 'Scenario not found: abc123'
     Unauthorized:
       description: Missing or invalid API key
       content:
@@ -379,6 +369,16 @@ components:
               type: authentication_error
               code: invalid_api_key
               message: Invalid or inactive API key
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          example:
+            error:
+              type: not_found
+              message: 'Scenario not found: abc123'
   securitySchemes:
     bearerAuth:
       type: http
