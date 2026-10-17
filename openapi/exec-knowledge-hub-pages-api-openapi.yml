@@ -572,76 +572,33 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    KnowledgeHubPage:
+    KnowledgeHubFolderRef:
       type: object
-      description: A Knowledge Hub page. List responses return this metadata-only shape (no body).
+      description: A compact folder reference embedded in pages and sources.
       properties:
         id:
           type: string
-          description: Unique page identifier (UUID)
-        title:
+          description: Unique folder identifier (UUID)
+        name:
           type: string
-          description: Page title
-        status:
-          type: string
-          enum:
-          - draft
-          - published
-          - archived
-          description: Current page status
-        visibility:
-          type: string
-          enum:
-          - private
-          - workspace
-          - global
-          description: Visibility scope of the page
-        owner:
-          $ref: '#/components/schemas/User'
-          description: User who owns the page
-        folders:
-          type: array
-          description: Folders the page belongs to
-          items:
-            $ref: '#/components/schemas/KnowledgeHubFolderRef'
-        skills:
-          type: array
-          description: Skills associated with the page
-          items:
-            $ref: '#/components/schemas/KnowledgeHubSkillRef'
-        source_count:
-          type: integer
-          description: Number of sources attached to the page
-        version:
-          type:
-          - integer
-          - 'null'
-          description: Version number of the published version, or null if never published
-        cover:
-          type: string
-          description: Cover image reference (empty string if none)
-        published_at:
+          description: Folder name
+        emoji:
           type:
           - string
           - 'null'
-          format: date-time
-          description: When the page was last published
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-    KnowledgeHubSkillRef:
+          description: Emoji icon shown next to the folder
+    KnowledgeHubPageDraft:
       type: object
-      description: A compact skill reference embedded in pages.
+      description: The unpublished draft of a page.
       properties:
-        id:
+        title:
           type: string
-          description: Unique skill identifier (UUID)
-        name:
-          type: string
-          description: Skill name
+          description: Draft title
+        content:
+          type:
+          - string
+          - 'null'
+          description: Markdown body of the draft
     KnowledgeHubSource:
       type: object
       description: A Knowledge Hub source — an uploaded file or ingested URL whose text is extracted and indexed.
@@ -727,21 +684,52 @@ components:
           - string
           - 'null'
           description: Extracted text (only included when requested via `?include=content`)
-    KnowledgeHubFolderRef:
+    User:
       type: object
-      description: A compact folder reference embedded in pages and sources.
       properties:
         id:
           type: string
-          description: Unique folder identifier (UUID)
-        name:
+          description: Unique user identifier
+        email:
           type: string
-          description: Folder name
-        emoji:
-          type:
-          - string
-          - 'null'
-          description: Emoji icon shown next to the folder
+          format: email
+          description: User's email address
+        first_name:
+          type: string
+          description: User's first name
+        last_name:
+          type: string
+          description: User's last name
+    ValidationErrorDetail:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Error category (e.g., "invalid_request")
+            code:
+              type: string
+              description: Specific error code (e.g., "user_not_found")
+            message:
+              type: string
+              description: Human-readable error message
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_count:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
     KnowledgeHubPageVersion:
       type: object
       description: A single entry in a page's version history.
@@ -770,33 +758,76 @@ components:
         updated_at:
           type: string
           format: date-time
-    ValidationErrorDetail:
+    KnowledgeHubPage:
       type: object
+      description: A Knowledge Hub page. List responses return this metadata-only shape (no body).
       properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              description: Error category (e.g., "invalid_request")
-            code:
-              type: string
-              description: Specific error code (e.g., "user_not_found")
-            message:
-              type: string
-              description: Human-readable error message
-    KnowledgeHubPageDraft:
-      type: object
-      description: The unpublished draft of a page.
-      properties:
+        id:
+          type: string
+          description: Unique page identifier (UUID)
         title:
           type: string
-          description: Draft title
-        content:
+          description: Page title
+        status:
+          type: string
+          enum:
+          - draft
+          - published
+          - archived
+          description: Current page status
+        visibility:
+          type: string
+          enum:
+          - private
+          - workspace
+          - global
+          description: Visibility scope of the page
+        owner:
+          $ref: '#/components/schemas/User'
+          description: User who owns the page
+        folders:
+          type: array
+          description: Folders the page belongs to
+          items:
+            $ref: '#/components/schemas/KnowledgeHubFolderRef'
+        skills:
+          type: array
+          description: Skills associated with the page
+          items:
+            $ref: '#/components/schemas/KnowledgeHubSkillRef'
+        source_count:
+          type: integer
+          description: Number of sources attached to the page
+        version:
+          type:
+          - integer
+          - 'null'
+          description: Version number of the published version, or null if never published
+        cover:
+          type: string
+          description: Cover image reference (empty string if none)
+        published_at:
           type:
           - string
           - 'null'
-          description: Markdown body of the draft
+          format: date-time
+          description: When the page was last published
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    KnowledgeHubSkillRef:
+      type: object
+      description: A compact skill reference embedded in pages.
+      properties:
+        id:
+          type: string
+          description: Unique skill identifier (UUID)
+        name:
+          type: string
+          description: Skill name
     DeleteResult:
       type: object
       description: Returned by archive/delete endpoints.
@@ -826,37 +857,6 @@ components:
           draft:
             $ref: '#/components/schemas/KnowledgeHubPageDraft'
             description: Current draft (only included when requested via `?include=draft`)
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique user identifier
-        email:
-          type: string
-          format: email
-          description: User's email address
-        first_name:
-          type: string
-          description: User's first name
-        last_name:
-          type: string
-          description: User's last name
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Current page number
-        page_size:
-          type: integer
-          description: Number of items per page
-        total_count:
-          type: integer
-          description: Total number of items
-        total_pages:
-          type: integer
-          description: Total number of pages
   responses:
     BadRequest:
       description: Invalid request parameters
