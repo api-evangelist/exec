@@ -550,3 +550,9 @@ components:
         Format: `exec_live_` followed by 40 alphanumeric characters.
 
         '
+x-provenance:
+  method: harvested
+  publisher: Exec
+  source: https://docs.exec.com/api-reference/openapi.yaml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
