@@ -1,568 +1,581 @@
 {
+  "info": {
+    "_postman_id": "74859c7f-dead-4bc8-94df-88ccf39075d5",
+    "name": "Exec Workspace API",
+    "description": "REST API for programmatic access to your Exec workspace.\n\nUse the Exec API to read workspace data, list members, retrieve group information,\nand create interactive scenario creation sessions.\n\n## Authentication\nAll requests require a valid API key passed in the Authorization header:\n```\nAuthorization: Bearer exec_live_...\n```\n\nCreate API keys in your workspace settings under **Settings > API**.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:50:31.000Z",
+    "updatedAt": "2026-10-21T19:50:32.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-74859c7f-dead-4bc8-94df-88ccf39075d5"
+  },
   "item": [
     {
-      "id": "78502ed2-daf0-4324-a7f7-9fdb829a5450",
-      "name": "Workspace",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": "workspace",
       "item": [
         {
-          "id": "876b3fc5-7e11-4750-a1bf-329acc72e880",
+          "name": "members",
+          "item": [
+            {
+              "name": "List workspace members",
+              "id": "912a596d-4b81-40d9-ba7c-ede2ec1a685d",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/workspace/members?page=1&page_size=50&group_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "workspace",
+                    "members"
+                  ],
+                  "query": [
+                    {
+                      "description": "Page number (1-indexed)",
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "description": "Number of results per page (max 100)",
+                      "key": "page_size",
+                      "value": "50"
+                    },
+                    {
+                      "description": "Comma-separated workspace group IDs to filter by",
+                      "key": "group_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                },
+                "description": "Returns a paginated list of workspace members with basic user info."
+              },
+              "response": [
+                {
+                  "id": "38f5ee33-0a8f-41fd-8da8-684a20157e9f",
+                  "name": "List of workspace members",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/workspace/members?page=1&page_size=50&group_ids=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "workspace",
+                        "members"
+                      ],
+                      "query": [
+                        {
+                          "description": "Page number (1-indexed)",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Number of results per page (max 100)",
+                          "key": "page_size",
+                          "value": "50"
+                        },
+                        {
+                          "description": "Comma-separated workspace group IDs to filter by",
+                          "key": "group_ids",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"email\": \"<email>\",\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\",\n      \"role\": \"staff\",\n      \"created_at\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"email\": \"<email>\",\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\",\n      \"role\": \"member\",\n      \"created_at\": \"<dateTime>\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": \"<integer>\",\n    \"page_size\": \"<integer>\",\n    \"total_count\": \"<integer>\",\n    \"total_pages\": \"<integer>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:50:32.000Z",
+                  "updatedAt": "2026-10-21T19:50:32.000Z",
+                  "uid": "35240-38f5ee33-0a8f-41fd-8da8-684a20157e9f"
+                },
+                {
+                  "id": "92361811-9c90-475b-8bbc-87a26ed041f9",
+                  "name": "Invalid request parameters",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/workspace/members?page=1&page_size=50&group_ids=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "workspace",
+                        "members"
+                      ],
+                      "query": [
+                        {
+                          "description": "Page number (1-indexed)",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Number of results per page (max 100)",
+                          "key": "page_size",
+                          "value": "50"
+                        },
+                        {
+                          "description": "Comma-separated workspace group IDs to filter by",
+                          "key": "group_ids",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:50:32.000Z",
+                  "updatedAt": "2026-10-21T19:50:32.000Z",
+                  "uid": "35240-92361811-9c90-475b-8bbc-87a26ed041f9"
+                },
+                {
+                  "id": "f2e87d25-75e1-46ce-886a-203ac82801a9",
+                  "name": "Missing or invalid API key",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/workspace/members?page=1&page_size=50&group_ids=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "workspace",
+                        "members"
+                      ],
+                      "query": [
+                        {
+                          "description": "Page number (1-indexed)",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Number of results per page (max 100)",
+                          "key": "page_size",
+                          "value": "50"
+                        },
+                        {
+                          "description": "Comma-separated workspace group IDs to filter by",
+                          "key": "group_ids",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:50:32.000Z",
+                  "updatedAt": "2026-10-21T19:50:32.000Z",
+                  "uid": "35240-f2e87d25-75e1-46ce-886a-203ac82801a9"
+                }
+              ],
+              "createdAt": "2026-10-21T19:50:32.000Z",
+              "updatedAt": "2026-10-21T19:50:32.000Z",
+              "uid": "35240-912a596d-4b81-40d9-ba7c-ede2ec1a685d"
+            }
+          ],
+          "id": "b8c4f392-82c8-4f84-8a9d-ab7a73a66cd0",
+          "createdAt": "2026-10-21T19:50:32.000Z",
+          "updatedAt": "2026-10-21T19:50:32.000Z",
+          "uid": "35240-b8c4f392-82c8-4f84-8a9d-ab7a73a66cd0"
+        },
+        {
+          "name": "groups",
+          "item": [
+            {
+              "name": "List workspace groups",
+              "id": "8f729c39-f493-4e02-96a8-6db4f1b1fcaf",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/workspace/groups?page=1&page_size=50",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "workspace",
+                    "groups"
+                  ],
+                  "query": [
+                    {
+                      "description": "Page number (1-indexed)",
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "description": "Number of results per page (max 100)",
+                      "key": "page_size",
+                      "value": "50"
+                    }
+                  ]
+                },
+                "description": "Returns a paginated list of groups in the workspace."
+              },
+              "response": [
+                {
+                  "id": "4a955465-b835-4d7a-b134-9d3c18b64964",
+                  "name": "List of workspace groups",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/workspace/groups?page=1&page_size=50",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "workspace",
+                        "groups"
+                      ],
+                      "query": [
+                        {
+                          "description": "Page number (1-indexed)",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Number of results per page (max 100)",
+                          "key": "page_size",
+                          "value": "50"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"created_at\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"created_at\": \"<dateTime>\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": \"<integer>\",\n    \"page_size\": \"<integer>\",\n    \"total_count\": \"<integer>\",\n    \"total_pages\": \"<integer>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:50:32.000Z",
+                  "updatedAt": "2026-10-21T19:50:32.000Z",
+                  "uid": "35240-4a955465-b835-4d7a-b134-9d3c18b64964"
+                },
+                {
+                  "id": "c31b6efd-0f79-4643-9d59-07015d10c14a",
+                  "name": "Missing or invalid API key",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/workspace/groups?page=1&page_size=50",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "workspace",
+                        "groups"
+                      ],
+                      "query": [
+                        {
+                          "description": "Page number (1-indexed)",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Number of results per page (max 100)",
+                          "key": "page_size",
+                          "value": "50"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:50:32.000Z",
+                  "updatedAt": "2026-10-21T19:50:32.000Z",
+                  "uid": "35240-c31b6efd-0f79-4643-9d59-07015d10c14a"
+                }
+              ],
+              "createdAt": "2026-10-21T19:50:32.000Z",
+              "updatedAt": "2026-10-21T19:50:32.000Z",
+              "uid": "35240-8f729c39-f493-4e02-96a8-6db4f1b1fcaf"
+            }
+          ],
+          "id": "ea8a95fc-f3e6-4630-9b76-64c324c3d3ea",
+          "createdAt": "2026-10-21T19:50:32.000Z",
+          "updatedAt": "2026-10-21T19:50:32.000Z",
+          "uid": "35240-ea8a95fc-f3e6-4630-9b76-64c324c3d3ea"
+        },
+        {
           "name": "Get workspace info",
+          "id": "de248d4e-c12d-4a80-92dc-0552f792edec",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
-            "name": "Get workspace info",
-            "description": {
-              "content": "Returns basic information about the authenticated workspace.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "workspace"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
+            "method": "GET",
             "header": [
               {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
-            "method": "GET",
-            "auth": null
+            "url": {
+              "raw": "{{baseUrl}}/workspace",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "workspace"
+              ]
+            },
+            "description": "Returns basic information about the authenticated workspace."
           },
           "response": [
             {
-              "id": "48085d2c-3906-4f46-a9c0-d49ad2133c55",
+              "id": "5fd24db8-3b1a-404b-ae55-7243f2ee99e6",
               "name": "Workspace information",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "workspace"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "GET",
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "url": {
+                  "raw": "{{baseUrl}}/workspace",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "workspace"
+                  ]
+                }
               },
               "status": "OK",
               "code": 200,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"a1b2c3d4e5f6\",\n  \"name\": \"Acme Corp\",\n  \"url_slug\": \"acme-corp\",\n  \"created_at\": \"2024-01-15T10:30:00Z\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"url_slug\": \"<string>\",\n  \"created_at\": \"<dateTime>\"\n}",
+              "createdAt": "2026-10-21T19:50:32.000Z",
+              "updatedAt": "2026-10-21T19:50:32.000Z",
+              "uid": "35240-5fd24db8-3b1a-404b-ae55-7243f2ee99e6"
             },
             {
-              "id": "9760c82e-feee-46aa-9fd1-c22b78375459",
+              "id": "2f126f3f-11f0-4d47-9bc0-f5149bb0cbaa",
               "name": "Missing or invalid API key",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "workspace"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "GET",
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "url": {
+                  "raw": "{{baseUrl}}/workspace",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "workspace"
+                  ]
+                }
               },
               "status": "Unauthorized",
               "code": 401,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+              "createdAt": "2026-10-21T19:50:32.000Z",
+              "updatedAt": "2026-10-21T19:50:32.000Z",
+              "uid": "35240-2f126f3f-11f0-4d47-9bc0-f5149bb0cbaa"
             },
             {
-              "id": "e91520ad-aadc-40a7-a63e-8d98ec867d28",
+              "id": "8e383739-aef7-43f4-86a5-a78c1a86e109",
               "name": "Workspace is inactive",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "workspace"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "GET",
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "url": {
+                  "raw": "{{baseUrl}}/workspace",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "workspace"
+                  ]
+                }
               },
               "status": "Forbidden",
               "code": 403,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authorization_error\",\n    \"code\": \"workspace_inactive\",\n    \"message\": \"Workspace is inactive\"\n  }\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+              "createdAt": "2026-10-21T19:50:32.000Z",
+              "updatedAt": "2026-10-21T19:50:32.000Z",
+              "uid": "35240-8e383739-aef7-43f4-86a5-a78c1a86e109"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "4436f400-3556-46b8-aaf3-11efae8ef79b",
-          "name": "List workspace members",
-          "request": {
-            "name": "List workspace members",
-            "description": {
-              "content": "Returns a paginated list of workspace members with basic user info.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "workspace",
-                "members"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "page",
-                  "value": "1",
-                  "description": "Page number (1-indexed)"
-                },
-                {
-                  "disabled": false,
-                  "key": "page_size",
-                  "value": "50",
-                  "description": "Number of results per page (max 100)"
-                },
-                {
-                  "disabled": false,
-                  "key": "group_ids",
-                  "value": "<string>",
-                  "description": "Comma-separated workspace group IDs to filter by"
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "718abc9f-90a8-4287-9a9a-b15a6e1aad3a",
-              "name": "List of workspace members",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "workspace",
-                    "members"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
-                    },
-                    {
-                      "key": "group_ids",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"data\": [\n    {\n      \"id\": \"m1n2o3p4q5r6\",\n      \"user\": {\n        \"id\": \"u7v8w9x0y1z2\",\n        \"email\": \"jane@acme.com\",\n        \"first_name\": \"Jane\",\n        \"last_name\": \"Smith\"\n      },\n      \"role\": \"admin\",\n      \"created_at\": \"2024-01-15T10:30:00Z\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 50,\n    \"total_count\": 25,\n    \"total_pages\": 1\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "605bba6d-5361-454b-abc9-03216e3509fe",
-              "name": "Invalid request parameters",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "workspace",
-                    "members"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
-                    },
-                    {
-                      "key": "group_ids",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request\",\n    \"code\": \"invalid_pagination\",\n    \"message\": \"Invalid pagination parameters\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "174d9def-3c3f-4f0c-9d0d-d031a1415850",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "workspace",
-                    "members"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
-                    },
-                    {
-                      "key": "group_ids",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "4bdc079a-ae36-48fd-83da-af48f4777643",
-          "name": "List workspace groups",
-          "request": {
-            "name": "List workspace groups",
-            "description": {
-              "content": "Returns a paginated list of groups in the workspace.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "workspace",
-                "groups"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "page",
-                  "value": "1",
-                  "description": "Page number (1-indexed)"
-                },
-                {
-                  "disabled": false,
-                  "key": "page_size",
-                  "value": "50",
-                  "description": "Number of results per page (max 100)"
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "2021e849-74b9-4601-ad6f-a206a5ca0b2f",
-              "name": "List of workspace groups",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "workspace",
-                    "groups"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"data\": [\n    {\n      \"id\": \"g1h2i3j4k5l6\",\n      \"name\": \"Sales Team\",\n      \"created_at\": \"2024-02-01T09:00:00Z\"\n    },\n    {\n      \"id\": \"g7h8i9j0k1l2\",\n      \"name\": \"Customer Success\",\n      \"created_at\": \"2024-02-15T14:30:00Z\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 50,\n    \"total_count\": 2,\n    \"total_pages\": 1\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "3ba12486-7dd1-4335-9f3e-7ae5cac40481",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "workspace",
-                    "groups"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "createdAt": "2026-10-21T19:50:32.000Z",
+          "updatedAt": "2026-10-21T19:50:32.000Z",
+          "uid": "35240-de248d4e-c12d-4a80-92dc-0552f792edec"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "type": "string",
-      "value": "https://api.exec.com/rest/v1",
-      "key": "baseUrl"
+      "id": "21783988-8fac-453f-81df-d4c304e31278",
+      "createdAt": "2026-10-21T19:50:32.000Z",
+      "updatedAt": "2026-10-21T19:50:32.000Z",
+      "uid": "35240-21783988-8fac-453f-81df-d4c304e31278"
     }
   ],
   "auth": {
@@ -570,17 +583,15 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "50921186-2a57-4a8b-9dbb-26e374a25399",
-    "name": "Exec Collections Workspace API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "REST API for programmatic access to your Exec workspace.\n\nUse the Exec API to read workspace data, list members, retrieve group information,\nand create interactive scenario creation sessions.\n\n## Authentication\nAll requests require a valid API key passed in the Authorization header:\n```\nAuthorization: Bearer exec_live_...\n```\n\nCreate API keys in your workspace settings under **Settings > API**.\n",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.exec.com/rest/v1"
     }
-  }
+  ]
 }

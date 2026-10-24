@@ -1,1862 +1,1894 @@
 {
+  "info": {
+    "_postman_id": "8ce00d27-3083-40ff-b6ce-c2de78624243",
+    "name": "Exec Knowledge Hub - Pages API",
+    "description": "REST API for programmatic access to your Exec workspace.\n\nUse the Exec API to read workspace data, list members, retrieve group information,\nand create interactive scenario creation sessions.\n\n## Authentication\nAll requests require a valid API key passed in the Authorization header:\n```\nAuthorization: Bearer exec_live_...\n```\n\nCreate API keys in your workspace settings under **Settings > API**.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:49:51.000Z",
+    "updatedAt": "2026-10-21T19:49:51.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-8ce00d27-3083-40ff-b6ce-c2de78624243"
+  },
   "item": [
     {
-      "id": "273f9243-8273-4cde-9f11-4253ebfa95bc",
-      "name": "Knowledge Hub - Pages",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": "knowledge-hub",
       "item": [
         {
-          "id": "23a44923-0f97-4be1-843f-e049bbc33f8c",
-          "name": "List pages",
-          "request": {
-            "name": "List pages",
-            "description": {
-              "content": "Returns a paginated list of Knowledge Hub pages. List rows are metadata\nonly — the page body is omitted. Fetch a single page to get its content.\n\nFilter by folder, status, owner, skill, free-text query, or update-date\nrange. Results are sorted by `updated_at` (newest first) by default.\n\nAPI keys are workspace-scoped and admin-created, so the response includes\nevery non-archived page in the workspace — including private and draft\npages — regardless of visibility.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "knowledge-hub",
-                "pages"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
+          "name": "pages",
+          "item": [
+            {
+              "name": "{page_id}",
+              "item": [
                 {
-                  "disabled": false,
-                  "key": "folder_id",
-                  "value": "<string>",
-                  "description": "Filter by folder UUID"
+                  "name": "versions",
+                  "item": [
+                    {
+                      "name": "List page versions",
+                      "id": "1923bafa-e0ef-41b7-89f2-bec4b72a4852",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id/versions?page=1&page_size=50",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "pages",
+                            ":page_id",
+                            "versions"
+                          ],
+                          "query": [
+                            {
+                              "description": "Pagination page number (1-indexed) \u2014 which page of results to return, not a Knowledge Hub page.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "Number of results per page (max 100)",
+                              "key": "page_size",
+                              "value": "50"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "53fdd052-f608-4140-ab92-661726d8041d",
+                              "key": "page_id",
+                              "value": "<string>",
+                              "description": "(Required) The page's unique identifier (UUID)"
+                            }
+                          ]
+                        },
+                        "description": "Returns the version history for a page, newest first."
+                      },
+                      "response": [
+                        {
+                          "id": "7bf4687c-247d-4571-8ddd-0326e3fb5151",
+                          "name": "Paginated version history",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id/versions?page=1&page_size=50",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "knowledge-hub",
+                                "pages",
+                                ":page_id",
+                                "versions"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Pagination page number (1-indexed) \u2014 which page of results to return, not a Knowledge Hub page.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "Number of results per page (max 100)",
+                                  "key": "page_size",
+                                  "value": "50"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "page_id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"data\": [\n    {\n      \"version\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"change_type\": \"ai_generation\",\n      \"created_by\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\"\n    },\n    {\n      \"version\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"change_type\": \"manual_edit\",\n      \"created_by\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": \"<integer>\",\n    \"page_size\": \"<integer>\",\n    \"total_count\": \"<integer>\",\n    \"total_pages\": \"<integer>\"\n  }\n}",
+                          "createdAt": "2026-10-21T19:49:51.000Z",
+                          "updatedAt": "2026-10-21T19:49:51.000Z",
+                          "uid": "35240-7bf4687c-247d-4571-8ddd-0326e3fb5151"
+                        },
+                        {
+                          "id": "0befc446-2382-460c-acf8-ef77e1df8e5b",
+                          "name": "Missing or invalid API key",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id/versions?page=1&page_size=50",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "knowledge-hub",
+                                "pages",
+                                ":page_id",
+                                "versions"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Pagination page number (1-indexed) \u2014 which page of results to return, not a Knowledge Hub page.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "Number of results per page (max 100)",
+                                  "key": "page_size",
+                                  "value": "50"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "page_id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-10-21T19:49:51.000Z",
+                          "updatedAt": "2026-10-21T19:49:51.000Z",
+                          "uid": "35240-0befc446-2382-460c-acf8-ef77e1df8e5b"
+                        },
+                        {
+                          "id": "adfb3b30-5dcd-4ed6-9b08-6b5d73ae58fd",
+                          "name": "Resource not found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id/versions?page=1&page_size=50",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "knowledge-hub",
+                                "pages",
+                                ":page_id",
+                                "versions"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Pagination page number (1-indexed) \u2014 which page of results to return, not a Knowledge Hub page.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "Number of results per page (max 100)",
+                                  "key": "page_size",
+                                  "value": "50"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "page_id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-10-21T19:49:51.000Z",
+                          "updatedAt": "2026-10-21T19:49:51.000Z",
+                          "uid": "35240-adfb3b30-5dcd-4ed6-9b08-6b5d73ae58fd"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T19:49:51.000Z",
+                      "updatedAt": "2026-10-21T19:49:51.000Z",
+                      "uid": "35240-1923bafa-e0ef-41b7-89f2-bec4b72a4852"
+                    }
+                  ],
+                  "id": "11121b27-893b-43b6-bb71-0f52baf3ba91",
+                  "createdAt": "2026-10-21T19:49:51.000Z",
+                  "updatedAt": "2026-10-21T19:49:51.000Z",
+                  "uid": "35240-11121b27-893b-43b6-bb71-0f52baf3ba91"
                 },
                 {
-                  "disabled": false,
-                  "key": "status",
-                  "value": "<string>",
-                  "description": "Filter by page status"
+                  "name": "Get page",
+                  "id": "5131fc27-86c4-4b6d-9569-74b477aa5b00",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id?include=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "knowledge-hub",
+                        "pages",
+                        ":page_id"
+                      ],
+                      "query": [
+                        {
+                          "description": "Comma-separated list of optional sections to include.\nAvailable values: `draft` (the current draft title and body).\n",
+                          "key": "include",
+                          "value": "<string>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "55d529f5-f379-4806-ba09-4b8c9420060c",
+                          "key": "page_id",
+                          "value": "<string>",
+                          "description": "(Required) The page's unique identifier (UUID)"
+                        }
+                      ]
+                    },
+                    "description": "Returns a single page with its published markdown body, attached sources,\nskills, and version info.\n\nUse `?include=draft` to also return the current draft body\n(`draft.title` and `draft.content`)."
+                  },
+                  "response": [
+                    {
+                      "id": "b9cde951-1364-4926-8f2d-ed7956f6e606",
+                      "name": "Page detail",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id?include=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "pages",
+                            ":page_id"
+                          ],
+                          "query": [
+                            {
+                              "description": "Comma-separated list of optional sections to include.\nAvailable values: `draft` (the current draft title and body).\n",
+                              "key": "include",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "page_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"draft\",\n  \"visibility\": \"workspace\",\n  \"owner\": {\n    \"id\": \"<string>\",\n    \"email\": \"<email>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\"\n  },\n  \"folders\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"emoji\": \"<string,null>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"emoji\": \"<string,null>\"\n    }\n  ],\n  \"skills\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\"\n    }\n  ],\n  \"source_count\": \"<integer>\",\n  \"version\": \"<integer,null>\",\n  \"cover\": \"<string>\",\n  \"published_at\": \"<string,null-date-time>\",\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\",\n  \"content\": \"<string,null>\",\n  \"sources\": [\n    {\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"source_type\": \"google_drive\",\n      \"status\": \"processing\",\n      \"content_format\": \"markdown\",\n      \"token_count\": \"<integer,null>\",\n      \"has_images\": \"<boolean>\",\n      \"external_url\": \"<string,null>\",\n      \"summary\": \"<string,null>\",\n      \"cover\": \"<string>\",\n      \"folders\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        }\n      ],\n      \"created_by\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"processed_at\": \"<string,null-date-time>\",\n      \"content\": \"<string,null>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"source_type\": \"integration\",\n      \"status\": \"failed\",\n      \"content_format\": \"markdown\",\n      \"token_count\": \"<integer,null>\",\n      \"has_images\": \"<boolean>\",\n      \"external_url\": \"<string,null>\",\n      \"summary\": \"<string,null>\",\n      \"cover\": \"<string>\",\n      \"folders\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        }\n      ],\n      \"created_by\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"processed_at\": \"<string,null-date-time>\",\n      \"content\": \"<string,null>\"\n    }\n  ],\n  \"draft\": {\n    \"title\": \"<string>\",\n    \"content\": \"<string,null>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:49:51.000Z",
+                      "updatedAt": "2026-10-21T19:49:51.000Z",
+                      "uid": "35240-b9cde951-1364-4926-8f2d-ed7956f6e606"
+                    },
+                    {
+                      "id": "906f114b-5c76-4de4-b0d9-cf3898c16e26",
+                      "name": "Missing or invalid API key",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id?include=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "pages",
+                            ":page_id"
+                          ],
+                          "query": [
+                            {
+                              "description": "Comma-separated list of optional sections to include.\nAvailable values: `draft` (the current draft title and body).\n",
+                              "key": "include",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "page_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:49:51.000Z",
+                      "updatedAt": "2026-10-21T19:49:51.000Z",
+                      "uid": "35240-906f114b-5c76-4de4-b0d9-cf3898c16e26"
+                    },
+                    {
+                      "id": "257a06b2-64f1-4b17-83b1-19368b5bc76b",
+                      "name": "Resource not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id?include=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "pages",
+                            ":page_id"
+                          ],
+                          "query": [
+                            {
+                              "description": "Comma-separated list of optional sections to include.\nAvailable values: `draft` (the current draft title and body).\n",
+                              "key": "include",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "page_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:49:51.000Z",
+                      "updatedAt": "2026-10-21T19:49:51.000Z",
+                      "uid": "35240-257a06b2-64f1-4b17-83b1-19368b5bc76b"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:49:51.000Z",
+                  "updatedAt": "2026-10-21T19:49:51.000Z",
+                  "uid": "35240-5131fc27-86c4-4b6d-9569-74b477aa5b00"
                 },
                 {
-                  "disabled": false,
-                  "key": "owner_id",
-                  "value": "<string>",
-                  "description": "Filter by the page owner's user UUID"
+                  "name": "Update page",
+                  "id": "e9c8a526-884b-49c9-8412-edeb4321ebd4",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"published\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "knowledge-hub",
+                        "pages",
+                        ":page_id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "28a14906-02d7-4e41-a08c-4a334cf293aa",
+                          "key": "page_id",
+                          "value": "<string>",
+                          "description": "(Required) The page's unique identifier (UUID)"
+                        }
+                      ]
+                    },
+                    "description": "Updates a page. Only the fields you provide are changed; omitted fields\nare left untouched. Editing `content` creates a new draft; set `status`\nto `published` to publish the new version.\n\n`PUT` is also accepted and behaves the same way."
+                  },
+                  "response": [
+                    {
+                      "id": "c07eb1b1-3631-4ecb-bc0d-63e18fb16c36",
+                      "name": "Updated page",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"published\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "pages",
+                            ":page_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "page_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"draft\",\n  \"visibility\": \"workspace\",\n  \"owner\": {\n    \"id\": \"<string>\",\n    \"email\": \"<email>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\"\n  },\n  \"folders\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"emoji\": \"<string,null>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"emoji\": \"<string,null>\"\n    }\n  ],\n  \"skills\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\"\n    }\n  ],\n  \"source_count\": \"<integer>\",\n  \"version\": \"<integer,null>\",\n  \"cover\": \"<string>\",\n  \"published_at\": \"<string,null-date-time>\",\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\",\n  \"content\": \"<string,null>\",\n  \"sources\": [\n    {\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"source_type\": \"google_drive\",\n      \"status\": \"processing\",\n      \"content_format\": \"markdown\",\n      \"token_count\": \"<integer,null>\",\n      \"has_images\": \"<boolean>\",\n      \"external_url\": \"<string,null>\",\n      \"summary\": \"<string,null>\",\n      \"cover\": \"<string>\",\n      \"folders\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        }\n      ],\n      \"created_by\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"processed_at\": \"<string,null-date-time>\",\n      \"content\": \"<string,null>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"source_type\": \"integration\",\n      \"status\": \"failed\",\n      \"content_format\": \"markdown\",\n      \"token_count\": \"<integer,null>\",\n      \"has_images\": \"<boolean>\",\n      \"external_url\": \"<string,null>\",\n      \"summary\": \"<string,null>\",\n      \"cover\": \"<string>\",\n      \"folders\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        }\n      ],\n      \"created_by\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"processed_at\": \"<string,null-date-time>\",\n      \"content\": \"<string,null>\"\n    }\n  ],\n  \"draft\": {\n    \"title\": \"<string>\",\n    \"content\": \"<string,null>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:49:51.000Z",
+                      "updatedAt": "2026-10-21T19:49:51.000Z",
+                      "uid": "35240-c07eb1b1-3631-4ecb-bc0d-63e18fb16c36"
+                    },
+                    {
+                      "id": "9555ac14-b021-4855-9999-30cce38de3de",
+                      "name": "Invalid request parameters",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"published\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "pages",
+                            ":page_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "page_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:49:51.000Z",
+                      "updatedAt": "2026-10-21T19:49:51.000Z",
+                      "uid": "35240-9555ac14-b021-4855-9999-30cce38de3de"
+                    },
+                    {
+                      "id": "ad805d7d-c179-4a7d-bd29-0232064eae82",
+                      "name": "Missing or invalid API key",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"published\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "pages",
+                            ":page_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "page_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:49:51.000Z",
+                      "updatedAt": "2026-10-21T19:49:51.000Z",
+                      "uid": "35240-ad805d7d-c179-4a7d-bd29-0232064eae82"
+                    },
+                    {
+                      "id": "6e9db379-7240-4114-ad7e-02d736fc87c0",
+                      "name": "Resource not found",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"published\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "pages",
+                            ":page_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "page_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:49:51.000Z",
+                      "updatedAt": "2026-10-21T19:49:51.000Z",
+                      "uid": "35240-6e9db379-7240-4114-ad7e-02d736fc87c0"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:49:51.000Z",
+                  "updatedAt": "2026-10-21T19:49:51.000Z",
+                  "uid": "35240-e9c8a526-884b-49c9-8412-edeb4321ebd4"
                 },
                 {
-                  "disabled": false,
-                  "key": "skill_id",
-                  "value": "<string>",
-                  "description": "Filter by an associated skill UUID"
+                  "name": "Update page (PUT)",
+                  "id": "b92a17a4-2a4e-43b4-9088-79b67243c309",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"published\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "knowledge-hub",
+                        "pages",
+                        ":page_id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "00ae5fa9-2b51-40d2-a248-c03df02ed7c0",
+                          "key": "page_id",
+                          "value": "<string>",
+                          "description": "(Required) The page's unique identifier (UUID)"
+                        }
+                      ]
+                    },
+                    "description": "Alias of `PATCH /knowledge-hub/pages/{page_id}`; see that operation."
+                  },
+                  "response": [
+                    {
+                      "id": "94325dae-afab-4a1c-8ddf-90fb0127a6fb",
+                      "name": "Updated page",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"published\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "pages",
+                            ":page_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "page_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"draft\",\n  \"visibility\": \"workspace\",\n  \"owner\": {\n    \"id\": \"<string>\",\n    \"email\": \"<email>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\"\n  },\n  \"folders\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"emoji\": \"<string,null>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"emoji\": \"<string,null>\"\n    }\n  ],\n  \"skills\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\"\n    }\n  ],\n  \"source_count\": \"<integer>\",\n  \"version\": \"<integer,null>\",\n  \"cover\": \"<string>\",\n  \"published_at\": \"<string,null-date-time>\",\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\",\n  \"content\": \"<string,null>\",\n  \"sources\": [\n    {\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"source_type\": \"google_drive\",\n      \"status\": \"processing\",\n      \"content_format\": \"markdown\",\n      \"token_count\": \"<integer,null>\",\n      \"has_images\": \"<boolean>\",\n      \"external_url\": \"<string,null>\",\n      \"summary\": \"<string,null>\",\n      \"cover\": \"<string>\",\n      \"folders\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        }\n      ],\n      \"created_by\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"processed_at\": \"<string,null-date-time>\",\n      \"content\": \"<string,null>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"source_type\": \"integration\",\n      \"status\": \"failed\",\n      \"content_format\": \"markdown\",\n      \"token_count\": \"<integer,null>\",\n      \"has_images\": \"<boolean>\",\n      \"external_url\": \"<string,null>\",\n      \"summary\": \"<string,null>\",\n      \"cover\": \"<string>\",\n      \"folders\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        }\n      ],\n      \"created_by\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"processed_at\": \"<string,null-date-time>\",\n      \"content\": \"<string,null>\"\n    }\n  ],\n  \"draft\": {\n    \"title\": \"<string>\",\n    \"content\": \"<string,null>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:49:51.000Z",
+                      "updatedAt": "2026-10-21T19:49:51.000Z",
+                      "uid": "35240-94325dae-afab-4a1c-8ddf-90fb0127a6fb"
+                    },
+                    {
+                      "id": "8e406e07-7dff-428b-86c8-49d6ddabf1d5",
+                      "name": "Invalid request parameters",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"published\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "pages",
+                            ":page_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "page_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:49:51.000Z",
+                      "updatedAt": "2026-10-21T19:49:51.000Z",
+                      "uid": "35240-8e406e07-7dff-428b-86c8-49d6ddabf1d5"
+                    },
+                    {
+                      "id": "6bd0182f-d8e4-4382-a91b-500ed433e973",
+                      "name": "Missing or invalid API key",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"published\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "pages",
+                            ":page_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "page_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:49:51.000Z",
+                      "updatedAt": "2026-10-21T19:49:51.000Z",
+                      "uid": "35240-6bd0182f-d8e4-4382-a91b-500ed433e973"
+                    },
+                    {
+                      "id": "812b0267-1113-4378-964d-730853f04294",
+                      "name": "Resource not found",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"published\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "pages",
+                            ":page_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "page_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:49:51.000Z",
+                      "updatedAt": "2026-10-21T19:49:51.000Z",
+                      "uid": "35240-812b0267-1113-4378-964d-730853f04294"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:49:51.000Z",
+                  "updatedAt": "2026-10-21T19:49:51.000Z",
+                  "uid": "35240-b92a17a4-2a4e-43b4-9088-79b67243c309"
                 },
                 {
-                  "disabled": false,
-                  "key": "query",
-                  "value": "<string>",
-                  "description": "Case-insensitive search over page titles"
-                },
-                {
-                  "disabled": false,
-                  "key": "updated_after",
-                  "value": "<dateTime>",
-                  "description": "Only include pages updated on or after this date (ISO 8601)"
-                },
-                {
-                  "disabled": false,
-                  "key": "updated_before",
-                  "value": "<dateTime>",
-                  "description": "Only include pages updated on or before this date (ISO 8601)"
-                },
-                {
-                  "disabled": false,
-                  "key": "sort",
-                  "value": "updated_at",
-                  "description": "Sort field. `updated_at` and `created_at` are newest-first; `title`\nis A–Z.\n"
-                },
-                {
-                  "disabled": false,
-                  "key": "page",
-                  "value": "1",
-                  "description": "Pagination page number (1-indexed) — which page of results to return, not a Knowledge Hub page."
-                },
-                {
-                  "disabled": false,
-                  "key": "page_size",
-                  "value": "50",
-                  "description": "Number of results per page (max 100)"
+                  "name": "Archive page",
+                  "id": "e45d7460-1563-4fe2-9588-086e486848ae",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "knowledge-hub",
+                        "pages",
+                        ":page_id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "2123e456-dcac-4387-815f-bce564bdeff5",
+                          "key": "page_id",
+                          "value": "<string>",
+                          "description": "(Required) The page's unique identifier (UUID)"
+                        }
+                      ]
+                    },
+                    "description": "Archives (soft-deletes) a page. The page is hidden from lists but its history is preserved."
+                  },
+                  "response": [
+                    {
+                      "id": "7a47af5e-052f-4204-b0b0-b2954a3da135",
+                      "name": "Page archived",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "pages",
+                            ":page_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "page_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"deleted\": \"<boolean>\"\n}",
+                      "createdAt": "2026-10-21T19:49:51.000Z",
+                      "updatedAt": "2026-10-21T19:49:51.000Z",
+                      "uid": "35240-7a47af5e-052f-4204-b0b0-b2954a3da135"
+                    },
+                    {
+                      "id": "24dc8bdb-3bc1-4e57-a640-35e2df90c3b7",
+                      "name": "Missing or invalid API key",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "pages",
+                            ":page_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "page_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:49:51.000Z",
+                      "updatedAt": "2026-10-21T19:49:51.000Z",
+                      "uid": "35240-24dc8bdb-3bc1-4e57-a640-35e2df90c3b7"
+                    },
+                    {
+                      "id": "162d5ddf-04bf-4823-8324-45430210501c",
+                      "name": "Resource not found",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/pages/:page_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "pages",
+                            ":page_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "page_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:49:51.000Z",
+                      "updatedAt": "2026-10-21T19:49:51.000Z",
+                      "uid": "35240-162d5ddf-04bf-4823-8324-45430210501c"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:49:51.000Z",
+                  "updatedAt": "2026-10-21T19:49:51.000Z",
+                  "uid": "35240-e45d7460-1563-4fe2-9588-086e486848ae"
                 }
               ],
-              "variable": []
+              "id": "3b7122dd-87c4-4010-a782-4e70feec2602",
+              "createdAt": "2026-10-21T19:49:51.000Z",
+              "updatedAt": "2026-10-21T19:49:51.000Z",
+              "uid": "35240-3b7122dd-87c4-4010-a782-4e70feec2602"
             },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
             {
-              "id": "8a387ec1-c7f4-4798-a9dd-ca5208b7ba83",
-              "name": "Paginated list of pages (metadata only)",
-              "originalRequest": {
+              "name": "List pages",
+              "id": "342d05b7-4098-4cb2-aad9-9099eab8c357",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
                 "url": {
+                  "raw": "{{baseUrl}}/knowledge-hub/pages?folder_id=<string>&status=draft&owner_id=<string>&skill_id=<string>&query=<string>&updated_after=<dateTime>&updated_before=<dateTime>&sort=updated_at&page=1&page_size=50",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
                   "path": [
                     "knowledge-hub",
                     "pages"
                   ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
                   "query": [
                     {
+                      "description": "Filter by folder UUID",
                       "key": "folder_id",
                       "value": "<string>"
                     },
                     {
+                      "description": "Filter by page status",
                       "key": "status",
-                      "value": "<string>"
+                      "value": "draft"
                     },
                     {
+                      "description": "Filter by the page owner's user UUID",
                       "key": "owner_id",
                       "value": "<string>"
                     },
                     {
+                      "description": "Filter by an associated skill UUID",
                       "key": "skill_id",
                       "value": "<string>"
                     },
                     {
+                      "description": "Case-insensitive search over page titles",
                       "key": "query",
                       "value": "<string>"
                     },
                     {
+                      "description": "Only include pages updated on or after this date (ISO 8601)",
                       "key": "updated_after",
                       "value": "<dateTime>"
                     },
                     {
+                      "description": "Only include pages updated on or before this date (ISO 8601)",
                       "key": "updated_before",
                       "value": "<dateTime>"
                     },
                     {
+                      "description": "Sort field. `updated_at` and `created_at` are newest-first; `title`\nis A\u2013Z.\n",
                       "key": "sort",
                       "value": "updated_at"
                     },
                     {
+                      "description": "Pagination page number (1-indexed) \u2014 which page of results to return, not a Knowledge Hub page.",
                       "key": "page",
                       "value": "1"
                     },
                     {
+                      "description": "Number of results per page (max 100)",
                       "key": "page_size",
                       "value": "50"
                     }
-                  ],
-                  "variable": []
+                  ]
                 },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                "description": "Returns a paginated list of Knowledge Hub pages. List rows are metadata\nonly \u2014 the page body is omitted. Fetch a single page to get its content.\n\nFilter by folder, status, owner, skill, free-text query, or update-date\nrange. Results are sorted by `updated_at` (newest first) by default.\n\nAPI keys are workspace-scoped and admin-created, so the response includes\nevery non-archived page in the workspace \u2014 including private and draft\npages \u2014 regardless of visibility."
               },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "response": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"data\": [\n    {\n      \"id\": \"p1a2b3c4d5e6\",\n      \"title\": \"Pricing objection guide\",\n      \"status\": \"published\",\n      \"visibility\": \"workspace\",\n      \"owner\": {\n        \"id\": \"u1a2b3c4d5e6\",\n        \"email\": \"jane@acme.com\",\n        \"first_name\": \"Jane\",\n        \"last_name\": \"Smith\"\n      },\n      \"folders\": [\n        {\n          \"id\": \"f1a2b3c4d5e6\",\n          \"name\": \"Sales\",\n          \"emoji\": \"💼\"\n        }\n      ],\n      \"skills\": [\n        {\n          \"id\": \"sk1a2b3c4d5e\",\n          \"name\": \"Objection handling\"\n        }\n      ],\n      \"source_count\": 3,\n      \"version\": 4,\n      \"cover\": \"\",\n      \"published_at\": \"2026-06-01T12:00:00Z\",\n      \"created_at\": \"2026-05-01T09:00:00Z\",\n      \"updated_at\": \"2026-06-10T15:30:00Z\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 50,\n    \"total_count\": 123,\n    \"total_pages\": 3\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "059b5a52-96bc-4194-8f7f-e8516e30dcc3",
-              "name": "Invalid request parameters",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+                  "id": "3fe885dd-dad5-4584-8f9f-8d14f01805e2",
+                  "name": "Paginated list of pages (metadata only)",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/knowledge-hub/pages?folder_id=<string>&status=draft&owner_id=<string>&skill_id=<string>&query=<string>&updated_after=<dateTime>&updated_before=<dateTime>&sort=updated_at&page=1&page_size=50",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "knowledge-hub",
+                        "pages"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by folder UUID",
+                          "key": "folder_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by page status",
+                          "key": "status",
+                          "value": "draft"
+                        },
+                        {
+                          "description": "Filter by the page owner's user UUID",
+                          "key": "owner_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by an associated skill UUID",
+                          "key": "skill_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Case-insensitive search over page titles",
+                          "key": "query",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Only include pages updated on or after this date (ISO 8601)",
+                          "key": "updated_after",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Only include pages updated on or before this date (ISO 8601)",
+                          "key": "updated_before",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Sort field. `updated_at` and `created_at` are newest-first; `title`\nis A\u2013Z.\n",
+                          "key": "sort",
+                          "value": "updated_at"
+                        },
+                        {
+                          "description": "Pagination page number (1-indexed) \u2014 which page of results to return, not a Knowledge Hub page.",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Number of results per page (max 100)",
+                          "key": "page_size",
+                          "value": "50"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
                     {
-                      "key": "folder_id",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "status",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "owner_id",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "skill_id",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "query",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "updated_after",
-                      "value": "<dateTime>"
-                    },
-                    {
-                      "key": "updated_before",
-                      "value": "<dateTime>"
-                    },
-                    {
-                      "key": "sort",
-                      "value": "updated_at"
-                    },
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
+                      "key": "Content-Type",
+                      "value": "application/json"
                     }
                   ],
-                  "variable": []
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"status\": \"archived\",\n      \"visibility\": \"private\",\n      \"owner\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"folders\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        }\n      ],\n      \"skills\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\"\n        }\n      ],\n      \"source_count\": \"<integer>\",\n      \"version\": \"<integer,null>\",\n      \"cover\": \"<string>\",\n      \"published_at\": \"<string,null-date-time>\",\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"status\": \"archived\",\n      \"visibility\": \"workspace\",\n      \"owner\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"folders\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        }\n      ],\n      \"skills\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\"\n        }\n      ],\n      \"source_count\": \"<integer>\",\n      \"version\": \"<integer,null>\",\n      \"cover\": \"<string>\",\n      \"published_at\": \"<string,null-date-time>\",\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": \"<integer>\",\n    \"page_size\": \"<integer>\",\n    \"total_count\": \"<integer>\",\n    \"total_pages\": \"<integer>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:49:51.000Z",
+                  "updatedAt": "2026-10-21T19:49:51.000Z",
+                  "uid": "35240-3fe885dd-dad5-4584-8f9f-8d14f01805e2"
                 },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request\",\n    \"code\": \"invalid_pagination\",\n    \"message\": \"Invalid pagination parameters\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "463260a4-431b-4c46-bf52-3ff5ab4d9c83",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+                  "id": "b852ca5a-3fd9-4579-80ad-514506f6bce7",
+                  "name": "Invalid request parameters",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/knowledge-hub/pages?folder_id=<string>&status=draft&owner_id=<string>&skill_id=<string>&query=<string>&updated_after=<dateTime>&updated_before=<dateTime>&sort=updated_at&page=1&page_size=50",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "knowledge-hub",
+                        "pages"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by folder UUID",
+                          "key": "folder_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by page status",
+                          "key": "status",
+                          "value": "draft"
+                        },
+                        {
+                          "description": "Filter by the page owner's user UUID",
+                          "key": "owner_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by an associated skill UUID",
+                          "key": "skill_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Case-insensitive search over page titles",
+                          "key": "query",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Only include pages updated on or after this date (ISO 8601)",
+                          "key": "updated_after",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Only include pages updated on or before this date (ISO 8601)",
+                          "key": "updated_before",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Sort field. `updated_at` and `created_at` are newest-first; `title`\nis A\u2013Z.\n",
+                          "key": "sort",
+                          "value": "updated_at"
+                        },
+                        {
+                          "description": "Pagination page number (1-indexed) \u2014 which page of results to return, not a Knowledge Hub page.",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Number of results per page (max 100)",
+                          "key": "page_size",
+                          "value": "50"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
                     {
-                      "key": "folder_id",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "status",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "owner_id",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "skill_id",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "query",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "updated_after",
-                      "value": "<dateTime>"
-                    },
-                    {
-                      "key": "updated_before",
-                      "value": "<dateTime>"
-                    },
-                    {
-                      "key": "sort",
-                      "value": "updated_at"
-                    },
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
+                      "key": "Content-Type",
+                      "value": "application/json"
                     }
                   ],
-                  "variable": []
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:49:51.000Z",
+                  "updatedAt": "2026-10-21T19:49:51.000Z",
+                  "uid": "35240-b852ca5a-3fd9-4579-80ad-514506f6bce7"
                 },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "de6991e8-6354-4a3d-b73c-b4520059899d",
-          "name": "Create page",
-          "request": {
-            "name": "Create page",
-            "description": {
-              "content": "Creates a Knowledge Hub page. New pages go through the draft → publish\nversion flow: set `status` to `published` to publish immediately, or\n`draft` (the default) to save without publishing.\n\nReturns the created page with its body (`201`).\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "knowledge-hub",
-                "pages"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"draft\",\n  \"visibility\": \"workspace\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "bd22a0f8-2c23-45ec-a66b-7765e2194f44",
-              "name": "Page created",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
+                  "id": "90c5ead5-4c84-4159-a2fc-ce51e9e4bafe",
+                  "name": "Missing or invalid API key",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/knowledge-hub/pages?folder_id=<string>&status=draft&owner_id=<string>&skill_id=<string>&query=<string>&updated_after=<dateTime>&updated_before=<dateTime>&sort=updated_at&page=1&page_size=50",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "knowledge-hub",
+                        "pages"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by folder UUID",
+                          "key": "folder_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by page status",
+                          "key": "status",
+                          "value": "draft"
+                        },
+                        {
+                          "description": "Filter by the page owner's user UUID",
+                          "key": "owner_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by an associated skill UUID",
+                          "key": "skill_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Case-insensitive search over page titles",
+                          "key": "query",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Only include pages updated on or after this date (ISO 8601)",
+                          "key": "updated_after",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Only include pages updated on or before this date (ISO 8601)",
+                          "key": "updated_before",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Sort field. `updated_at` and `created_at` are newest-first; `title`\nis A\u2013Z.\n",
+                          "key": "sort",
+                          "value": "updated_at"
+                        },
+                        {
+                          "description": "Pagination page number (1-indexed) \u2014 which page of results to return, not a Knowledge Hub page.",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Number of results per page (max 100)",
+                          "key": "page_size",
+                          "value": "50"
+                        }
+                      ]
+                    }
                   },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:49:51.000Z",
+                  "updatedAt": "2026-10-21T19:49:51.000Z",
+                  "uid": "35240-90c5ead5-4c84-4159-a2fc-ce51e9e4bafe"
+                }
+              ],
+              "createdAt": "2026-10-21T19:49:51.000Z",
+              "updatedAt": "2026-10-21T19:49:51.000Z",
+              "uid": "35240-342d05b7-4098-4cb2-aad9-9099eab8c357"
+            },
+            {
+              "name": "Create page",
+              "id": "b86f19cd-7bbc-4306-8346-447a95fc6010",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
                 "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"title\": \"Pricing objection guide\",\n  \"content\": \"## Handling pricing objections\\n\\nLead with value before discussing discounts…\",\n  \"status\": \"published\",\n  \"visibility\": \"workspace\",\n  \"folder_ids\": [\n    \"f1a2b3c4d5e6\"\n  ],\n  \"source_ids\": [\n    \"s1a2b3c4d5e6\"\n  ],\n  \"skill_ids\": [\n    \"sk1a2b3c4d5e\"\n  ]\n}",
+                  "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"draft\",\n  \"visibility\": \"workspace\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
-                }
-              },
-              "status": "Created",
-              "code": 201,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"string\",\n  \"title\": \"string\",\n  \"status\": \"archived\",\n  \"visibility\": \"private\",\n  \"owner\": {\n    \"id\": \"string\",\n    \"email\": \"GIJuxZJtQ-NL0@WvpRZB.bdko\",\n    \"first_name\": \"string\",\n    \"last_name\": \"string\"\n  },\n  \"folders\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"emoji\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"emoji\": \"string\"\n    }\n  ],\n  \"skills\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"source_count\": 8052,\n  \"version\": 4758,\n  \"cover\": \"string\",\n  \"published_at\": \"1948-07-29T03:41:55.446Z\",\n  \"created_at\": \"1953-11-29T18:44:46.167Z\",\n  \"updated_at\": \"2000-09-06T13:21:00.750Z\",\n  \"content\": \"string\",\n  \"sources\": [\n    {\n      \"id\": \"string\",\n      \"title\": \"string\",\n      \"source_type\": \"url\",\n      \"status\": \"failed\",\n      \"content_format\": \"markdown\",\n      \"token_count\": 4858,\n      \"has_images\": true,\n      \"external_url\": \"string\",\n      \"summary\": \"string\",\n      \"cover\": \"string\",\n      \"folders\": [\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"emoji\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"emoji\": \"string\"\n        }\n      ],\n      \"created_by\": {\n        \"id\": \"string\",\n        \"email\": \"dNcZl@yGSGMmIAQkDIiCgleZVmuerpcXvjEY.cdkt\",\n        \"first_name\": \"string\",\n        \"last_name\": \"string\"\n      },\n      \"created_at\": \"2022-05-09T15:56:31.005Z\",\n      \"updated_at\": \"1988-03-22T07:33:06.184Z\",\n      \"processed_at\": \"2019-04-11T12:22:28.573Z\",\n      \"content\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"title\": \"string\",\n      \"source_type\": \"url\",\n      \"status\": \"ready\",\n      \"content_format\": \"plain_text\",\n      \"token_count\": 5178,\n      \"has_images\": true,\n      \"external_url\": \"string\",\n      \"summary\": \"string\",\n      \"cover\": \"string\",\n      \"folders\": [\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"emoji\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"emoji\": \"string\"\n        }\n      ],\n      \"created_by\": {\n        \"id\": \"string\",\n        \"email\": \"jF5PriYpwESk2@YMxVTUThqghkviwaYwJIfn.fxcz\",\n        \"first_name\": \"string\",\n        \"last_name\": \"string\"\n      },\n      \"created_at\": \"1986-06-30T09:44:20.900Z\",\n      \"updated_at\": \"2012-08-17T17:59:28.507Z\",\n      \"processed_at\": \"2000-06-25T17:23:48.909Z\",\n      \"content\": \"string\"\n    }\n  ],\n  \"draft\": {\n    \"title\": \"string\",\n    \"content\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "edf71314-afff-42fd-a976-87d097bae1d8",
-              "name": "Invalid request parameters",
-              "originalRequest": {
+                },
                 "url": {
+                  "raw": "{{baseUrl}}/knowledge-hub/pages",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
                   "path": [
                     "knowledge-hub",
                     "pages"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
+                  ]
                 },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"title\": \"Pricing objection guide\",\n  \"content\": \"## Handling pricing objections\\n\\nLead with value before discussing discounts…\",\n  \"status\": \"published\",\n  \"visibility\": \"workspace\",\n  \"folder_ids\": [\n    \"f1a2b3c4d5e6\"\n  ],\n  \"source_ids\": [\n    \"s1a2b3c4d5e6\"\n  ],\n  \"skill_ids\": [\n    \"sk1a2b3c4d5e\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
+                "description": "Creates a Knowledge Hub page. New pages go through the draft \u2192 publish\nversion flow: set `status` to `published` to publish immediately, or\n`draft` (the default) to save without publishing.\n\nReturns the created page with its body (`201`)."
               },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
+              "response": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "d518a96a-f40e-4801-949d-b5fbf0f14236",
+                  "name": "Page created",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"draft\",\n  \"visibility\": \"workspace\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/knowledge-hub/pages",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "knowledge-hub",
+                        "pages"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"draft\",\n  \"visibility\": \"workspace\",\n  \"owner\": {\n    \"id\": \"<string>\",\n    \"email\": \"<email>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\"\n  },\n  \"folders\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"emoji\": \"<string,null>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"emoji\": \"<string,null>\"\n    }\n  ],\n  \"skills\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\"\n    }\n  ],\n  \"source_count\": \"<integer>\",\n  \"version\": \"<integer,null>\",\n  \"cover\": \"<string>\",\n  \"published_at\": \"<string,null-date-time>\",\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\",\n  \"content\": \"<string,null>\",\n  \"sources\": [\n    {\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"source_type\": \"google_drive\",\n      \"status\": \"processing\",\n      \"content_format\": \"markdown\",\n      \"token_count\": \"<integer,null>\",\n      \"has_images\": \"<boolean>\",\n      \"external_url\": \"<string,null>\",\n      \"summary\": \"<string,null>\",\n      \"cover\": \"<string>\",\n      \"folders\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        }\n      ],\n      \"created_by\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"processed_at\": \"<string,null-date-time>\",\n      \"content\": \"<string,null>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"source_type\": \"integration\",\n      \"status\": \"failed\",\n      \"content_format\": \"markdown\",\n      \"token_count\": \"<integer,null>\",\n      \"has_images\": \"<boolean>\",\n      \"external_url\": \"<string,null>\",\n      \"summary\": \"<string,null>\",\n      \"cover\": \"<string>\",\n      \"folders\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"emoji\": \"<string,null>\"\n        }\n      ],\n      \"created_by\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"processed_at\": \"<string,null-date-time>\",\n      \"content\": \"<string,null>\"\n    }\n  ],\n  \"draft\": {\n    \"title\": \"<string>\",\n    \"content\": \"<string,null>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:49:51.000Z",
+                  "updatedAt": "2026-10-21T19:49:51.000Z",
+                  "uid": "35240-d518a96a-f40e-4801-949d-b5fbf0f14236"
+                },
+                {
+                  "id": "a55c8f41-fc4f-4157-84ad-36f7f9b98692",
+                  "name": "Invalid request parameters",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"draft\",\n  \"visibility\": \"workspace\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/knowledge-hub/pages",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "knowledge-hub",
+                        "pages"
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:49:51.000Z",
+                  "updatedAt": "2026-10-21T19:49:51.000Z",
+                  "uid": "35240-a55c8f41-fc4f-4157-84ad-36f7f9b98692"
+                },
+                {
+                  "id": "1d42a366-2836-47f2-8cb9-66ded81a3d37",
+                  "name": "Missing or invalid API key",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"draft\",\n  \"visibility\": \"workspace\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/knowledge-hub/pages",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "knowledge-hub",
+                        "pages"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:49:51.000Z",
+                  "updatedAt": "2026-10-21T19:49:51.000Z",
+                  "uid": "35240-1d42a366-2836-47f2-8cb9-66ded81a3d37"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request\",\n    \"code\": \"invalid_pagination\",\n    \"message\": \"Invalid pagination parameters\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "680fbe05-2efb-48bb-b9b0-396b5a416de8",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"title\": \"Pricing objection guide\",\n  \"content\": \"## Handling pricing objections\\n\\nLead with value before discussing discounts…\",\n  \"status\": \"published\",\n  \"visibility\": \"workspace\",\n  \"folder_ids\": [\n    \"f1a2b3c4d5e6\"\n  ],\n  \"source_ids\": [\n    \"s1a2b3c4d5e6\"\n  ],\n  \"skill_ids\": [\n    \"sk1a2b3c4d5e\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:49:51.000Z",
+              "updatedAt": "2026-10-21T19:49:51.000Z",
+              "uid": "35240-b86f19cd-7bbc-4306-8346-447a95fc6010"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "34e3c0ed-07f8-4bdc-8c50-aea0cc7f2e8b",
-          "name": "Get page",
-          "request": {
-            "name": "Get page",
-            "description": {
-              "content": "Returns a single page with its published markdown body, attached sources,\nskills, and version info.\n\nUse `?include=draft` to also return the current draft body\n(`draft.title` and `draft.content`).\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "knowledge-hub",
-                "pages",
-                ":page_id"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "include",
-                  "value": "<string>",
-                  "description": "Comma-separated list of optional sections to include.\nAvailable values: `draft` (the current draft title and body).\n"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "page_id",
-                  "description": "(Required) The page's unique identifier (UUID)"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "36cd312f-c5c0-4a0b-bf90-db06dec0e9d5",
-              "name": "Page detail",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "include",
-                      "value": "draft"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"p1a2b3c4d5e6\",\n  \"title\": \"Pricing objection guide\",\n  \"status\": \"published\",\n  \"visibility\": \"workspace\",\n  \"owner\": {\n    \"id\": \"u1a2b3c4d5e6\",\n    \"email\": \"jane@acme.com\",\n    \"first_name\": \"Jane\",\n    \"last_name\": \"Smith\"\n  },\n  \"folders\": [\n    {\n      \"id\": \"f1a2b3c4d5e6\",\n      \"name\": \"Sales\",\n      \"emoji\": \"💼\"\n    }\n  ],\n  \"skills\": [\n    {\n      \"id\": \"sk1a2b3c4d5e\",\n      \"name\": \"Objection handling\"\n    }\n  ],\n  \"source_count\": 1,\n  \"version\": 4,\n  \"cover\": \"\",\n  \"published_at\": \"2026-06-01T12:00:00Z\",\n  \"created_at\": \"2026-05-01T09:00:00Z\",\n  \"updated_at\": \"2026-06-10T15:30:00Z\",\n  \"content\": \"## Handling pricing objections\\n\\nLead with value before discussing discounts…\",\n  \"sources\": [\n    {\n      \"id\": \"s1a2b3c4d5e6\",\n      \"title\": \"Q2 pricing deck.pdf\",\n      \"source_type\": \"upload\",\n      \"status\": \"ready\",\n      \"content_format\": \"plain_text\",\n      \"token_count\": 5234,\n      \"has_images\": false,\n      \"external_url\": null,\n      \"summary\": \"Quarterly pricing and packaging overview.\",\n      \"cover\": \"\",\n      \"folders\": [\n        {\n          \"id\": \"f9a8b7c6d5e4\",\n          \"name\": \"File Attachments\",\n          \"emoji\": \"📎\"\n        }\n      ],\n      \"created_by\": {\n        \"id\": \"u1a2b3c4d5e6\",\n        \"email\": \"jane@acme.com\",\n        \"first_name\": \"Jane\",\n        \"last_name\": \"Smith\"\n      },\n      \"created_at\": \"2026-05-01T09:00:00Z\",\n      \"updated_at\": \"2026-05-01T09:05:00Z\",\n      \"processed_at\": \"2026-05-01T09:05:00Z\"\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "2a0af92e-be2a-4448-8409-55f5fff54c22",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "include",
-                      "value": "draft"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "423e4f81-ad22-4f99-8ded-e6814683d817",
-              "name": "Resource not found",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "include",
-                      "value": "draft"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"not_found\",\n    \"message\": \"Scenario not found: abc123\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "f68aa37f-d6b3-475a-adef-6ca08cc68d73",
-          "name": "Update page",
-          "request": {
-            "name": "Update page",
-            "description": {
-              "content": "Updates a page. Only the fields you provide are changed; omitted fields\nare left untouched. Editing `content` creates a new draft; set `status`\nto `published` to publish the new version.\n\n`PUT` is also accepted and behaves the same way.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "knowledge-hub",
-                "pages",
-                ":page_id"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "page_id",
-                  "description": "(Required) The page's unique identifier (UUID)"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "PATCH",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"<string>\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "de261624-e697-4276-b7e4-9b610d288620",
-              "name": "Updated page",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"title\": \"Pricing objection guide (updated)\",\n  \"content\": \"## Handling pricing objections\\n\\nUpdated guidance…\",\n  \"status\": \"published\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"string\",\n  \"title\": \"string\",\n  \"status\": \"published\",\n  \"visibility\": \"global\",\n  \"owner\": {\n    \"id\": \"string\",\n    \"email\": \"Wu2txK-3uC0@IKFFFetg.pzfo\",\n    \"first_name\": \"string\",\n    \"last_name\": \"string\"\n  },\n  \"folders\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"emoji\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"emoji\": \"string\"\n    }\n  ],\n  \"skills\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"source_count\": 6370,\n  \"version\": 2717,\n  \"cover\": \"string\",\n  \"published_at\": \"2004-01-19T06:48:32.854Z\",\n  \"created_at\": \"2026-03-09T19:44:03.737Z\",\n  \"updated_at\": \"1953-09-08T11:00:48.946Z\",\n  \"content\": \"string\",\n  \"sources\": [\n    {\n      \"id\": \"string\",\n      \"title\": \"string\",\n      \"source_type\": \"upload\",\n      \"status\": \"pending\",\n      \"content_format\": \"markdown\",\n      \"token_count\": 3067,\n      \"has_images\": true,\n      \"external_url\": \"string\",\n      \"summary\": \"string\",\n      \"cover\": \"string\",\n      \"folders\": [\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"emoji\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"emoji\": \"string\"\n        }\n      ],\n      \"created_by\": {\n        \"id\": \"string\",\n        \"email\": \"qFYJ@nYncgdnEWmKGuEOMNlaFJjbVz.dsi\",\n        \"first_name\": \"string\",\n        \"last_name\": \"string\"\n      },\n      \"created_at\": \"1997-10-11T15:33:16.540Z\",\n      \"updated_at\": \"2008-01-29T13:46:00.993Z\",\n      \"processed_at\": \"2015-10-28T17:08:37.505Z\",\n      \"content\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"title\": \"string\",\n      \"source_type\": \"integration\",\n      \"status\": \"ready\",\n      \"content_format\": \"video\",\n      \"token_count\": 4298,\n      \"has_images\": false,\n      \"external_url\": \"string\",\n      \"summary\": \"string\",\n      \"cover\": \"string\",\n      \"folders\": [\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"emoji\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"emoji\": \"string\"\n        }\n      ],\n      \"created_by\": {\n        \"id\": \"string\",\n        \"email\": \"1O6xMqk0@gGCzgfFwcjXIlLZWXXMEJmyfzzIfZ.fgqd\",\n        \"first_name\": \"string\",\n        \"last_name\": \"string\"\n      },\n      \"created_at\": \"1959-04-04T22:28:06.250Z\",\n      \"updated_at\": \"1990-08-17T00:40:27.154Z\",\n      \"processed_at\": \"2019-01-25T16:49:11.903Z\",\n      \"content\": \"string\"\n    }\n  ],\n  \"draft\": {\n    \"title\": \"string\",\n    \"content\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "a7932cfc-48b1-476a-8507-d3f0f8abf9d6",
-              "name": "Invalid request parameters",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"title\": \"Pricing objection guide (updated)\",\n  \"content\": \"## Handling pricing objections\\n\\nUpdated guidance…\",\n  \"status\": \"published\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request\",\n    \"code\": \"invalid_pagination\",\n    \"message\": \"Invalid pagination parameters\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "63ecba42-f408-4b5b-8823-73a3394338a0",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"title\": \"Pricing objection guide (updated)\",\n  \"content\": \"## Handling pricing objections\\n\\nUpdated guidance…\",\n  \"status\": \"published\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "0234d2f1-3632-4e7b-9e45-4fe55cdd1017",
-              "name": "Resource not found",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"title\": \"Pricing objection guide (updated)\",\n  \"content\": \"## Handling pricing objections\\n\\nUpdated guidance…\",\n  \"status\": \"published\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"not_found\",\n    \"message\": \"Scenario not found: abc123\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "502734c8-950f-4a5e-b1c6-a43428a3a817",
-          "name": "Update page (PUT)",
-          "request": {
-            "name": "Update page (PUT)",
-            "description": {
-              "content": "Alias of `PATCH /knowledge-hub/pages/{page_id}`; see that operation.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "knowledge-hub",
-                "pages",
-                ":page_id"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "page_id",
-                  "description": "(Required) The page's unique identifier (UUID)"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "PUT",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"<string>\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "40e13212-a2b1-4a3c-9b86-2f439a60f610",
-              "name": "Updated page",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"<string>\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"string\",\n  \"title\": \"string\",\n  \"status\": \"published\",\n  \"visibility\": \"global\",\n  \"owner\": {\n    \"id\": \"string\",\n    \"email\": \"Wu2txK-3uC0@IKFFFetg.pzfo\",\n    \"first_name\": \"string\",\n    \"last_name\": \"string\"\n  },\n  \"folders\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"emoji\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"emoji\": \"string\"\n    }\n  ],\n  \"skills\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"source_count\": 6370,\n  \"version\": 2717,\n  \"cover\": \"string\",\n  \"published_at\": \"2004-01-19T06:48:32.854Z\",\n  \"created_at\": \"2026-03-09T19:44:03.737Z\",\n  \"updated_at\": \"1953-09-08T11:00:48.946Z\",\n  \"content\": \"string\",\n  \"sources\": [\n    {\n      \"id\": \"string\",\n      \"title\": \"string\",\n      \"source_type\": \"upload\",\n      \"status\": \"pending\",\n      \"content_format\": \"markdown\",\n      \"token_count\": 3067,\n      \"has_images\": true,\n      \"external_url\": \"string\",\n      \"summary\": \"string\",\n      \"cover\": \"string\",\n      \"folders\": [\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"emoji\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"emoji\": \"string\"\n        }\n      ],\n      \"created_by\": {\n        \"id\": \"string\",\n        \"email\": \"qFYJ@nYncgdnEWmKGuEOMNlaFJjbVz.dsi\",\n        \"first_name\": \"string\",\n        \"last_name\": \"string\"\n      },\n      \"created_at\": \"1997-10-11T15:33:16.540Z\",\n      \"updated_at\": \"2008-01-29T13:46:00.993Z\",\n      \"processed_at\": \"2015-10-28T17:08:37.505Z\",\n      \"content\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"title\": \"string\",\n      \"source_type\": \"integration\",\n      \"status\": \"ready\",\n      \"content_format\": \"video\",\n      \"token_count\": 4298,\n      \"has_images\": false,\n      \"external_url\": \"string\",\n      \"summary\": \"string\",\n      \"cover\": \"string\",\n      \"folders\": [\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"emoji\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"emoji\": \"string\"\n        }\n      ],\n      \"created_by\": {\n        \"id\": \"string\",\n        \"email\": \"1O6xMqk0@gGCzgfFwcjXIlLZWXXMEJmyfzzIfZ.fgqd\",\n        \"first_name\": \"string\",\n        \"last_name\": \"string\"\n      },\n      \"created_at\": \"1959-04-04T22:28:06.250Z\",\n      \"updated_at\": \"1990-08-17T00:40:27.154Z\",\n      \"processed_at\": \"2019-01-25T16:49:11.903Z\",\n      \"content\": \"string\"\n    }\n  ],\n  \"draft\": {\n    \"title\": \"string\",\n    \"content\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "77d1caec-182a-428a-b62d-913f2d58b97b",
-              "name": "Invalid request parameters",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"<string>\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request\",\n    \"code\": \"invalid_pagination\",\n    \"message\": \"Invalid pagination parameters\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "bbc89327-1d8a-495e-9c71-f76c4f7eb35f",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"<string>\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "625dbb7f-d42e-438f-878a-000b3b1b4905",
-              "name": "Resource not found",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"status\": \"<string>\",\n  \"folder_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skill_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"not_found\",\n    \"message\": \"Scenario not found: abc123\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "10faa65a-0ae9-43af-8ce8-c2c2676b831a",
-          "name": "Archive page",
-          "request": {
-            "name": "Archive page",
-            "description": {
-              "content": "Archives (soft-deletes) a page. The page is hidden from lists but its history is preserved.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "knowledge-hub",
-                "pages",
-                ":page_id"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "page_id",
-                  "description": "(Required) The page's unique identifier (UUID)"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "24b53eb3-3df5-4082-92b3-a1a796eab613",
-              "name": "Page archived",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"p1a2b3c4d5e6\",\n  \"deleted\": true\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "e13ee37a-5989-4d54-ada3-974be6061c18",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "dcfb2526-c681-4a18-8f68-32aeddaacbf5",
-              "name": "Resource not found",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"not_found\",\n    \"message\": \"Scenario not found: abc123\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "353432c7-9510-469a-afe1-08cbc5e740ed",
-          "name": "List page versions",
-          "request": {
-            "name": "List page versions",
-            "description": {
-              "content": "Returns the version history for a page, newest first.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "knowledge-hub",
-                "pages",
-                ":page_id",
-                "versions"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "page",
-                  "value": "1",
-                  "description": "Pagination page number (1-indexed) — which page of results to return, not a Knowledge Hub page."
-                },
-                {
-                  "disabled": false,
-                  "key": "page_size",
-                  "value": "50",
-                  "description": "Number of results per page (max 100)"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "page_id",
-                  "description": "(Required) The page's unique identifier (UUID)"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "7becba62-250d-4879-9cb8-f0200a685a47",
-              "name": "Paginated version history",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id",
-                    "versions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"data\": [\n    {\n      \"version\": 4,\n      \"title\": \"Pricing objection guide\",\n      \"change_type\": \"manual_edit\",\n      \"created_by\": {\n        \"id\": \"u1a2b3c4d5e6\",\n        \"email\": \"jane@acme.com\",\n        \"first_name\": \"Jane\",\n        \"last_name\": \"Smith\"\n      },\n      \"created_at\": \"2026-06-01T12:00:00Z\",\n      \"updated_at\": \"2026-06-01T12:00:00Z\"\n    },\n    {\n      \"version\": 3,\n      \"title\": \"Pricing objection guide\",\n      \"change_type\": \"ai_generation\",\n      \"created_by\": null,\n      \"created_at\": \"2026-05-20T10:00:00Z\",\n      \"updated_at\": \"2026-05-20T10:00:00Z\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 50,\n    \"total_count\": 4,\n    \"total_pages\": 1\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "163c3dcd-92de-4073-9ae7-8b499e4e0d1a",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id",
-                    "versions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "6ee04f91-e75e-4299-b8b5-822b1d0e49e7",
-              "name": "Resource not found",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "pages",
-                    ":page_id",
-                    "versions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "page_id",
-                      "description": "(Required) The page's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"not_found\",\n    \"message\": \"Scenario not found: abc123\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "7650027f-f600-4c9e-a527-3e6a67de588d",
+          "createdAt": "2026-10-21T19:49:51.000Z",
+          "updatedAt": "2026-10-21T19:49:51.000Z",
+          "uid": "35240-7650027f-f600-4c9e-a527-3e6a67de588d"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "type": "string",
-      "value": "https://api.exec.com/rest/v1",
-      "key": "baseUrl"
+      "id": "393799d8-bcb5-4119-bae6-003052f39c81",
+      "createdAt": "2026-10-21T19:49:51.000Z",
+      "updatedAt": "2026-10-21T19:49:51.000Z",
+      "uid": "35240-393799d8-bcb5-4119-bae6-003052f39c81"
     }
   ],
   "auth": {
@@ -1864,17 +1896,15 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "b5f797ac-381b-4acf-b03c-50b8cb0c0ba5",
-    "name": "Exec Collections Knowledge Hub - Pages API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "REST API for programmatic access to your Exec workspace.\n\nUse the Exec API to read workspace data, list members, retrieve group information,\nand create interactive scenario creation sessions.\n\n## Authentication\nAll requests require a valid API key passed in the Authorization header:\n```\nAuthorization: Bearer exec_live_...\n```\n\nCreate API keys in your workspace settings under **Settings > API**.\n",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.exec.com/rest/v1"
     }
-  }
+  ]
 }

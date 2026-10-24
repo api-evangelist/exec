@@ -1,471 +1,478 @@
 {
+  "info": {
+    "_postman_id": "b7480104-edfa-4cb4-bb34-e5d006e03f83",
+    "name": "Exec Knowledge Hub - Folders API",
+    "description": "REST API for programmatic access to your Exec workspace.\n\nUse the Exec API to read workspace data, list members, retrieve group information,\nand create interactive scenario creation sessions.\n\n## Authentication\nAll requests require a valid API key passed in the Authorization header:\n```\nAuthorization: Bearer exec_live_...\n```\n\nCreate API keys in your workspace settings under **Settings > API**.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:49:45.000Z",
+    "updatedAt": "2026-10-21T19:49:45.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-b7480104-edfa-4cb4-bb34-e5d006e03f83"
+  },
   "item": [
     {
-      "id": "cb6e4f79-954a-49e3-a6b9-49398da8652c",
-      "name": "Knowledge Hub - Folders",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": "knowledge-hub",
       "item": [
         {
-          "id": "3f849682-b440-45bf-9359-7fb7cd103e5f",
-          "name": "List folders",
-          "request": {
-            "name": "List folders",
-            "description": {
-              "content": "Returns a paginated list of Knowledge Hub folders (also called Spaces or\nHubs) in the workspace.\n\nFolders group pages and sources, and can be nested to form a hierarchy.\nPass `parent` to list the direct children of a folder, or omit it to list\nevery folder in the workspace.\n\nAPI keys are workspace-scoped and admin-created, so the response includes\nevery non-archived folder regardless of its visibility scope.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "knowledge-hub",
-                "folders"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "parent_id",
-                  "value": "<string>",
-                  "description": "Return only the direct children of this folder (folder UUID). Omit to list all folders."
-                },
-                {
-                  "disabled": false,
-                  "key": "query",
-                  "value": "<string>",
-                  "description": "Case-insensitive search over folder names"
-                },
-                {
-                  "disabled": false,
-                  "key": "page",
-                  "value": "1",
-                  "description": "Pagination page number (1-indexed) — which page of results to return, not a Knowledge Hub page."
-                },
-                {
-                  "disabled": false,
-                  "key": "page_size",
-                  "value": "50",
-                  "description": "Number of results per page (max 100)"
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
+          "name": "folders",
+          "item": [
             {
-              "id": "1a00e4fc-a2d7-45a3-87f6-abc196c59f33",
-              "name": "Paginated list of folders",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "folders"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+              "name": "{folder_id}",
+              "item": [
+                {
+                  "name": "Get folder",
+                  "id": "bf3e23f4-e703-480d-aca0-4e50a85aa878",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/knowledge-hub/folders/:folder_id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "knowledge-hub",
+                        "folders",
+                        ":folder_id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "cef97184-0c55-457d-8fa7-e39d00b7b82e",
+                          "key": "folder_id",
+                          "value": "<string>",
+                          "description": "(Required) The folder's unique identifier (UUID)"
+                        }
+                      ]
+                    },
+                    "description": "Returns a single Knowledge Hub folder by its UUID."
+                  },
+                  "response": [
                     {
-                      "key": "parent_id",
-                      "value": "<string>"
+                      "id": "9c9517a7-d8f8-4d5f-b5dc-94a9745a5da5",
+                      "name": "Folder detail",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/folders/:folder_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "folders",
+                            ":folder_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "folder_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"emoji\": \"<string,null>\",\n  \"parent\": \"<string,null>\",\n  \"visibility\": \"private\",\n  \"item_count\": \"<integer>\",\n  \"subfolder_count\": \"<integer>\",\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\"\n}",
+                      "createdAt": "2026-10-21T19:49:45.000Z",
+                      "updatedAt": "2026-10-21T19:49:45.000Z",
+                      "uid": "35240-9c9517a7-d8f8-4d5f-b5dc-94a9745a5da5"
                     },
                     {
-                      "key": "query",
-                      "value": "<string>"
+                      "id": "5a091009-401c-40c1-9b61-d8bbb7cbfb1e",
+                      "name": "Missing or invalid API key",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/folders/:folder_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "folders",
+                            ":folder_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "folder_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:49:45.000Z",
+                      "updatedAt": "2026-10-21T19:49:45.000Z",
+                      "uid": "35240-5a091009-401c-40c1-9b61-d8bbb7cbfb1e"
                     },
                     {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
+                      "id": "f55e08e3-3ba6-4e2a-8711-375eb672483f",
+                      "name": "Resource not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/knowledge-hub/folders/:folder_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "knowledge-hub",
+                            "folders",
+                            ":folder_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "folder_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:49:45.000Z",
+                      "updatedAt": "2026-10-21T19:49:45.000Z",
+                      "uid": "35240-f55e08e3-3ba6-4e2a-8711-375eb672483f"
                     }
                   ],
-                  "variable": []
-                },
+                  "createdAt": "2026-10-21T19:49:45.000Z",
+                  "updatedAt": "2026-10-21T19:49:45.000Z",
+                  "uid": "35240-bf3e23f4-e703-480d-aca0-4e50a85aa878"
+                }
+              ],
+              "id": "27b1c8ab-f3da-43d1-8135-9ddebb558d5e",
+              "createdAt": "2026-10-21T19:49:45.000Z",
+              "updatedAt": "2026-10-21T19:49:45.000Z",
+              "uid": "35240-27b1c8ab-f3da-43d1-8135-9ddebb558d5e"
+            },
+            {
+              "name": "List folders",
+              "id": "e692dea4-ce5b-493a-bf58-2878f4f10115",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"data\": [\n    {\n      \"id\": \"f1a2b3c4d5e6\",\n      \"name\": \"Sales\",\n      \"emoji\": \"💼\",\n      \"parent\": null,\n      \"visibility\": \"workspace\",\n      \"item_count\": 12,\n      \"subfolder_count\": 3,\n      \"created_at\": \"2026-05-01T09:00:00Z\",\n      \"updated_at\": \"2026-05-10T10:00:00Z\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 50,\n    \"total_count\": 8,\n    \"total_pages\": 1\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "bb797640-aa31-434e-b443-67f70ad14e14",
-              "name": "Invalid request parameters",
-              "originalRequest": {
                 "url": {
+                  "raw": "{{baseUrl}}/knowledge-hub/folders?parent_id=<string>&query=<string>&page=1&page_size=50",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
                   "path": [
                     "knowledge-hub",
                     "folders"
                   ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
                   "query": [
                     {
+                      "description": "Return only the direct children of this folder (folder UUID). Omit to list all folders.",
                       "key": "parent_id",
                       "value": "<string>"
                     },
                     {
+                      "description": "Case-insensitive search over folder names",
                       "key": "query",
                       "value": "<string>"
                     },
                     {
+                      "description": "Pagination page number (1-indexed) \u2014 which page of results to return, not a Knowledge Hub page.",
                       "key": "page",
                       "value": "1"
                     },
                     {
+                      "description": "Number of results per page (max 100)",
                       "key": "page_size",
                       "value": "50"
                     }
-                  ],
-                  "variable": []
+                  ]
                 },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                "description": "Returns a paginated list of Knowledge Hub folders (also called Spaces or\nHubs) in the workspace.\n\nFolders group pages and sources, and can be nested to form a hierarchy.\nPass `parent` to list the direct children of a folder, or omit it to list\nevery folder in the workspace.\n\nAPI keys are workspace-scoped and admin-created, so the response includes\nevery non-archived folder regardless of its visibility scope."
               },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
+              "response": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request\",\n    \"code\": \"invalid_pagination\",\n    \"message\": \"Invalid pagination parameters\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "82477249-4318-430e-981f-40df0e1e76e9",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "folders"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+                  "id": "7b9f3edc-79a2-4739-8c3c-824910ba310f",
+                  "name": "Paginated list of folders",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/knowledge-hub/folders?parent_id=<string>&query=<string>&page=1&page_size=50",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "knowledge-hub",
+                        "folders"
+                      ],
+                      "query": [
+                        {
+                          "description": "Return only the direct children of this folder (folder UUID). Omit to list all folders.",
+                          "key": "parent_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Case-insensitive search over folder names",
+                          "key": "query",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Pagination page number (1-indexed) \u2014 which page of results to return, not a Knowledge Hub page.",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Number of results per page (max 100)",
+                          "key": "page_size",
+                          "value": "50"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
                     {
-                      "key": "parent_id",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "query",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
+                      "key": "Content-Type",
+                      "value": "application/json"
                     }
                   ],
-                  "variable": []
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"emoji\": \"<string,null>\",\n      \"parent\": \"<string,null>\",\n      \"visibility\": \"workspace\",\n      \"item_count\": \"<integer>\",\n      \"subfolder_count\": \"<integer>\",\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"emoji\": \"<string,null>\",\n      \"parent\": \"<string,null>\",\n      \"visibility\": \"workspace\",\n      \"item_count\": \"<integer>\",\n      \"subfolder_count\": \"<integer>\",\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": \"<integer>\",\n    \"page_size\": \"<integer>\",\n    \"total_count\": \"<integer>\",\n    \"total_pages\": \"<integer>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:49:45.000Z",
+                  "updatedAt": "2026-10-21T19:49:45.000Z",
+                  "uid": "35240-7b9f3edc-79a2-4739-8c3c-824910ba310f"
                 },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "6c37f9ad-1796-4a9d-9f7c-2ef1dfca52a4",
+                  "name": "Invalid request parameters",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/knowledge-hub/folders?parent_id=<string>&query=<string>&page=1&page_size=50",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "knowledge-hub",
+                        "folders"
+                      ],
+                      "query": [
+                        {
+                          "description": "Return only the direct children of this folder (folder UUID). Omit to list all folders.",
+                          "key": "parent_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Case-insensitive search over folder names",
+                          "key": "query",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Pagination page number (1-indexed) \u2014 which page of results to return, not a Knowledge Hub page.",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Number of results per page (max 100)",
+                          "key": "page_size",
+                          "value": "50"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:49:45.000Z",
+                  "updatedAt": "2026-10-21T19:49:45.000Z",
+                  "uid": "35240-6c37f9ad-1796-4a9d-9f7c-2ef1dfca52a4"
+                },
+                {
+                  "id": "b839233d-2837-47eb-bc33-414811d36d77",
+                  "name": "Missing or invalid API key",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/knowledge-hub/folders?parent_id=<string>&query=<string>&page=1&page_size=50",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "knowledge-hub",
+                        "folders"
+                      ],
+                      "query": [
+                        {
+                          "description": "Return only the direct children of this folder (folder UUID). Omit to list all folders.",
+                          "key": "parent_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Case-insensitive search over folder names",
+                          "key": "query",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Pagination page number (1-indexed) \u2014 which page of results to return, not a Knowledge Hub page.",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Number of results per page (max 100)",
+                          "key": "page_size",
+                          "value": "50"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:49:45.000Z",
+                  "updatedAt": "2026-10-21T19:49:45.000Z",
+                  "uid": "35240-b839233d-2837-47eb-bc33-414811d36d77"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:49:45.000Z",
+              "updatedAt": "2026-10-21T19:49:45.000Z",
+              "uid": "35240-e692dea4-ce5b-493a-bf58-2878f4f10115"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "d018145a-0347-456c-9339-5134b719d63c",
-          "name": "Get folder",
-          "request": {
-            "name": "Get folder",
-            "description": {
-              "content": "Returns a single Knowledge Hub folder by its UUID.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "knowledge-hub",
-                "folders",
-                ":folder_id"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "folder_id",
-                  "description": "(Required) The folder's unique identifier (UUID)"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "a866aea6-b1db-4e62-816e-4c80d4403d36",
-              "name": "Folder detail",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "folders",
-                    ":folder_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "folder_id",
-                      "description": "(Required) The folder's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"f1a2b3c4d5e6\",\n  \"name\": \"Sales\",\n  \"emoji\": \"💼\",\n  \"parent\": null,\n  \"visibility\": \"workspace\",\n  \"item_count\": 12,\n  \"subfolder_count\": 3,\n  \"created_at\": \"2026-05-01T09:00:00Z\",\n  \"updated_at\": \"2026-05-10T10:00:00Z\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "5f7b051d-1989-4e87-9358-07ed833e7a2d",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "folders",
-                    ":folder_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "folder_id",
-                      "description": "(Required) The folder's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "b9592940-cc9b-42df-9535-18fca1e52cfa",
-              "name": "Resource not found",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "knowledge-hub",
-                    "folders",
-                    ":folder_id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "folder_id",
-                      "description": "(Required) The folder's unique identifier (UUID)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"not_found\",\n    \"message\": \"Scenario not found: abc123\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "1f6d95db-68f9-4f1b-99a5-10df2950fe58",
+          "createdAt": "2026-10-21T19:49:45.000Z",
+          "updatedAt": "2026-10-21T19:49:45.000Z",
+          "uid": "35240-1f6d95db-68f9-4f1b-99a5-10df2950fe58"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "type": "string",
-      "value": "https://api.exec.com/rest/v1",
-      "key": "baseUrl"
+      "id": "1adccf17-90ae-4e64-be45-8fcff454de11",
+      "createdAt": "2026-10-21T19:49:45.000Z",
+      "updatedAt": "2026-10-21T19:49:45.000Z",
+      "uid": "35240-1adccf17-90ae-4e64-be45-8fcff454de11"
     }
   ],
   "auth": {
@@ -473,17 +480,15 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "92e3abe3-3ba3-4b85-b469-482040b654e2",
-    "name": "Exec Collections Knowledge Hub - Folders API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "REST API for programmatic access to your Exec workspace.\n\nUse the Exec API to read workspace data, list members, retrieve group information,\nand create interactive scenario creation sessions.\n\n## Authentication\nAll requests require a valid API key passed in the Authorization header:\n```\nAuthorization: Bearer exec_live_...\n```\n\nCreate API keys in your workspace settings under **Settings > API**.\n",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.exec.com/rest/v1"
     }
-  }
+  ]
 }

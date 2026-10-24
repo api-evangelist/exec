@@ -1,2233 +1,2326 @@
 {
+  "info": {
+    "_postman_id": "cae699ff-e991-46fe-baec-e1bec192c38c",
+    "name": "Exec Scenarios API",
+    "description": "REST API for programmatic access to your Exec workspace.\n\nUse the Exec API to read workspace data, list members, retrieve group information,\nand create interactive scenario creation sessions.\n\n## Authentication\nAll requests require a valid API key passed in the Authorization header:\n```\nAuthorization: Bearer exec_live_...\n```\n\nCreate API keys in your workspace settings under **Settings > API**.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:50:12.000Z",
+    "updatedAt": "2026-10-21T19:50:12.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-cae699ff-e991-46fe-baec-e1bec192c38c"
+  },
   "item": [
     {
-      "id": "4b858aaf-c79d-4524-88de-00c828dda851",
-      "name": "Scenarios",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": "scenarios",
       "item": [
         {
-          "id": "390bc988-4663-4fb8-a7fc-1e125dec79f8",
-          "name": "List scenario assignments",
-          "request": {
-            "name": "List scenario assignments",
-            "description": {
-              "content": "Returns a paginated list of scenario assignments in the workspace.\n\nAssignments represent tasks given to users to practice specific scenarios. Each\nassignment tracks status (not_started, in_progress, completed, past_due, did_not_pass),\nbest score, attempt count, and completion requirements.\n\nFilter by user, scenario, program, or status to find specific assignments.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "scenarios",
-                "assignments"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "user_ids",
-                  "value": "<string>",
-                  "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included)."
-                },
-                {
-                  "disabled": false,
-                  "key": "user_emails",
-                  "value": "<string>",
-                  "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included)."
-                },
-                {
-                  "disabled": false,
-                  "key": "scenario_ids",
-                  "value": "<string>",
-                  "description": "Comma-separated scenario IDs to filter by"
-                },
-                {
-                  "disabled": false,
-                  "key": "program_ids",
-                  "value": "<string>",
-                  "description": "Comma-separated program IDs to filter by"
-                },
-                {
-                  "disabled": false,
-                  "key": "status",
-                  "value": "<string>,<string>",
-                  "description": "Filter by one or more assignment statuses"
-                },
-                {
-                  "disabled": false,
-                  "key": "page",
-                  "value": "1",
-                  "description": "Page number (1-indexed)"
-                },
-                {
-                  "disabled": false,
-                  "key": "page_size",
-                  "value": "50",
-                  "description": "Number of results per page (max 100)"
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
+          "name": "assignments",
+          "item": [
             {
-              "id": "91968d8c-121a-4207-b310-2c8aa969f4c9",
-              "name": "Paginated list of assignments",
-              "originalRequest": {
+              "name": "List scenario assignments",
+              "id": "617d001f-5e32-4847-8288-2e94ec31ac3c",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
                 "url": {
+                  "raw": "{{baseUrl}}/scenarios/assignments?user_ids=<string>&user_emails=<string>&scenario_ids=<string>&program_ids=<string>&status=not_started,in_progress&page=1&page_size=50",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
                   "path": [
                     "scenarios",
                     "assignments"
                   ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
                   "query": [
                     {
+                      "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).",
                       "key": "user_ids",
                       "value": "<string>"
                     },
                     {
+                      "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).",
                       "key": "user_emails",
                       "value": "<string>"
                     },
                     {
+                      "description": "Comma-separated scenario IDs to filter by",
                       "key": "scenario_ids",
                       "value": "<string>"
                     },
                     {
+                      "description": "Comma-separated program IDs to filter by",
                       "key": "program_ids",
                       "value": "<string>"
                     },
                     {
+                      "description": "Filter by one or more assignment statuses",
                       "key": "status",
-                      "value": "completed,past_due"
+                      "value": "not_started,in_progress"
                     },
                     {
+                      "description": "Page number (1-indexed)",
                       "key": "page",
                       "value": "1"
                     },
                     {
+                      "description": "Number of results per page (max 100)",
                       "key": "page_size",
                       "value": "50"
                     }
-                  ],
-                  "variable": []
+                  ]
                 },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                "description": "Returns a paginated list of scenario assignments in the workspace.\n\nAssignments represent tasks given to users to practice specific scenarios. Each\nassignment tracks status (not_started, in_progress, completed, past_due, did_not_pass),\nbest score, attempt count, and completion requirements.\n\nFilter by user, scenario, program, or status to find specific assignments."
               },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "response": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"data\": [\n    {\n      \"id\": \"a1b2c3d4e5f6\",\n      \"user\": {\n        \"id\": \"u1a2b3c4d5e6\",\n        \"email\": \"jane@acme.com\",\n        \"first_name\": \"Jane\",\n        \"last_name\": \"Smith\"\n      },\n      \"scenario\": {\n        \"id\": \"s1a2b3c4d5e6\",\n        \"name\": \"Procurement Discovery\",\n        \"slug\": \"procurement-discovery\"\n      },\n      \"status\": \"completed\",\n      \"due_date\": \"2026-04-15T00:00:00Z\",\n      \"best_score\": 88,\n      \"best_rank\": \"gold\",\n      \"attempt_count\": 3,\n      \"attempt_min\": 1,\n      \"attempt_max\": null,\n      \"rank_min\": \"silver\",\n      \"program\": null,\n      \"created_at\": \"2026-03-01T10:00:00Z\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 50,\n    \"total_count\": 1,\n    \"total_pages\": 1\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "97cf1cb0-e06d-4ef6-924b-60cc4ad2ffb8",
-              "name": "Invalid request parameters",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    "assignments"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+                  "id": "248ad4a5-1b62-4642-80cd-252273e08e3f",
+                  "name": "Paginated list of assignments",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/scenarios/assignments?user_ids=<string>&user_emails=<string>&scenario_ids=<string>&program_ids=<string>&status=not_started,in_progress&page=1&page_size=50",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scenarios",
+                        "assignments"
+                      ],
+                      "query": [
+                        {
+                          "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).",
+                          "key": "user_ids",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).",
+                          "key": "user_emails",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Comma-separated scenario IDs to filter by",
+                          "key": "scenario_ids",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Comma-separated program IDs to filter by",
+                          "key": "program_ids",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by one or more assignment statuses",
+                          "key": "status",
+                          "value": "not_started,in_progress"
+                        },
+                        {
+                          "description": "Page number (1-indexed)",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Number of results per page (max 100)",
+                          "key": "page_size",
+                          "value": "50"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
                     {
-                      "key": "user_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "user_emails",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "scenario_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "program_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "status",
-                      "value": "completed,past_due"
-                    },
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
+                      "key": "Content-Type",
+                      "value": "application/json"
                     }
                   ],
-                  "variable": []
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"user\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"scenario\": {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"slug\": \"<string>\"\n      },\n      \"status\": \"in_progress\",\n      \"due_date\": \"<string,null-date-time>\",\n      \"best_score\": \"<number,null>\",\n      \"best_rank\": \"unranked\",\n      \"attempt_count\": \"<integer>\",\n      \"attempt_min\": \"<integer,null>\",\n      \"attempt_max\": \"<integer,null>\",\n      \"rank_min\": \"gold\",\n      \"program\": null,\n      \"created_at\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"user\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"scenario\": {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"slug\": \"<string>\"\n      },\n      \"status\": \"did_not_pass\",\n      \"due_date\": \"<string,null-date-time>\",\n      \"best_score\": \"<number,null>\",\n      \"best_rank\": \"bronze\",\n      \"attempt_count\": \"<integer>\",\n      \"attempt_min\": \"<integer,null>\",\n      \"attempt_max\": \"<integer,null>\",\n      \"rank_min\": \"gold\",\n      \"program\": null,\n      \"created_at\": \"<dateTime>\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": \"<integer>\",\n    \"page_size\": \"<integer>\",\n    \"total_count\": \"<integer>\",\n    \"total_pages\": \"<integer>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:50:12.000Z",
+                  "updatedAt": "2026-10-21T19:50:12.000Z",
+                  "uid": "35240-248ad4a5-1b62-4642-80cd-252273e08e3f"
                 },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request\",\n    \"code\": \"invalid_pagination\",\n    \"message\": \"Invalid pagination parameters\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "54e9bc66-13fe-4ba2-a552-02fcfb47c6d7",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    "assignments"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+                  "id": "0ca36b9c-2b8f-45bc-bd8d-d91ede6b7cb8",
+                  "name": "Invalid request parameters",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/scenarios/assignments?user_ids=<string>&user_emails=<string>&scenario_ids=<string>&program_ids=<string>&status=not_started,in_progress&page=1&page_size=50",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scenarios",
+                        "assignments"
+                      ],
+                      "query": [
+                        {
+                          "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).",
+                          "key": "user_ids",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).",
+                          "key": "user_emails",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Comma-separated scenario IDs to filter by",
+                          "key": "scenario_ids",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Comma-separated program IDs to filter by",
+                          "key": "program_ids",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by one or more assignment statuses",
+                          "key": "status",
+                          "value": "not_started,in_progress"
+                        },
+                        {
+                          "description": "Page number (1-indexed)",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Number of results per page (max 100)",
+                          "key": "page_size",
+                          "value": "50"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
                     {
-                      "key": "user_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "user_emails",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "scenario_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "program_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "status",
-                      "value": "completed,past_due"
-                    },
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
+                      "key": "Content-Type",
+                      "value": "application/json"
                     }
                   ],
-                  "variable": []
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:50:12.000Z",
+                  "updatedAt": "2026-10-21T19:50:12.000Z",
+                  "uid": "35240-0ca36b9c-2b8f-45bc-bd8d-d91ede6b7cb8"
                 },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "d4f9cd50-1e6b-465e-9ba6-e47b10784963",
+                  "name": "Missing or invalid API key",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/scenarios/assignments?user_ids=<string>&user_emails=<string>&scenario_ids=<string>&program_ids=<string>&status=not_started,in_progress&page=1&page_size=50",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scenarios",
+                        "assignments"
+                      ],
+                      "query": [
+                        {
+                          "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).",
+                          "key": "user_ids",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).",
+                          "key": "user_emails",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Comma-separated scenario IDs to filter by",
+                          "key": "scenario_ids",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Comma-separated program IDs to filter by",
+                          "key": "program_ids",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by one or more assignment statuses",
+                          "key": "status",
+                          "value": "not_started,in_progress"
+                        },
+                        {
+                          "description": "Page number (1-indexed)",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Number of results per page (max 100)",
+                          "key": "page_size",
+                          "value": "50"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:50:12.000Z",
+                  "updatedAt": "2026-10-21T19:50:12.000Z",
+                  "uid": "35240-d4f9cd50-1e6b-465e-9ba6-e47b10784963"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:50:12.000Z",
+              "updatedAt": "2026-10-21T19:50:12.000Z",
+              "uid": "35240-617d001f-5e32-4847-8288-2e94ec31ac3c"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "b7b074dd-8d5e-4329-9ff8-0dc17a456361",
+          "createdAt": "2026-10-21T19:50:12.000Z",
+          "updatedAt": "2026-10-21T19:50:12.000Z",
+          "uid": "35240-b7b074dd-8d5e-4329-9ff8-0dc17a456361"
         },
         {
-          "id": "2a6145b3-5edf-4f23-abca-f4b6c6bfce49",
-          "name": "Get scenario analytics summary",
-          "request": {
-            "name": "Get scenario analytics summary",
-            "description": {
-              "content": "Returns aggregate metrics for a scenario: participant count, total sessions,\naverage best score and rank, average lift, total practice minutes, and average\nsession duration. Accepts both UUID and slug for the scenario identifier.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "scenarios",
-                ":scenario_id",
-                "analytics",
-                "summary"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "user_ids",
-                  "value": "<string>",
-                  "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included)."
-                },
-                {
-                  "disabled": false,
-                  "key": "user_emails",
-                  "value": "<string>",
-                  "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included)."
-                },
-                {
-                  "disabled": false,
-                  "key": "group_ids",
-                  "value": "<string>",
-                  "description": "Comma-separated workspace group IDs to filter by"
-                },
-                {
-                  "disabled": false,
-                  "key": "start_date",
-                  "value": "<dateTime>",
-                  "description": "ISO 8601 datetime — only include sessions on or after this date"
-                },
-                {
-                  "disabled": false,
-                  "key": "end_date",
-                  "value": "<dateTime>",
-                  "description": "ISO 8601 datetime — only include sessions on or before this date"
-                },
-                {
-                  "disabled": false,
-                  "key": "exclude_system_users",
-                  "value": "false",
-                  "description": "Exclude sessions from system users (emails ending in @exec.com). Default false."
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "scenario_id",
-                  "description": "(Required) Scenario identifier (UUID or slug)"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
+          "name": "{scenario_id}",
+          "item": [
             {
-              "id": "d4215cb1-3b84-4577-bd6f-5eb12e1a511a",
-              "name": "Scenario analytics summary",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "analytics",
-                    "summary"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "user_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "user_emails",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "group_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "start_date",
-                      "value": "<dateTime>"
-                    },
-                    {
-                      "key": "end_date",
-                      "value": "<dateTime>"
-                    },
-                    {
-                      "key": "exclude_system_users",
-                      "value": "false"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier (UUID or slug)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "name": "analytics",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "name": "summary",
+                  "item": [
+                    {
+                      "name": "Get scenario analytics summary",
+                      "id": "af9f176a-a09f-47ff-a571-b7f654ebcbc9",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scenarios/:scenario_id/analytics/summary?user_ids=<string>&user_emails=<string>&group_ids=<string>&start_date=<dateTime>&end_date=<dateTime>&exclude_system_users=false",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scenarios",
+                            ":scenario_id",
+                            "analytics",
+                            "summary"
+                          ],
+                          "query": [
+                            {
+                              "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).",
+                              "key": "user_ids",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).",
+                              "key": "user_emails",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Comma-separated workspace group IDs to filter by",
+                              "key": "group_ids",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "ISO 8601 datetime \u2014 only include sessions on or after this date",
+                              "key": "start_date",
+                              "value": "<dateTime>"
+                            },
+                            {
+                              "description": "ISO 8601 datetime \u2014 only include sessions on or before this date",
+                              "key": "end_date",
+                              "value": "<dateTime>"
+                            },
+                            {
+                              "description": "Exclude sessions from system users (emails ending in @exec.com). Default false.",
+                              "key": "exclude_system_users",
+                              "value": "false"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "37a1580b-26a2-4d18-97f7-baf23c5ce689",
+                              "key": "scenario_id",
+                              "value": "<string>",
+                              "description": "(Required) Scenario identifier (UUID or slug)"
+                            }
+                          ]
+                        },
+                        "description": "Returns aggregate metrics for a scenario: participant count, total sessions,\naverage best score and rank, average lift, total practice minutes, and average\nsession duration. Accepts both UUID and slug for the scenario identifier."
+                      },
+                      "response": [
+                        {
+                          "id": "bab448a3-afc6-4d96-a745-04f93e474365",
+                          "name": "Scenario analytics summary",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scenarios/:scenario_id/analytics/summary?user_ids=<string>&user_emails=<string>&group_ids=<string>&start_date=<dateTime>&end_date=<dateTime>&exclude_system_users=false",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scenarios",
+                                ":scenario_id",
+                                "analytics",
+                                "summary"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).",
+                                  "key": "user_ids",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).",
+                                  "key": "user_emails",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Comma-separated workspace group IDs to filter by",
+                                  "key": "group_ids",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "ISO 8601 datetime \u2014 only include sessions on or after this date",
+                                  "key": "start_date",
+                                  "value": "<dateTime>"
+                                },
+                                {
+                                  "description": "ISO 8601 datetime \u2014 only include sessions on or before this date",
+                                  "key": "end_date",
+                                  "value": "<dateTime>"
+                                },
+                                {
+                                  "description": "Exclude sessions from system users (emails ending in @exec.com). Default false.",
+                                  "key": "exclude_system_users",
+                                  "value": "false"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "scenario_id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"participant_count\": \"<integer>\",\n  \"total_sessions\": \"<integer>\",\n  \"average_best_score\": \"<number>\",\n  \"average_best_rank\": \"gold\",\n  \"average_lift_percentage\": \"<number>\",\n  \"total_practice_minutes\": \"<integer>\",\n  \"average_session_duration_seconds\": \"<number>\",\n  \"score_distribution\": [\n    {\n      \"rank\": \"unranked\",\n      \"count\": \"<integer>\",\n      \"percentage\": \"<number>\"\n    },\n    {\n      \"rank\": \"unranked\",\n      \"count\": \"<integer>\",\n      \"percentage\": \"<number>\"\n    }\n  ]\n}",
+                          "createdAt": "2026-10-21T19:50:12.000Z",
+                          "updatedAt": "2026-10-21T19:50:12.000Z",
+                          "uid": "35240-bab448a3-afc6-4d96-a745-04f93e474365"
+                        },
+                        {
+                          "id": "82fa4485-43e0-40c8-8c1c-25c4427c60a6",
+                          "name": "Missing or invalid API key",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scenarios/:scenario_id/analytics/summary?user_ids=<string>&user_emails=<string>&group_ids=<string>&start_date=<dateTime>&end_date=<dateTime>&exclude_system_users=false",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scenarios",
+                                ":scenario_id",
+                                "analytics",
+                                "summary"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).",
+                                  "key": "user_ids",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).",
+                                  "key": "user_emails",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Comma-separated workspace group IDs to filter by",
+                                  "key": "group_ids",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "ISO 8601 datetime \u2014 only include sessions on or after this date",
+                                  "key": "start_date",
+                                  "value": "<dateTime>"
+                                },
+                                {
+                                  "description": "ISO 8601 datetime \u2014 only include sessions on or before this date",
+                                  "key": "end_date",
+                                  "value": "<dateTime>"
+                                },
+                                {
+                                  "description": "Exclude sessions from system users (emails ending in @exec.com). Default false.",
+                                  "key": "exclude_system_users",
+                                  "value": "false"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "scenario_id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-10-21T19:50:12.000Z",
+                          "updatedAt": "2026-10-21T19:50:12.000Z",
+                          "uid": "35240-82fa4485-43e0-40c8-8c1c-25c4427c60a6"
+                        },
+                        {
+                          "id": "c159aa71-c08c-421d-b7c4-d75e55040374",
+                          "name": "Resource not found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scenarios/:scenario_id/analytics/summary?user_ids=<string>&user_emails=<string>&group_ids=<string>&start_date=<dateTime>&end_date=<dateTime>&exclude_system_users=false",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scenarios",
+                                ":scenario_id",
+                                "analytics",
+                                "summary"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).",
+                                  "key": "user_ids",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).",
+                                  "key": "user_emails",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Comma-separated workspace group IDs to filter by",
+                                  "key": "group_ids",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "ISO 8601 datetime \u2014 only include sessions on or after this date",
+                                  "key": "start_date",
+                                  "value": "<dateTime>"
+                                },
+                                {
+                                  "description": "ISO 8601 datetime \u2014 only include sessions on or before this date",
+                                  "key": "end_date",
+                                  "value": "<dateTime>"
+                                },
+                                {
+                                  "description": "Exclude sessions from system users (emails ending in @exec.com). Default false.",
+                                  "key": "exclude_system_users",
+                                  "value": "false"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "scenario_id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-10-21T19:50:12.000Z",
+                          "updatedAt": "2026-10-21T19:50:12.000Z",
+                          "uid": "35240-c159aa71-c08c-421d-b7c4-d75e55040374"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T19:50:12.000Z",
+                      "updatedAt": "2026-10-21T19:50:12.000Z",
+                      "uid": "35240-af9f176a-a09f-47ff-a571-b7f654ebcbc9"
+                    }
+                  ],
+                  "id": "55816eb6-09cd-4a19-9fe1-e5d189574b46",
+                  "createdAt": "2026-10-21T19:50:12.000Z",
+                  "updatedAt": "2026-10-21T19:50:12.000Z",
+                  "uid": "35240-55816eb6-09cd-4a19-9fe1-e5d189574b46"
+                },
+                {
+                  "name": "participants",
+                  "item": [
+                    {
+                      "name": "Get scenario participant analytics",
+                      "id": "c3d132d5-0fa9-4478-b54a-5110e75774f2",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scenarios/:scenario_id/analytics/participants?user_ids=<string>&user_emails=<string>&group_ids=<string>&start_date=<dateTime>&end_date=<dateTime>&exclude_system_users=false&sorting=-best_score&page=1&page_size=50",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scenarios",
+                            ":scenario_id",
+                            "analytics",
+                            "participants"
+                          ],
+                          "query": [
+                            {
+                              "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).",
+                              "key": "user_ids",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).",
+                              "key": "user_emails",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Comma-separated workspace group IDs to filter by",
+                              "key": "group_ids",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "ISO 8601 datetime \u2014 only include sessions on or after this date",
+                              "key": "start_date",
+                              "value": "<dateTime>"
+                            },
+                            {
+                              "description": "ISO 8601 datetime \u2014 only include sessions on or before this date",
+                              "key": "end_date",
+                              "value": "<dateTime>"
+                            },
+                            {
+                              "description": "Exclude sessions from system users (emails ending in @exec.com). Default false.",
+                              "key": "exclude_system_users",
+                              "value": "false"
+                            },
+                            {
+                              "description": "Sort field. Prefix with `-` for descending order.",
+                              "key": "sorting",
+                              "value": "-best_score"
+                            },
+                            {
+                              "description": "Page number (1-indexed)",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "Number of results per page (max 100)",
+                              "key": "page_size",
+                              "value": "50"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "a2f4b037-fc10-47af-b9e8-cbe6145123e8",
+                              "key": "scenario_id",
+                              "value": "<string>",
+                              "description": "(Required) Scenario identifier (UUID or slug)"
+                            }
+                          ]
+                        },
+                        "description": "Returns a per-user performance table for a scenario with pagination and sorting.\nShows each participant's first score, best score, lift, rank, session count,\nand total practice duration."
+                      },
+                      "response": [
+                        {
+                          "id": "256b7133-bf11-4f60-9856-98fa79d886e0",
+                          "name": "Per-user participant analytics",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scenarios/:scenario_id/analytics/participants?user_ids=<string>&user_emails=<string>&group_ids=<string>&start_date=<dateTime>&end_date=<dateTime>&exclude_system_users=false&sorting=-best_score&page=1&page_size=50",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scenarios",
+                                ":scenario_id",
+                                "analytics",
+                                "participants"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).",
+                                  "key": "user_ids",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).",
+                                  "key": "user_emails",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Comma-separated workspace group IDs to filter by",
+                                  "key": "group_ids",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "ISO 8601 datetime \u2014 only include sessions on or after this date",
+                                  "key": "start_date",
+                                  "value": "<dateTime>"
+                                },
+                                {
+                                  "description": "ISO 8601 datetime \u2014 only include sessions on or before this date",
+                                  "key": "end_date",
+                                  "value": "<dateTime>"
+                                },
+                                {
+                                  "description": "Exclude sessions from system users (emails ending in @exec.com). Default false.",
+                                  "key": "exclude_system_users",
+                                  "value": "false"
+                                },
+                                {
+                                  "description": "Sort field. Prefix with `-` for descending order.",
+                                  "key": "sorting",
+                                  "value": "-best_score"
+                                },
+                                {
+                                  "description": "Page number (1-indexed)",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "Number of results per page (max 100)",
+                                  "key": "page_size",
+                                  "value": "50"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "scenario_id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"data\": [\n    {\n      \"user\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"session_count\": \"<integer>\",\n      \"first_score\": \"<number,null>\",\n      \"first_rank\": \"gold\",\n      \"best_score\": \"<number,null>\",\n      \"best_rank\": \"gold\",\n      \"lift_percentage\": \"<number,null>\",\n      \"total_duration_seconds\": \"<number>\"\n    },\n    {\n      \"user\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"session_count\": \"<integer>\",\n      \"first_score\": \"<number,null>\",\n      \"first_rank\": \"bronze\",\n      \"best_score\": \"<number,null>\",\n      \"best_rank\": \"silver\",\n      \"lift_percentage\": \"<number,null>\",\n      \"total_duration_seconds\": \"<number>\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": \"<integer>\",\n    \"page_size\": \"<integer>\",\n    \"total_count\": \"<integer>\",\n    \"total_pages\": \"<integer>\"\n  }\n}",
+                          "createdAt": "2026-10-21T19:50:12.000Z",
+                          "updatedAt": "2026-10-21T19:50:12.000Z",
+                          "uid": "35240-256b7133-bf11-4f60-9856-98fa79d886e0"
+                        },
+                        {
+                          "id": "33e5e5a6-7414-4bd5-b2ba-2d38e6468278",
+                          "name": "Missing or invalid API key",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scenarios/:scenario_id/analytics/participants?user_ids=<string>&user_emails=<string>&group_ids=<string>&start_date=<dateTime>&end_date=<dateTime>&exclude_system_users=false&sorting=-best_score&page=1&page_size=50",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scenarios",
+                                ":scenario_id",
+                                "analytics",
+                                "participants"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).",
+                                  "key": "user_ids",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).",
+                                  "key": "user_emails",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Comma-separated workspace group IDs to filter by",
+                                  "key": "group_ids",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "ISO 8601 datetime \u2014 only include sessions on or after this date",
+                                  "key": "start_date",
+                                  "value": "<dateTime>"
+                                },
+                                {
+                                  "description": "ISO 8601 datetime \u2014 only include sessions on or before this date",
+                                  "key": "end_date",
+                                  "value": "<dateTime>"
+                                },
+                                {
+                                  "description": "Exclude sessions from system users (emails ending in @exec.com). Default false.",
+                                  "key": "exclude_system_users",
+                                  "value": "false"
+                                },
+                                {
+                                  "description": "Sort field. Prefix with `-` for descending order.",
+                                  "key": "sorting",
+                                  "value": "-best_score"
+                                },
+                                {
+                                  "description": "Page number (1-indexed)",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "Number of results per page (max 100)",
+                                  "key": "page_size",
+                                  "value": "50"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "scenario_id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-10-21T19:50:12.000Z",
+                          "updatedAt": "2026-10-21T19:50:12.000Z",
+                          "uid": "35240-33e5e5a6-7414-4bd5-b2ba-2d38e6468278"
+                        },
+                        {
+                          "id": "ffb2fa6c-4bcc-4f66-aaa1-4b732ce1ea51",
+                          "name": "Resource not found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scenarios/:scenario_id/analytics/participants?user_ids=<string>&user_emails=<string>&group_ids=<string>&start_date=<dateTime>&end_date=<dateTime>&exclude_system_users=false&sorting=-best_score&page=1&page_size=50",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scenarios",
+                                ":scenario_id",
+                                "analytics",
+                                "participants"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included).",
+                                  "key": "user_ids",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included).",
+                                  "key": "user_emails",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Comma-separated workspace group IDs to filter by",
+                                  "key": "group_ids",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "ISO 8601 datetime \u2014 only include sessions on or after this date",
+                                  "key": "start_date",
+                                  "value": "<dateTime>"
+                                },
+                                {
+                                  "description": "ISO 8601 datetime \u2014 only include sessions on or before this date",
+                                  "key": "end_date",
+                                  "value": "<dateTime>"
+                                },
+                                {
+                                  "description": "Exclude sessions from system users (emails ending in @exec.com). Default false.",
+                                  "key": "exclude_system_users",
+                                  "value": "false"
+                                },
+                                {
+                                  "description": "Sort field. Prefix with `-` for descending order.",
+                                  "key": "sorting",
+                                  "value": "-best_score"
+                                },
+                                {
+                                  "description": "Page number (1-indexed)",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "Number of results per page (max 100)",
+                                  "key": "page_size",
+                                  "value": "50"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "scenario_id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-10-21T19:50:12.000Z",
+                          "updatedAt": "2026-10-21T19:50:12.000Z",
+                          "uid": "35240-ffb2fa6c-4bcc-4f66-aaa1-4b732ce1ea51"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T19:50:12.000Z",
+                      "updatedAt": "2026-10-21T19:50:12.000Z",
+                      "uid": "35240-c3d132d5-0fa9-4478-b54a-5110e75774f2"
+                    }
+                  ],
+                  "id": "52e0f5a0-64bb-4f98-8eec-7f7154d31736",
+                  "createdAt": "2026-10-21T19:50:12.000Z",
+                  "updatedAt": "2026-10-21T19:50:12.000Z",
+                  "uid": "35240-52e0f5a0-64bb-4f98-8eec-7f7154d31736"
                 }
               ],
-              "body": "{\n  \"participant_count\": 45,\n  \"total_sessions\": 128,\n  \"average_best_score\": 74.2,\n  \"average_best_rank\": \"silver\",\n  \"average_lift_percentage\": 18.5,\n  \"total_practice_minutes\": 742,\n  \"average_session_duration_seconds\": 348,\n  \"score_distribution\": [\n    {\n      \"rank\": \"gold\",\n      \"count\": 12,\n      \"percentage\": 26.7\n    },\n    {\n      \"rank\": \"silver\",\n      \"count\": 18,\n      \"percentage\": 40\n    },\n    {\n      \"rank\": \"bronze\",\n      \"count\": 10,\n      \"percentage\": 22.2\n    },\n    {\n      \"rank\": \"unranked\",\n      \"count\": 5,\n      \"percentage\": 11.1\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "3203455b-62c2-4d7a-b1f7-415a30784273",
+              "createdAt": "2026-10-21T19:50:12.000Z",
+              "updatedAt": "2026-10-21T19:50:12.000Z",
+              "uid": "35240-3203455b-62c2-4d7a-b1f7-415a30784273"
             },
             {
-              "id": "ba151188-adcb-4c45-aaac-fdf0e1b84ab1",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "analytics",
-                    "summary"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "user_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "user_emails",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "group_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "start_date",
-                      "value": "<dateTime>"
-                    },
-                    {
-                      "key": "end_date",
-                      "value": "<dateTime>"
-                    },
-                    {
-                      "key": "exclude_system_users",
-                      "value": "false"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier (UUID or slug)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
+              "name": "access",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "name": "Check scenario access",
+                  "id": "ce531c7e-df43-442b-ac9b-99101880beaf",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/scenarios/:scenario_id/access?user_email=<email>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scenarios",
+                        ":scenario_id",
+                        "access"
+                      ],
+                      "query": [
+                        {
+                          "description": "(Required) Email of the user to check access for",
+                          "key": "user_email",
+                          "value": "<email>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "911434b3-4b75-42a7-901e-dee2a5821a37",
+                          "key": "scenario_id",
+                          "value": "<string>",
+                          "description": "(Required) Scenario identifier"
+                        }
+                      ]
+                    },
+                    "description": "Check if a user has access to a specific scenario and what permission level they have."
+                  },
+                  "response": [
+                    {
+                      "id": "9f5f496b-4d60-40b8-a573-92f6afd2b072",
+                      "name": "User's permission levels for the scenario",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scenarios/:scenario_id/access?user_email=<email>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scenarios",
+                            ":scenario_id",
+                            "access"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) Email of the user to check access for",
+                              "key": "user_email",
+                              "value": "<email>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "scenario_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"user_email\": \"<email>\",\n  \"scenario_id\": \"<string>\",\n  \"permissions\": {\n    \"can_view\": \"<boolean>\",\n    \"can_share\": \"<boolean>\",\n    \"can_monitor\": \"<boolean>\",\n    \"can_edit\": \"<boolean>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:50:12.000Z",
+                      "updatedAt": "2026-10-21T19:50:12.000Z",
+                      "uid": "35240-9f5f496b-4d60-40b8-a573-92f6afd2b072"
+                    },
+                    {
+                      "id": "68d56676-5300-4454-8f7f-3ce02d1f0494",
+                      "name": "Invalid request parameters",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scenarios/:scenario_id/access?user_email=<email>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scenarios",
+                            ":scenario_id",
+                            "access"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) Email of the user to check access for",
+                              "key": "user_email",
+                              "value": "<email>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "scenario_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:50:12.000Z",
+                      "updatedAt": "2026-10-21T19:50:12.000Z",
+                      "uid": "35240-68d56676-5300-4454-8f7f-3ce02d1f0494"
+                    },
+                    {
+                      "id": "8ca22ffb-351e-427a-bb76-78dd65f95daf",
+                      "name": "Missing or invalid API key",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scenarios/:scenario_id/access?user_email=<email>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scenarios",
+                            ":scenario_id",
+                            "access"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) Email of the user to check access for",
+                              "key": "user_email",
+                              "value": "<email>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "scenario_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:50:12.000Z",
+                      "updatedAt": "2026-10-21T19:50:12.000Z",
+                      "uid": "35240-8ca22ffb-351e-427a-bb76-78dd65f95daf"
+                    },
+                    {
+                      "id": "1856f7ba-09f9-4b4e-bf48-a61ac43cb5ec",
+                      "name": "Resource not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scenarios/:scenario_id/access?user_email=<email>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scenarios",
+                            ":scenario_id",
+                            "access"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) Email of the user to check access for",
+                              "key": "user_email",
+                              "value": "<email>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "scenario_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:50:12.000Z",
+                      "updatedAt": "2026-10-21T19:50:12.000Z",
+                      "uid": "35240-1856f7ba-09f9-4b4e-bf48-a61ac43cb5ec"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:50:12.000Z",
+                  "updatedAt": "2026-10-21T19:50:12.000Z",
+                  "uid": "35240-ce531c7e-df43-442b-ac9b-99101880beaf"
+                },
+                {
+                  "name": "Grant scenario access",
+                  "id": "80479e37-3626-4a24-a050-dfbf460a6300",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"user_email\": \"<email>\",\n  \"permission_level\": \"share\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/scenarios/:scenario_id/access",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scenarios",
+                        ":scenario_id",
+                        "access"
+                      ],
+                      "variable": [
+                        {
+                          "id": "850419bc-52fb-4f5b-8f86-62806d15112f",
+                          "key": "scenario_id",
+                          "value": "<string>",
+                          "description": "(Required) Scenario identifier"
+                        }
+                      ]
+                    },
+                    "description": "Grant a user access to a specific scenario with a specified permission level."
+                  },
+                  "response": [
+                    {
+                      "id": "64436c5b-900d-4a39-a34f-1ea80c664479",
+                      "name": "Access granted successfully",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"user_email\": \"<email>\",\n  \"permission_level\": \"share\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/scenarios/:scenario_id/access",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scenarios",
+                            ":scenario_id",
+                            "access"
+                          ],
+                          "variable": [
+                            {
+                              "key": "scenario_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"user_email\": \"<email>\",\n  \"scenario_id\": \"<string>\",\n  \"permission_level\": \"share\",\n  \"granted\": \"<boolean>\"\n}",
+                      "createdAt": "2026-10-21T19:50:12.000Z",
+                      "updatedAt": "2026-10-21T19:50:12.000Z",
+                      "uid": "35240-64436c5b-900d-4a39-a34f-1ea80c664479"
+                    },
+                    {
+                      "id": "2299285d-88b0-4a40-aa43-e753bdc616c2",
+                      "name": "Invalid request parameters",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"user_email\": \"<email>\",\n  \"permission_level\": \"share\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/scenarios/:scenario_id/access",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scenarios",
+                            ":scenario_id",
+                            "access"
+                          ],
+                          "variable": [
+                            {
+                              "key": "scenario_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:50:12.000Z",
+                      "updatedAt": "2026-10-21T19:50:12.000Z",
+                      "uid": "35240-2299285d-88b0-4a40-aa43-e753bdc616c2"
+                    },
+                    {
+                      "id": "62f49a72-1a97-4d92-aa75-d11e426a7bdb",
+                      "name": "Missing or invalid API key",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"user_email\": \"<email>\",\n  \"permission_level\": \"share\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/scenarios/:scenario_id/access",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scenarios",
+                            ":scenario_id",
+                            "access"
+                          ],
+                          "variable": [
+                            {
+                              "key": "scenario_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:50:12.000Z",
+                      "updatedAt": "2026-10-21T19:50:12.000Z",
+                      "uid": "35240-62f49a72-1a97-4d92-aa75-d11e426a7bdb"
+                    },
+                    {
+                      "id": "9c7bd42d-6fe3-4920-8473-e7e465fb5222",
+                      "name": "Resource not found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"user_email\": \"<email>\",\n  \"permission_level\": \"share\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/scenarios/:scenario_id/access",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scenarios",
+                            ":scenario_id",
+                            "access"
+                          ],
+                          "variable": [
+                            {
+                              "key": "scenario_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:50:12.000Z",
+                      "updatedAt": "2026-10-21T19:50:12.000Z",
+                      "uid": "35240-9c7bd42d-6fe3-4920-8473-e7e465fb5222"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:50:12.000Z",
+                  "updatedAt": "2026-10-21T19:50:12.000Z",
+                  "uid": "35240-80479e37-3626-4a24-a050-dfbf460a6300"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "d2aa10fa-3cb1-4c1c-bce8-46b2835cb5ab",
+              "createdAt": "2026-10-21T19:50:12.000Z",
+              "updatedAt": "2026-10-21T19:50:12.000Z",
+              "uid": "35240-d2aa10fa-3cb1-4c1c-bce8-46b2835cb5ab"
             },
             {
-              "id": "d40eb0c5-a1c3-42c7-8b8d-3949e1309b72",
-              "name": "Resource not found",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "analytics",
-                    "summary"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "user_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "user_emails",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "group_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "start_date",
-                      "value": "<dateTime>"
-                    },
-                    {
-                      "key": "end_date",
-                      "value": "<dateTime>"
-                    },
-                    {
-                      "key": "exclude_system_users",
-                      "value": "false"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier (UUID or slug)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
+              "name": "assignments",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "name": "Assign scenario to user",
+                  "id": "7d7919fa-dacf-4fa1-9c5f-81c57edda87c",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"user_email\": \"<email>\",\n  \"due_date\": \"<dateTime>\",\n  \"assigner_email\": \"<email>\",\n  \"attempt_min\": \"<integer>\",\n  \"attempt_max\": \"<integer>\",\n  \"rank_min\": \"bronze\",\n  \"custom_message\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/scenarios/:scenario_id/assignments",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scenarios",
+                        ":scenario_id",
+                        "assignments"
+                      ],
+                      "variable": [
+                        {
+                          "id": "740ed382-4425-413c-980c-beeb60eaf03b",
+                          "key": "scenario_id",
+                          "value": "<string>",
+                          "description": "(Required) Scenario identifier"
+                        }
+                      ]
+                    },
+                    "description": "Assign a scenario to a user as a task or homework assignment.\nThe user will receive notification of the assignment and can track their progress."
+                  },
+                  "response": [
+                    {
+                      "id": "09eb8cb3-526a-4664-bd41-58f373aad6e9",
+                      "name": "Assignment created successfully",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"user_email\": \"<email>\",\n  \"due_date\": \"<dateTime>\",\n  \"assigner_email\": \"<email>\",\n  \"attempt_min\": \"<integer>\",\n  \"attempt_max\": \"<integer>\",\n  \"rank_min\": \"bronze\",\n  \"custom_message\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/scenarios/:scenario_id/assignments",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scenarios",
+                            ":scenario_id",
+                            "assignments"
+                          ],
+                          "variable": [
+                            {
+                              "key": "scenario_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"user\": {\n    \"id\": \"<string>\",\n    \"email\": \"<email>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\"\n  },\n  \"scenario\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"slug\": \"<string>\"\n  },\n  \"status\": \"in_progress\",\n  \"due_date\": \"<string,null-date-time>\",\n  \"best_score\": \"<number,null>\",\n  \"best_rank\": \"bronze\",\n  \"attempt_count\": \"<integer>\",\n  \"attempt_min\": \"<integer,null>\",\n  \"attempt_max\": \"<integer,null>\",\n  \"rank_min\": \"gold\",\n  \"program\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\"\n  },\n  \"created_at\": \"<dateTime>\"\n}",
+                      "createdAt": "2026-10-21T19:50:12.000Z",
+                      "updatedAt": "2026-10-21T19:50:12.000Z",
+                      "uid": "35240-09eb8cb3-526a-4664-bd41-58f373aad6e9"
+                    },
+                    {
+                      "id": "fc6c1bb9-a934-4cae-8752-34781713d13f",
+                      "name": "Invalid request parameters",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"user_email\": \"<email>\",\n  \"due_date\": \"<dateTime>\",\n  \"assigner_email\": \"<email>\",\n  \"attempt_min\": \"<integer>\",\n  \"attempt_max\": \"<integer>\",\n  \"rank_min\": \"bronze\",\n  \"custom_message\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/scenarios/:scenario_id/assignments",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scenarios",
+                            ":scenario_id",
+                            "assignments"
+                          ],
+                          "variable": [
+                            {
+                              "key": "scenario_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:50:12.000Z",
+                      "updatedAt": "2026-10-21T19:50:12.000Z",
+                      "uid": "35240-fc6c1bb9-a934-4cae-8752-34781713d13f"
+                    },
+                    {
+                      "id": "f0f3ba2d-44d5-4e67-a7bf-9f5db83c4a0c",
+                      "name": "Missing or invalid API key",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"user_email\": \"<email>\",\n  \"due_date\": \"<dateTime>\",\n  \"assigner_email\": \"<email>\",\n  \"attempt_min\": \"<integer>\",\n  \"attempt_max\": \"<integer>\",\n  \"rank_min\": \"bronze\",\n  \"custom_message\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/scenarios/:scenario_id/assignments",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scenarios",
+                            ":scenario_id",
+                            "assignments"
+                          ],
+                          "variable": [
+                            {
+                              "key": "scenario_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:50:12.000Z",
+                      "updatedAt": "2026-10-21T19:50:12.000Z",
+                      "uid": "35240-f0f3ba2d-44d5-4e67-a7bf-9f5db83c4a0c"
+                    },
+                    {
+                      "id": "dd28c5b4-6b44-4d97-9100-0c44251e5632",
+                      "name": "Resource not found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"user_email\": \"<email>\",\n  \"due_date\": \"<dateTime>\",\n  \"assigner_email\": \"<email>\",\n  \"attempt_min\": \"<integer>\",\n  \"attempt_max\": \"<integer>\",\n  \"rank_min\": \"bronze\",\n  \"custom_message\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/scenarios/:scenario_id/assignments",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scenarios",
+                            ":scenario_id",
+                            "assignments"
+                          ],
+                          "variable": [
+                            {
+                              "key": "scenario_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:50:12.000Z",
+                      "updatedAt": "2026-10-21T19:50:12.000Z",
+                      "uid": "35240-dd28c5b4-6b44-4d97-9100-0c44251e5632"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:50:12.000Z",
+                  "updatedAt": "2026-10-21T19:50:12.000Z",
+                  "uid": "35240-7d7919fa-dacf-4fa1-9c5f-81c57edda87c"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"not_found\",\n    \"message\": \"Scenario not found: abc123\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "c49d3dc8-0490-44c9-8ee1-8cbcba9df5ec",
+              "createdAt": "2026-10-21T19:50:12.000Z",
+              "updatedAt": "2026-10-21T19:50:12.000Z",
+              "uid": "35240-c49d3dc8-0490-44c9-8ee1-8cbcba9df5ec"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "fe6a8946-edb0-44a4-ad80-986b7885e46c",
+          "createdAt": "2026-10-21T19:50:12.000Z",
+          "updatedAt": "2026-10-21T19:50:12.000Z",
+          "uid": "35240-fe6a8946-edb0-44a4-ad80-986b7885e46c"
         },
         {
-          "id": "549b3c98-57ce-460c-b459-ff8c7b8e0c02",
-          "name": "Get scenario participant analytics",
-          "request": {
-            "name": "Get scenario participant analytics",
-            "description": {
-              "content": "Returns a per-user performance table for a scenario with pagination and sorting.\nShows each participant's first score, best score, lift, rank, session count,\nand total practice duration.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "scenarios",
-                ":scenario_id",
-                "analytics",
-                "participants"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "user_ids",
-                  "value": "<string>",
-                  "description": "Comma-separated user IDs to filter by. When combined with user_emails, results are unioned (all matching users from either list are included)."
-                },
-                {
-                  "disabled": false,
-                  "key": "user_emails",
-                  "value": "<string>",
-                  "description": "Comma-separated user email addresses to filter by. When combined with user_ids, results are unioned (all matching users from either list are included)."
-                },
-                {
-                  "disabled": false,
-                  "key": "group_ids",
-                  "value": "<string>",
-                  "description": "Comma-separated workspace group IDs to filter by"
-                },
-                {
-                  "disabled": false,
-                  "key": "start_date",
-                  "value": "<dateTime>",
-                  "description": "ISO 8601 datetime — only include sessions on or after this date"
-                },
-                {
-                  "disabled": false,
-                  "key": "end_date",
-                  "value": "<dateTime>",
-                  "description": "ISO 8601 datetime — only include sessions on or before this date"
-                },
-                {
-                  "disabled": false,
-                  "key": "exclude_system_users",
-                  "value": "false",
-                  "description": "Exclude sessions from system users (emails ending in @exec.com). Default false."
-                },
-                {
-                  "disabled": false,
-                  "key": "sorting",
-                  "value": "-best_score",
-                  "description": "Sort field. Prefix with `-` for descending order."
-                },
-                {
-                  "disabled": false,
-                  "key": "page",
-                  "value": "1",
-                  "description": "Page number (1-indexed)"
-                },
-                {
-                  "disabled": false,
-                  "key": "page_size",
-                  "value": "50",
-                  "description": "Number of results per page (max 100)"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "scenario_id",
-                  "description": "(Required) Scenario identifier (UUID or slug)"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "1a4f0163-898f-4dfe-9132-3832aba8685b",
-              "name": "Per-user participant analytics",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "analytics",
-                    "participants"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "user_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "user_emails",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "group_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "start_date",
-                      "value": "<dateTime>"
-                    },
-                    {
-                      "key": "end_date",
-                      "value": "<dateTime>"
-                    },
-                    {
-                      "key": "exclude_system_users",
-                      "value": "false"
-                    },
-                    {
-                      "key": "sorting",
-                      "value": "-best_score"
-                    },
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier (UUID or slug)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"data\": [\n    {\n      \"user\": {\n        \"id\": \"u1a2b3c4d5e6\",\n        \"email\": \"jane@acme.com\",\n        \"first_name\": \"Jane\",\n        \"last_name\": \"Smith\"\n      },\n      \"session_count\": 4,\n      \"first_score\": 55,\n      \"first_rank\": \"bronze\",\n      \"best_score\": 88,\n      \"best_rank\": \"gold\",\n      \"lift_percentage\": 33,\n      \"total_duration_seconds\": 1240\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 50,\n    \"total_count\": 1,\n    \"total_pages\": 1\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "421ee8cf-b483-49d8-b33e-b201fc4d5ab8",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "analytics",
-                    "participants"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "user_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "user_emails",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "group_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "start_date",
-                      "value": "<dateTime>"
-                    },
-                    {
-                      "key": "end_date",
-                      "value": "<dateTime>"
-                    },
-                    {
-                      "key": "exclude_system_users",
-                      "value": "false"
-                    },
-                    {
-                      "key": "sorting",
-                      "value": "-best_score"
-                    },
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier (UUID or slug)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "53e93b7e-4ddf-480c-a48d-d332dc2ae27a",
-              "name": "Resource not found",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "analytics",
-                    "participants"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "user_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "user_emails",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "group_ids",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "start_date",
-                      "value": "<dateTime>"
-                    },
-                    {
-                      "key": "end_date",
-                      "value": "<dateTime>"
-                    },
-                    {
-                      "key": "exclude_system_users",
-                      "value": "false"
-                    },
-                    {
-                      "key": "sorting",
-                      "value": "-best_score"
-                    },
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "page_size",
-                      "value": "50"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier (UUID or slug)"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"not_found\",\n    \"message\": \"Scenario not found: abc123\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "e9b568f0-4f45-4824-bd18-de91baed7dc6",
           "name": "List scenarios",
+          "id": "eeb7f520-a9af-45ac-9ef4-37eed64a569e",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
-            "name": "List scenarios",
-            "description": {
-              "content": "Returns a paginated list of scenarios in the workspace.\n\nBy default, returns all scenarios in the workspace (admin view).\nUse filters to narrow down results by owner, visibility, or access.\n",
-              "type": "text/plain"
-            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
             "url": {
+              "raw": "{{baseUrl}}/scenarios?page=1&page_size=50&owner_email=<email>&visible_to_email=<email>&visibility=private&include_archived=false&skill_ids=<string>&collection_ids=<string>&include=<string>",
+              "host": [
+                "{{baseUrl}}"
+              ],
               "path": [
                 "scenarios"
               ],
-              "host": [
-                "{{baseUrl}}"
-              ],
               "query": [
                 {
-                  "disabled": false,
+                  "description": "Page number (1-indexed)",
                   "key": "page",
-                  "value": "1",
-                  "description": "Page number (1-indexed)"
+                  "value": "1"
                 },
                 {
-                  "disabled": false,
+                  "description": "Number of results per page (max 100)",
                   "key": "page_size",
-                  "value": "50",
-                  "description": "Number of results per page (max 100)"
+                  "value": "50"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter by scenario owner's email address",
                   "key": "owner_email",
-                  "value": "<email>",
-                  "description": "Filter by scenario owner's email address"
+                  "value": "<email>"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter by who can access the scenario (checks owner, user shares, group shares, workspace shares)",
                   "key": "visible_to_email",
-                  "value": "<email>",
-                  "description": "Filter by who can access the scenario (checks owner, user shares, group shares, workspace shares)"
+                  "value": "<email>"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter by visibility scope",
                   "key": "visibility",
-                  "value": "<string>",
-                  "description": "Filter by visibility scope"
+                  "value": "private"
                 },
                 {
-                  "disabled": false,
+                  "description": "Include archived scenarios in results",
                   "key": "include_archived",
-                  "value": "false",
-                  "description": "Include archived scenarios in results"
+                  "value": "false"
                 },
                 {
-                  "disabled": false,
+                  "description": "Comma-separated skill IDs to filter by",
                   "key": "skill_ids",
-                  "value": "<string>",
-                  "description": "Comma-separated skill IDs to filter by"
+                  "value": "<string>"
                 },
                 {
-                  "disabled": false,
+                  "description": "Comma-separated collection IDs to filter by",
                   "key": "collection_ids",
-                  "value": "<string>",
-                  "description": "Comma-separated collection IDs to filter by"
+                  "value": "<string>"
                 },
                 {
-                  "disabled": false,
+                  "description": "Comma-separated list of optional data to include.\nAvailable values: `skills` (list of skills evaluated by each scenario).\n",
                   "key": "include",
-                  "value": "<string>",
-                  "description": "Comma-separated list of optional data to include.\nAvailable values: `skills` (list of skills evaluated by each scenario).\n"
+                  "value": "<string>"
                 }
-              ],
-              "variable": []
+              ]
             },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
+            "description": "Returns a paginated list of scenarios in the workspace.\n\nBy default, returns all scenarios in the workspace (admin view).\nUse filters to narrow down results by owner, visibility, or access."
           },
           "response": [
             {
-              "id": "957555b7-a1e0-438e-b753-208d10fed20d",
+              "id": "c90a3cee-5e39-48f1-8f7e-c45bb1d41167",
               "name": "List of scenarios",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "scenarios"
-                  ],
+                  "raw": "{{baseUrl}}/scenarios?page=1&page_size=50&owner_email=<email>&visible_to_email=<email>&visibility=private&include_archived=false&skill_ids=<string>&collection_ids=<string>&include=<string>",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "scenarios"
+                  ],
                   "query": [
                     {
+                      "description": "Page number (1-indexed)",
                       "key": "page",
                       "value": "1"
                     },
                     {
+                      "description": "Number of results per page (max 100)",
                       "key": "page_size",
                       "value": "50"
                     },
                     {
+                      "description": "Filter by scenario owner's email address",
                       "key": "owner_email",
                       "value": "<email>"
                     },
                     {
+                      "description": "Filter by who can access the scenario (checks owner, user shares, group shares, workspace shares)",
                       "key": "visible_to_email",
                       "value": "<email>"
                     },
                     {
+                      "description": "Filter by visibility scope",
                       "key": "visibility",
-                      "value": "<string>"
+                      "value": "private"
                     },
                     {
+                      "description": "Include archived scenarios in results",
                       "key": "include_archived",
                       "value": "false"
                     },
                     {
+                      "description": "Comma-separated skill IDs to filter by",
                       "key": "skill_ids",
                       "value": "<string>"
                     },
                     {
+                      "description": "Comma-separated collection IDs to filter by",
                       "key": "collection_ids",
                       "value": "<string>"
                     },
                     {
+                      "description": "Comma-separated list of optional data to include.\nAvailable values: `skills` (list of skills evaluated by each scenario).\n",
                       "key": "include",
-                      "value": "skills"
+                      "value": "<string>"
                     }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                  ]
+                }
               },
               "status": "OK",
               "code": 200,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"data\": [\n    {\n      \"id\": \"s1c2e3n4a5r6\",\n      \"name\": \"Discovery Call with IT Director\",\n      \"description\": \"Practice handling objections from skeptical IT buyers\",\n      \"slug\": \"discovery-call-it-director\",\n      \"url\": \"https://acme-corp.app.exec.com/scenarios/discovery-call-it-director\",\n      \"difficulty\": \"medium\",\n      \"context\": \"The buyer is the VP of Engineering at a Series B fintech. They have an active RFP out for an observability tool and your competitor presented yesterday.\",\n      \"objective\": \"Qualify the opportunity and book a follow-up meeting with the economic buyer.\\n##### Outcomes to Avoid:\\n- Discounting before discovery\\n- Skipping the budget conversation\\n- Committing to a custom integration without scoping\",\n      \"language\": \"English\",\n      \"visibility\": \"workspace\",\n      \"owner\": {\n        \"id\": \"u7v8w9x0y1z2\",\n        \"email\": \"jane@acme.com\",\n        \"first_name\": \"Jane\",\n        \"last_name\": \"Smith\"\n      },\n      \"created_at\": \"2024-01-15T10:30:00Z\",\n      \"updated_at\": \"2024-02-01T14:20:00Z\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 50,\n    \"total_count\": 125,\n    \"total_pages\": 3\n  }\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string,null>\",\n      \"slug\": \"<string>\",\n      \"url\": \"<uri>\",\n      \"difficulty\": \"medium\",\n      \"context\": \"<string,null>\",\n      \"objective\": \"<string,null>\",\n      \"language\": \"<string>\",\n      \"visibility\": \"private\",\n      \"owner\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"skills\": \"<array,null>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string,null>\",\n      \"slug\": \"<string>\",\n      \"url\": \"<uri>\",\n      \"difficulty\": \"very_hard\",\n      \"context\": \"<string,null>\",\n      \"objective\": \"<string,null>\",\n      \"language\": \"<string>\",\n      \"visibility\": \"private\",\n      \"owner\": {\n        \"id\": \"<string>\",\n        \"email\": \"<email>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\"\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"skills\": \"<array,null>\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": \"<integer>\",\n    \"page_size\": \"<integer>\",\n    \"total_count\": \"<integer>\",\n    \"total_pages\": \"<integer>\"\n  }\n}",
+              "createdAt": "2026-10-21T19:50:12.000Z",
+              "updatedAt": "2026-10-21T19:50:12.000Z",
+              "uid": "35240-c90a3cee-5e39-48f1-8f7e-c45bb1d41167"
             },
             {
-              "id": "4cf3e166-bfa1-4d73-aab1-9b5a91b1d4ef",
+              "id": "00bc5c03-3b5d-4f49-954a-54da6525d4a1",
               "name": "Invalid request parameters",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "scenarios"
-                  ],
+                  "raw": "{{baseUrl}}/scenarios?page=1&page_size=50&owner_email=<email>&visible_to_email=<email>&visibility=private&include_archived=false&skill_ids=<string>&collection_ids=<string>&include=<string>",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "scenarios"
+                  ],
                   "query": [
                     {
+                      "description": "Page number (1-indexed)",
                       "key": "page",
                       "value": "1"
                     },
                     {
+                      "description": "Number of results per page (max 100)",
                       "key": "page_size",
                       "value": "50"
                     },
                     {
+                      "description": "Filter by scenario owner's email address",
                       "key": "owner_email",
                       "value": "<email>"
                     },
                     {
+                      "description": "Filter by who can access the scenario (checks owner, user shares, group shares, workspace shares)",
                       "key": "visible_to_email",
                       "value": "<email>"
                     },
                     {
+                      "description": "Filter by visibility scope",
                       "key": "visibility",
-                      "value": "<string>"
+                      "value": "private"
                     },
                     {
+                      "description": "Include archived scenarios in results",
                       "key": "include_archived",
                       "value": "false"
                     },
                     {
+                      "description": "Comma-separated skill IDs to filter by",
                       "key": "skill_ids",
                       "value": "<string>"
                     },
                     {
+                      "description": "Comma-separated collection IDs to filter by",
                       "key": "collection_ids",
                       "value": "<string>"
                     },
                     {
+                      "description": "Comma-separated list of optional data to include.\nAvailable values: `skills` (list of skills evaluated by each scenario).\n",
                       "key": "include",
-                      "value": "skills"
+                      "value": "<string>"
                     }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                  ]
+                }
               },
               "status": "Bad Request",
               "code": 400,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request\",\n    \"code\": \"invalid_pagination\",\n    \"message\": \"Invalid pagination parameters\"\n  }\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+              "createdAt": "2026-10-21T19:50:12.000Z",
+              "updatedAt": "2026-10-21T19:50:12.000Z",
+              "uid": "35240-00bc5c03-3b5d-4f49-954a-54da6525d4a1"
             },
             {
-              "id": "2506f43b-c61f-48aa-9b1e-66ac0d2d45f7",
+              "id": "7c7d7b4c-a92e-4ba9-808e-540527345015",
               "name": "Missing or invalid API key",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "scenarios"
-                  ],
+                  "raw": "{{baseUrl}}/scenarios?page=1&page_size=50&owner_email=<email>&visible_to_email=<email>&visibility=private&include_archived=false&skill_ids=<string>&collection_ids=<string>&include=<string>",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "scenarios"
+                  ],
                   "query": [
                     {
+                      "description": "Page number (1-indexed)",
                       "key": "page",
                       "value": "1"
                     },
                     {
+                      "description": "Number of results per page (max 100)",
                       "key": "page_size",
                       "value": "50"
                     },
                     {
+                      "description": "Filter by scenario owner's email address",
                       "key": "owner_email",
                       "value": "<email>"
                     },
                     {
+                      "description": "Filter by who can access the scenario (checks owner, user shares, group shares, workspace shares)",
                       "key": "visible_to_email",
                       "value": "<email>"
                     },
                     {
+                      "description": "Filter by visibility scope",
                       "key": "visibility",
-                      "value": "<string>"
+                      "value": "private"
                     },
                     {
+                      "description": "Include archived scenarios in results",
                       "key": "include_archived",
                       "value": "false"
                     },
                     {
+                      "description": "Comma-separated skill IDs to filter by",
                       "key": "skill_ids",
                       "value": "<string>"
                     },
                     {
+                      "description": "Comma-separated collection IDs to filter by",
                       "key": "collection_ids",
                       "value": "<string>"
                     },
                     {
+                      "description": "Comma-separated list of optional data to include.\nAvailable values: `skills` (list of skills evaluated by each scenario).\n",
                       "key": "include",
-                      "value": "skills"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "f67f258c-5418-4dbd-b06f-025bbaaae61c",
-          "name": "Check scenario access",
-          "request": {
-            "name": "Check scenario access",
-            "description": {
-              "content": "Check if a user has access to a specific scenario and what permission level they have.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "scenarios",
-                ":scenario_id",
-                "access"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "user_email",
-                  "value": "<email>",
-                  "description": "(Required) Email of the user to check access for"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "scenario_id",
-                  "description": "(Required) Scenario identifier"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "4572a9f4-ec38-4938-9ee8-27d31cd9e4c3",
-              "name": "User's permission levels for the scenario",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "access"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "user_email",
-                      "value": "jane@acme.com"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier"
+                      "value": "<string>"
                     }
                   ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"user_email\": \"jane@acme.com\",\n  \"scenario_id\": \"s1c2e3n4a5r6\",\n  \"permissions\": {\n    \"can_view\": true,\n    \"can_share\": true,\n    \"can_monitor\": false,\n    \"can_edit\": false\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "dfc28278-05f5-428a-b956-4d6c5ea97024",
-              "name": "Invalid request parameters",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "access"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "user_email",
-                      "value": "jane@acme.com"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request\",\n    \"code\": \"invalid_pagination\",\n    \"message\": \"Invalid pagination parameters\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "c30d84bf-f9a5-405d-bbe8-07de884d11e8",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "access"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "user_email",
-                      "value": "jane@acme.com"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "1d30d5ce-66d8-42e7-a27d-161f8890dfac",
-              "name": "Resource not found",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "access"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "user_email",
-                      "value": "jane@acme.com"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"not_found\",\n    \"message\": \"Scenario not found: abc123\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "23adef7e-a178-4c0d-960c-514d917ebcdd",
-          "name": "Grant scenario access",
-          "request": {
-            "name": "Grant scenario access",
-            "description": {
-              "content": "Grant a user access to a specific scenario with a specified permission level.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "scenarios",
-                ":scenario_id",
-                "access"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "scenario_id",
-                  "description": "(Required) Scenario identifier"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"user_email\": \"<email>\",\n  \"permission_level\": \"<string>\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "c6f5c4e3-6b9c-4641-87bf-cc555c731ebe",
-              "name": "Access granted successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "access"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"user_email\": \"jane@acme.com\",\n  \"permission_level\": \"edit\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"user_email\": \"jane@acme.com\",\n  \"scenario_id\": \"s1c2e3n4a5r6\",\n  \"permission_level\": \"edit\",\n  \"granted\": true\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "625d89b3-3fe6-49e8-a024-837ef4efd3e4",
-              "name": "Invalid request parameters",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "access"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"user_email\": \"jane@acme.com\",\n  \"permission_level\": \"edit\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request\",\n    \"code\": \"invalid_pagination\",\n    \"message\": \"Invalid pagination parameters\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "6694f32d-87f9-4f59-8d9b-a088a46b3bab",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "access"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"user_email\": \"jane@acme.com\",\n  \"permission_level\": \"edit\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
                 }
               },
               "status": "Unauthorized",
               "code": 401,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "443e0e8b-2015-4e1b-adcc-784974f275e9",
-              "name": "Resource not found",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "access"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"user_email\": \"jane@acme.com\",\n  \"permission_level\": \"edit\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"not_found\",\n    \"message\": \"Scenario not found: abc123\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+              "createdAt": "2026-10-21T19:50:12.000Z",
+              "updatedAt": "2026-10-21T19:50:12.000Z",
+              "uid": "35240-7c7d7b4c-a92e-4ba9-808e-540527345015"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "1adbfa58-9ffc-4ce4-9599-f9713d09de6b",
-          "name": "Assign scenario to user",
-          "request": {
-            "name": "Assign scenario to user",
-            "description": {
-              "content": "Assign a scenario to a user as a task or homework assignment.\nThe user will receive notification of the assignment and can track their progress.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "scenarios",
-                ":scenario_id",
-                "assignments"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "scenario_id",
-                  "description": "(Required) Scenario identifier"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"user_email\": \"<email>\",\n  \"due_date\": \"<dateTime>\",\n  \"assigner_email\": \"<email>\",\n  \"attempt_min\": \"<integer>\",\n  \"attempt_max\": \"<integer>\",\n  \"rank_min\": \"<string>\",\n  \"custom_message\": \"<string>\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "2c3ed2af-ed4f-4294-95a6-18a8a8cd9c92",
-              "name": "Assignment created successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "assignments"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"user_email\": \"jane@acme.com\",\n  \"due_date\": \"2024-03-15T17:00:00Z\",\n  \"assigner_email\": \"manager@acme.com\",\n  \"attempt_min\": 1,\n  \"attempt_max\": 5,\n  \"rank_min\": \"silver\",\n  \"custom_message\": \"Please complete this discovery call practice by Friday\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"a1s2s3i4g5n6\",\n  \"user\": {\n    \"id\": \"u1a2b3c4d5e6\",\n    \"email\": \"jane@acme.com\",\n    \"first_name\": \"Jane\",\n    \"last_name\": \"Smith\"\n  },\n  \"scenario\": {\n    \"id\": \"s1c2e3n4a5r6\",\n    \"name\": \"Discovery Call\",\n    \"slug\": \"discovery-call\"\n  },\n  \"status\": \"not_started\",\n  \"due_date\": \"2024-03-15T17:00:00Z\",\n  \"best_score\": null,\n  \"best_rank\": null,\n  \"attempt_count\": 0,\n  \"attempt_min\": 1,\n  \"attempt_max\": 5,\n  \"rank_min\": \"silver\",\n  \"program\": null,\n  \"created_at\": \"2024-03-01T10:00:00Z\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "30acbb02-f50c-4a98-b386-b71b61311848",
-              "name": "Invalid request parameters",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "assignments"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"user_email\": \"jane@acme.com\",\n  \"due_date\": \"2024-03-15T17:00:00Z\",\n  \"assigner_email\": \"manager@acme.com\",\n  \"attempt_min\": 1,\n  \"attempt_max\": 5,\n  \"rank_min\": \"silver\",\n  \"custom_message\": \"Please complete this discovery call practice by Friday\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request\",\n    \"code\": \"invalid_pagination\",\n    \"message\": \"Invalid pagination parameters\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "c24b4626-5dda-4c6b-b3d6-217af2c3c927",
-              "name": "Missing or invalid API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "assignments"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"user_email\": \"jane@acme.com\",\n  \"due_date\": \"2024-03-15T17:00:00Z\",\n  \"assigner_email\": \"manager@acme.com\",\n  \"attempt_min\": 1,\n  \"attempt_max\": 5,\n  \"rank_min\": \"silver\",\n  \"custom_message\": \"Please complete this discovery call practice by Friday\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "5cd48d3c-2af2-438e-84fc-0727729f783d",
-              "name": "Resource not found",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scenarios",
-                    ":scenario_id",
-                    "assignments"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "scenario_id",
-                      "description": "(Required) Scenario identifier"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"user_email\": \"jane@acme.com\",\n  \"due_date\": \"2024-03-15T17:00:00Z\",\n  \"assigner_email\": \"manager@acme.com\",\n  \"attempt_min\": 1,\n  \"attempt_max\": 5,\n  \"rank_min\": \"silver\",\n  \"custom_message\": \"Please complete this discovery call practice by Friday\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"not_found\",\n    \"message\": \"Scenario not found: abc123\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "createdAt": "2026-10-21T19:50:12.000Z",
+          "updatedAt": "2026-10-21T19:50:12.000Z",
+          "uid": "35240-eeb7f520-a9af-45ac-9ef4-37eed64a569e"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "type": "string",
-      "value": "https://api.exec.com/rest/v1",
-      "key": "baseUrl"
+      "id": "8b74d727-92a5-4b04-9e22-c9adec04ebc1",
+      "createdAt": "2026-10-21T19:50:12.000Z",
+      "updatedAt": "2026-10-21T19:50:12.000Z",
+      "uid": "35240-8b74d727-92a5-4b04-9e22-c9adec04ebc1"
     }
   ],
   "auth": {
@@ -2235,17 +2328,15 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "d4b68c9b-acfd-4fec-8032-a7d2a2c16478",
-    "name": "Exec Collections Scenarios API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "REST API for programmatic access to your Exec workspace.\n\nUse the Exec API to read workspace data, list members, retrieve group information,\nand create interactive scenario creation sessions.\n\n## Authentication\nAll requests require a valid API key passed in the Authorization header:\n```\nAuthorization: Bearer exec_live_...\n```\n\nCreate API keys in your workspace settings under **Settings > API**.\n",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.exec.com/rest/v1"
     }
-  }
+  ]
 }

@@ -1,175 +1,174 @@
 {
+  "info": {
+    "_postman_id": "181dc755-5aa1-4add-bf59-1e40cfd9d0f9",
+    "name": "Exec Collections API",
+    "description": "REST API for programmatic access to your Exec workspace.\n\nUse the Exec API to read workspace data, list members, retrieve group information,\nand create interactive scenario creation sessions.\n\n## Authentication\nAll requests require a valid API key passed in the Authorization header:\n```\nAuthorization: Bearer exec_live_...\n```\n\nCreate API keys in your workspace settings under **Settings > API**.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:49:38.000Z",
+    "updatedAt": "2026-10-21T19:49:39.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-181dc755-5aa1-4add-bf59-1e40cfd9d0f9"
+  },
   "item": [
     {
-      "id": "4fdeb34f-abb6-40fb-a7e9-41bb534f7441",
-      "name": "Collections",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": "collections",
       "item": [
         {
-          "id": "e2579082-80be-4261-a43d-3909a210334c",
           "name": "List collections",
+          "id": "746bf6b8-c8c5-400a-87cc-3e93fd15fcf7",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
-            "name": "List collections",
-            "description": {
-              "content": "Returns a paginated list of collections in the workspace, ordered\nalphabetically by name.\n\nCollections group related scenarios together (e.g. \"Procurement Scenarios\",\n\"Onboarding\"). Use collection IDs to filter sessions, skills, and scenario\nanalytics by collection.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "collections"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "page",
-                  "value": "1",
-                  "description": "Page number (1-indexed)"
-                },
-                {
-                  "disabled": false,
-                  "key": "page_size",
-                  "value": "50",
-                  "description": "Number of results per page (max 100)"
-                }
-              ],
-              "variable": []
-            },
+            "method": "GET",
             "header": [
               {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
-            "method": "GET",
-            "auth": null
+            "url": {
+              "raw": "{{baseUrl}}/collections?page=1&page_size=50",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "collections"
+              ],
+              "query": [
+                {
+                  "description": "Page number (1-indexed)",
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "description": "Number of results per page (max 100)",
+                  "key": "page_size",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Returns a paginated list of collections in the workspace, ordered\nalphabetically by name.\n\nCollections group related scenarios together (e.g. \"Procurement Scenarios\",\n\"Onboarding\"). Use collection IDs to filter sessions, skills, and scenario\nanalytics by collection."
           },
           "response": [
             {
-              "id": "06916b18-880c-42e5-ba89-2cde4af91f56",
+              "id": "4e679eea-e2c0-4739-bbb6-3801bfacf105",
               "name": "Paginated list of collections",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "collections"
-                  ],
+                  "raw": "{{baseUrl}}/collections?page=1&page_size=50",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "collections"
+                  ],
                   "query": [
                     {
+                      "description": "Page number (1-indexed)",
                       "key": "page",
                       "value": "1"
                     },
                     {
+                      "description": "Number of results per page (max 100)",
                       "key": "page_size",
                       "value": "50"
                     }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                  ]
+                }
               },
               "status": "OK",
               "code": 200,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"data\": [\n    {\n      \"id\": \"r1a2b3c4d5e6\",\n      \"name\": \"Procurement Scenarios\",\n      \"slug\": \"procurement-scenarios\",\n      \"description\": \"Practice scenarios for procurement conversations.\",\n      \"scenario_count\": 4,\n      \"created_at\": \"2026-01-10T09:00:00Z\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 50,\n    \"total_count\": 1,\n    \"total_pages\": 1\n  }\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"slug\": \"<string>\",\n      \"description\": \"<string,null>\",\n      \"scenario_count\": \"<integer>\",\n      \"created_at\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"slug\": \"<string>\",\n      \"description\": \"<string,null>\",\n      \"scenario_count\": \"<integer>\",\n      \"created_at\": \"<dateTime>\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": \"<integer>\",\n    \"page_size\": \"<integer>\",\n    \"total_count\": \"<integer>\",\n    \"total_pages\": \"<integer>\"\n  }\n}",
+              "createdAt": "2026-10-21T19:49:39.000Z",
+              "updatedAt": "2026-10-21T19:49:39.000Z",
+              "uid": "35240-4e679eea-e2c0-4739-bbb6-3801bfacf105"
             },
             {
-              "id": "fa0259fa-5689-4110-9062-6d0711472b36",
+              "id": "c82c0391-2253-44ec-a798-98b4a87a925b",
               "name": "Missing or invalid API key",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "collections"
-                  ],
+                  "raw": "{{baseUrl}}/collections?page=1&page_size=50",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "collections"
+                  ],
                   "query": [
                     {
+                      "description": "Page number (1-indexed)",
                       "key": "page",
                       "value": "1"
                     },
                     {
+                      "description": "Number of results per page (max 100)",
                       "key": "page_size",
                       "value": "50"
                     }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                  ]
+                }
               },
               "status": "Unauthorized",
               "code": 401,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"code\": \"invalid_api_key\",\n    \"message\": \"Invalid or inactive API key\"\n  }\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+              "createdAt": "2026-10-21T19:49:39.000Z",
+              "updatedAt": "2026-10-21T19:49:39.000Z",
+              "uid": "35240-c82c0391-2253-44ec-a798-98b4a87a925b"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "createdAt": "2026-10-21T19:49:39.000Z",
+          "updatedAt": "2026-10-21T19:49:39.000Z",
+          "uid": "35240-746bf6b8-c8c5-400a-87cc-3e93fd15fcf7"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "type": "string",
-      "value": "https://api.exec.com/rest/v1",
-      "key": "baseUrl"
+      "id": "29a99e65-8944-4c29-b6df-24a20cf94dd9",
+      "createdAt": "2026-10-21T19:49:39.000Z",
+      "updatedAt": "2026-10-21T19:49:39.000Z",
+      "uid": "35240-29a99e65-8944-4c29-b6df-24a20cf94dd9"
     }
   ],
   "auth": {
@@ -177,17 +176,15 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "da7627c3-ff32-4f5a-acc7-0717285f9ae9",
-    "name": "Exec Collections API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "REST API for programmatic access to your Exec workspace.\n\nUse the Exec API to read workspace data, list members, retrieve group information,\nand create interactive scenario creation sessions.\n\n## Authentication\nAll requests require a valid API key passed in the Authorization header:\n```\nAuthorization: Bearer exec_live_...\n```\n\nCreate API keys in your workspace settings under **Settings > API**.\n",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.exec.com/rest/v1"
     }
-  }
+  ]
 }
